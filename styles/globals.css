@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+:root {
+  /* 基底：和紙白／土壁灰 */
+  --background: #ece6da;
+  --foreground: #3a332b;
+
+  /* 侘寂大地色票 */
+  --color-clay: #b08968;
+  /* 陶土 */
+  --color-moss: #6b7a5e;
+  /* 苔綠 */
+  --color-stone: #8c8378;
+  /* 石灰 */
+  --color-ink: #3a332b;
+  /* 墨色 */
+  --color-sand: #d9cdb8;
+  /* 砂色 */
+  --color-rust: #a45c40;
+  /* 鐵鏽 */
+
+  --border: #d4c8b3;
+  --muted: #7a7166;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-clay: var(--color-clay);
+  --color-moss: var(--color-moss);
+  --color-stone: var(--color-stone);
+  --color-ink: var(--color-ink);
+  --color-sand: var(--color-sand);
+  --color-rust: var(--color-rust);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1f1c18;
+    --foreground: #e3d9c6;
+
+    --color-clay: #c19a73;
+    --color-moss: #7e8f6e;
+    --color-stone: #a39a8d;
+    --color-ink: #e3d9c6;
+    --color-sand: #4a4338;
+    --color-rust: #c17455;
+
+    --border: #3a342b;
+    --muted: #9a9082;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
