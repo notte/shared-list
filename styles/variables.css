@@ -1,0 +1,125 @@
+@layer components {
+  /* Dialog / Modal */
+  .alert-dialog-wrapper {
+    @apply max-w-lg space-y-4 border bg-border border-rust p-8 rounded-xl;
+  }
+
+  .dialog-wrapper {
+    @apply max-w-lg space-y-4 border bg-border border-rust p-8 rounded-xl;
+  }
+
+  /* Card */
+  .card-container {
+    background-color: var(--surface);
+    border: 1px solid var(--btn-default-border);
+    @apply rounded-xl p-4 transition-colors duration-200 mb-6 w-1/2;
+  }
+
+  .card-container:hover {
+    @apply shadow-lg shadow-clay/20 dark:shadow-transparent;
+  }
+
+  /* Input */
+  .input-wrapper {
+    @apply w-full max-w-md px-4;
+  }
+
+  .input-label {
+    color: var(--foreground);
+    @apply text-sm font-medium block mb-1;
+  }
+
+  .input-description {
+    color: var(--muted);
+    @apply text-sm mb-2;
+  }
+
+  .input {
+    background-color: var(--background);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    @apply w-full rounded-md px-3 py-2 text-sm outline-none transition-colors duration-200;
+  }
+
+  .input:focus {
+    border-color: var(--color-clay);
+  }
+
+  .input:disabled {
+    color: var(--muted);
+    @apply cursor-not-allowed opacity-60;
+  }
+
+  .input-error {
+    color: var(--btn-danger-text);
+    @apply mb-4 text-sm mt-1 h-3.5;
+  }
+
+  /* Select */
+  .select-trigger {
+    background-color: var(--background);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    @apply mb-4 w-full rounded-md px-3 py-2 text-sm outline-none transition-colors duration-200 cursor-pointer;
+  }
+
+  .select-items {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    @apply min-w-40 rounded-md shadow-md p-1 z-50;
+  }
+
+  .select-item {
+    color: var(--foreground);
+    @apply block w-full px-3 py-2 text-sm rounded-md cursor-pointer transition-colors duration-200;
+  }
+
+  .select-item:hover,
+  .select-item[data-focus] {
+    background-color: var(--color-sand);
+  }
+
+  /* Toast */
+  .toast {
+    @apply px-6 py-3 rounded-md text-sm font-medium border shadow-md fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-opacity duration-300;
+  }
+
+  /* Button */
+  .btn {
+    @apply px-4 py-1 rounded-md font-bold text-sm transition-colors duration-200 border cursor-pointer;
+  }
+
+  .btn-default {
+    background-color: var(--btn-default-bg);
+    color: var(--btn-default-text);
+    border-color: var(--btn-default-border);
+  }
+
+  .btn-primary {
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    border-color: var(--btn-primary-border);
+  }
+
+  .btn-success {
+    background-color: var(--btn-success-bg);
+    color: var(--btn-success-text);
+    border-color: var(--btn-success-border);
+  }
+
+  .btn-warning {
+    background-color: var(--btn-warning-bg);
+    color: var(--btn-warning-text);
+    border-color: var(--btn-warning-border);
+  }
+
+  .btn-danger {
+    background-color: var(--btn-danger-bg);
+    color: var(--btn-danger-text);
+    border-color: var(--btn-danger-border);
+  }
+
+  .btn-icon {
+    @apply p-2 cursor-pointer border-0;
+  }
+}

@@ -1,14 +1,29 @@
+import Button from "@/components/ui/Button"
+import { EventType, ButtonAction } from "@/types/state"
+import { CardItemProps } from "@/features/cards/adapters/props"
+
 export default function CardItem({
   title,
   description,
-}: {
-  title: string
-  description: string
-}) {
+  createdAt,
+  createdBy,
+}: CardItemProps) {
   return (
-    <div className="bg-white shadow-md rounded-lg p-4">
-      <h2 className="text-xl font-bold mb-2">{title}</h2>
-      <p className="text-gray-600">{description}</p>
+    <div className="card-container">
+      <div className="flex justify-between items-center mb-2">
+        <h2 className="text-xl font-bold mb-2">{title}</h2>
+        <div className="text-sm text-stone flex items-end gap-3">
+          <p className="border-r pr-3">Created by: {createdBy?.userName}</p>
+          <p>Created: {createdAt?.toLocaleDateString("zh-TW")}</p>
+        </div>
+      </div>
+      <p className="mb-4 line-clamp-2 text-sm">{description}</p>
+      <Button
+        buttonText="read more"
+        variant={EventType.Primary}
+        disabled={true}
+        action={ButtonAction.Navigate}
+      />
     </div>
   )
 }

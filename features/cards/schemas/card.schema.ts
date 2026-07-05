@@ -9,6 +9,7 @@ export interface Vote {
   isMultipleChoice: boolean
   maxChoices: number // Only relevant when isMultipleChoice is true
   totalVotes: number
+  userVoteRecord?: VoteRecord // Optional, only present if the user has voted
 }
 
 export interface VoteOption {
@@ -36,7 +37,7 @@ export interface ListItem {
 }
 
 // Core card data, shared across all users
-export interface CardItem {
+export interface Card {
   cardId: string
   title: string
   description: string
