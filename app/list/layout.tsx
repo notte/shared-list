@@ -4,7 +4,7 @@ import {
   PlusCircleIcon,
   Cog8ToothIcon,
 } from "@heroicons/react/24/solid"
-import { ButtonAction, EventType, Size } from "@/types/state"
+import { ButtonAction, EventType, Size } from "@/types/enums"
 import Button from "@/components/ui/Button"
 
 export default function Layout({ children }: { children: React.ReactNode }) {

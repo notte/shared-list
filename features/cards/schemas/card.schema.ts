@@ -1,4 +1,3 @@
-import { ListType } from "@/features/cards/constants/card-status"
 import { User } from "@/features/user/schemas/user.schema"
 
 // Voting configuration for a card
@@ -8,7 +7,6 @@ export interface Vote {
   options: VoteOption[]
   isMultipleChoice: boolean
   maxChoices: number // Only relevant when isMultipleChoice is true
-  totalVotes: number
   userVoteRecord?: VoteRecord // Optional, only present if the user has voted
 }
 
@@ -20,20 +18,9 @@ export interface VoteOption {
 
 // Tracks which options a user voted for
 export interface VoteRecord {
-  user: User
+  userId: string
   voteId: string
   optionIds: string[]
-}
-
-// Ordered or unordered list attached to a card
-export interface List {
-  listType: ListType
-  items: ListItem[]
-}
-
-export interface ListItem {
-  text: string
-  order: number
 }
 
 // Core card data, shared across all users
@@ -43,15 +30,15 @@ export interface Card {
   description: string
   createdAt: Date
   createdBy: User
-  address: string
   publishTime: Date
   endTime: Date
   eventTime: Date
+  address?: string
 }
 
 // Per-user state for a card
 export interface UserCardState {
-  user: User
+  userId: string
   cardId: string
   isRead: boolean
   isVoted: boolean

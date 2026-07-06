@@ -1,7 +1,7 @@
 "use client"
 
 import { Button as HeadlessButton } from "@headlessui/react"
-import { EventType, ButtonAction } from "@/types/state"
+import { EventType, ButtonAction } from "@/types/enums"
 
 export interface ButtonProps {
   disabled?: boolean

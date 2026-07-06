@@ -1,4 +1,4 @@
-import { EventType, Size } from "@/types/state"
+import { EventType, Size } from "@/types/enums"
 
 export const colorMap: Record<EventType, string> = {
   [EventType.Default]: "text-[var(--btn-default-text)]",

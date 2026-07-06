@@ -1,6 +1,6 @@
 import Button from "@/components/ui/Button"
-import { EventType, ButtonAction } from "@/types/state"
-import { CardItemProps } from "@/features/cards/adapters/props"
+import { EventType, ButtonAction } from "@/types/enums"
+import { CardItem as CardItemProps } from "@/features/cards/adapters/response"
 
 export default function CardItem({
   title,

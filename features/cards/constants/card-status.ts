@@ -3,8 +3,3 @@ export enum CardStatus {
   Published = "published",
   Archived = "archived",
 }
-
-export enum ListType {
-  Ordered = "ordered",
-  Unordered = "unordered",
-}

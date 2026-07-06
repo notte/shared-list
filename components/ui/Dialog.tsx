@@ -11,7 +11,7 @@ import {
 import { XMarkIcon } from "@heroicons/react/24/solid"
 
 import Button from "@/components/ui/Button"
-import { EventType, DialogRole, Size } from "@/types/state"
+import { EventType, DialogRole, Size } from "@/types/enums"
 import Icon from "./Icon"
 
 export interface DialogProps extends Omit<HeadlessDialogProps, "onClose"> {

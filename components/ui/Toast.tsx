@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
-import { EventType } from "@/types/state"
+import { EventType } from "@/types/enums"
 
 export interface ToastProps {
   eventType: EventType

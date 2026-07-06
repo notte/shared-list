@@ -1,4 +1,3 @@
-import Dialog from "../components/ui/Dialog"
 export enum EventType {
   Default = "default",
   Primary = "primary",

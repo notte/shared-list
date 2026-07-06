@@ -1,12 +1,6 @@
-import {
-  Card,
-  List,
-  UserCardState,
-  Vote,
-} from "@/features/cards/schemas/card.schema"
+import { Card, UserCardState, Vote } from "@/features/cards/schemas/card.schema"
 
 // Cards 相關 API 回應的型別定義
-
 export type CardItem = Partial<Card>
 
 export interface getCardListResponse {
@@ -15,7 +9,6 @@ export interface getCardListResponse {
 }
 
 export interface getCardDetailResponse extends Partial<Card> {
-  lists?: List[]
   userCardState?: UserCardState
 }
 

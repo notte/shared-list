@@ -1,4 +1,4 @@
-import { EventType, Size } from "@/types/state"
+import { EventType, Size } from "@/types/enums"
 import { colorMap, iconSizeMap } from "@/lib/map"
 
 export interface IconProps {
