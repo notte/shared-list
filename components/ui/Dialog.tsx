@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
   Dialog as HeadlessDialog,
   DialogPanel,
@@ -16,10 +16,11 @@ import Icon from "./Icon"
 
 export interface DialogProps extends Omit<HeadlessDialogProps, "onClose"> {
   open: boolean
+  onClose: () => void
+  onConfirm?: () => void
   title: string
   role: DialogRole
   description?: string
-  onClose?: () => void
   children?: React.ReactNode
 }
 
@@ -27,17 +28,21 @@ export default function Dialog({
   title,
   description,
   open,
+  onClose,
+  onConfirm,
   role,
   children,
 }: DialogProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(open)
+  const handleOnClose = () => {
+    if (onClose) onClose()
+  }
 
-  const onClose = () => {
-    setIsOpen(false)
+  const handleOnConfirm = () => {
+    if (onConfirm) onConfirm()
   }
 
   return (
-    <HeadlessDialog open={isOpen} onClose={() => {}}>
+    <HeadlessDialog open={open} onClose={handleOnClose}>
       <div className="fixed inset-0 flex w-screen items-center justify-center bg-ink/80 dark:bg-sand/50">
         <DialogPanel
           className={
@@ -52,7 +57,7 @@ export default function Dialog({
               <Button
                 variant={EventType.Icon}
                 disabled={false}
-                onClick={onClose}
+                onClick={handleOnClose}
               >
                 <Icon eventType={EventType.Primary} size={Size.Large}>
                   <XMarkIcon />
@@ -65,12 +70,12 @@ export default function Dialog({
               <Description>{description}</Description>
               <div className="flex gap-4">
                 <Button
-                  onClick={onClose}
+                  onClick={handleOnClose}
                   buttonText="Cancel"
                   variant={EventType.Danger}
                 />
                 <Button
-                  onClick={onClose}
+                  onClick={handleOnConfirm}
                   buttonText="Deactivate"
                   variant={EventType.Primary}
                 />

@@ -1,15 +1,24 @@
-import { Card, UserCardState, Vote } from "@/features/cards/schemas/card.schema"
+import {
+  Card,
+  UserCardState,
+  Vote,
+  VoteRecord,
+} from "@/features/cards/schemas/card.schema"
 
-// Cards 相關 API 回應的型別定義
-export type CardItem = Partial<Card>
-
-export interface getCardListResponse {
-  cards: CardItem[]
+// 卡片列表回應
+export interface GetCardListResponse {
+  cards: Card[]
   count: number
 }
 
-export interface getCardDetailResponse extends Partial<Card> {
-  userCardState?: UserCardState
+// 卡片詳情回應 (進入卡片時，通常會合併回傳該卡片主體與當前使用者的已讀狀態)
+export interface GetCardDetailResponse {
+  card: Card
+  userCardState: UserCardState
 }
 
-export type getVoteResponse = Partial<Vote>
+// 取得投票資訊與個人投票紀錄的回應 (發送至 /api/lists/[listId]/cards/[cardId]/vote)
+export interface GetVoteStatusResponse {
+  vote: Vote // 包含各選項當前的總票數
+  userVoteRecord: VoteRecord | null // 當前使用者投了哪些項目的紀錄（若未投則為 null）
+}

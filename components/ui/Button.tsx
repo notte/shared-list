@@ -38,6 +38,7 @@ export default function Button({
       disabled={disabled}
       onClick={handleClick}
       className={`btn btn-${variant}`}
+      type={action === ButtonAction.Submit ? "submit" : "button"}
     >
       {buttonText || children}
     </HeadlessButton>

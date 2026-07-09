@@ -7,6 +7,11 @@ export enum EventType {
   Icon = "icon",
 }
 
+export enum CardType {
+  Announce = "announce",
+  Vote = "vote",
+}
+
 export enum ButtonAction {
   Navigate = "navigate",
   Submit = "submit",

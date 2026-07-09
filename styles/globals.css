@@ -18,6 +18,18 @@
   --border: #d4c8b3;
   --muted: #7a7166;
 
+  /* 使用者預設標示色 */
+  --color-maple: #c84b31;
+  --color-persimmon: #d3753b;
+  --color-ginkgo: #dfad34;
+  --color-sprout: #8cb86d;
+  --color-pine: #3b7a57;
+  --color-cyan: #3a8b9e;
+  --color-ocean: #2b5c8f;
+  --color-iris: #6a5acd;
+  --color-camellia: #b83b5e;
+  --color-ochre: #b87333;
+
   /* 按鈕狀態色票（方案 B：淡底 + 邊框） */
   --btn-default-bg: #ece6da; /* 預設底色：和紙白 */
   --btn-default-text: #3a332b; /* 預設文字：墨色 */
@@ -113,8 +125,3 @@
 }
 
 @import "./variables.css";
-
-body {
-  @apply bg-background text-foreground font-sans;
-  font-family: Arial, Helvetica, sans-serif;
-}

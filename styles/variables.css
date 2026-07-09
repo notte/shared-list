@@ -1,4 +1,13 @@
 @layer components {
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  section,
+  form {
+    @apply w-full flex justify-center items-center my-4 flex-col;
+  }
+
   /* Dialog / Modal */
   .alert-dialog-wrapper {
     @apply max-w-lg space-y-4 border bg-border border-rust p-8 rounded-xl;
@@ -121,5 +130,14 @@
 
   .btn-icon {
     @apply p-2 cursor-pointer border-0;
+  }
+
+  /* 時間選擇器 */
+  .rdp-root {
+    --rdp-accent-color: var(--color-clay) !important;
+    --rdp-accent-background-color: var(--btn-primary-bg) !important;
+    --rdp-range-start-color: var(--color-clay) !important;
+    --rdp-range-end-color: var(--color-clay) !important;
+    --rdp-range-middle-background-color: var(--btn-primary-bg) !important;
   }
 }
