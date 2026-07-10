@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { db } from "@/lib/firebaseAdmin"
 import { GetListDetailResponse } from "@/features/lists/adapters/response"
 
+// 清單已建立，取得當前清單基本資料
 export async function GET(
   request: Request,
   // 將 params 宣告為 Promise 以符合新版 Next.js 規範

@@ -1,23 +1,16 @@
 @layer components {
+  /* ─── Body ─────────────────────────────────────────── */
   body {
     @apply bg-background text-foreground font-sans;
   }
 
+  /* ─── Layout ────────────────────────────────────────── */
   section,
   form {
     @apply w-full flex justify-center items-center my-4 flex-col;
   }
 
-  /* Dialog / Modal */
-  .alert-dialog-wrapper {
-    @apply max-w-lg space-y-4 border bg-border border-rust p-8 rounded-xl;
-  }
-
-  .dialog-wrapper {
-    @apply max-w-lg space-y-4 border bg-border border-rust p-8 rounded-xl;
-  }
-
-  /* Card */
+  /* ─── Card ──────────────────────────────────────────── */
   .card-container {
     background-color: var(--surface);
     border: 1px solid var(--btn-default-border);
@@ -28,7 +21,7 @@
     @apply shadow-lg shadow-clay/20 dark:shadow-transparent;
   }
 
-  /* Input */
+  /* ─── Input ─────────────────────────────────────────── */
   .input-wrapper {
     @apply w-full max-w-md px-4;
   }
@@ -64,7 +57,7 @@
     @apply mb-4 text-sm mt-1 h-3.5;
   }
 
-  /* Select */
+  /* ─── Select ────────────────────────────────────────── */
   .select-trigger {
     background-color: var(--background);
     color: var(--foreground);
@@ -88,12 +81,7 @@
     background-color: var(--color-sand);
   }
 
-  /* Toast */
-  .toast {
-    @apply px-6 py-3 rounded-md text-sm font-medium border shadow-md fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-opacity duration-300;
-  }
-
-  /* Button */
+  /* ─── Button ────────────────────────────────────────── */
   .btn {
     @apply px-4 py-1 rounded-md font-bold text-sm transition-colors duration-200 border cursor-pointer;
   }
@@ -132,7 +120,47 @@
     @apply p-2 cursor-pointer border-0;
   }
 
-  /* 時間選擇器 */
+  /* ─── Toast ─────────────────────────────────────────── */
+  /* 基底：定位、排版、動畫 */
+  .toast {
+    @apply px-6 py-3 rounded-md text-sm font-medium border shadow-md fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-opacity duration-300;
+  }
+
+  /* 提高飽和度，確保在頁面上足夠顯眼 */
+  .toast-info {
+    background-color: #daeef3;
+    color: #1a5f6e;
+    border-color: #3a8b9e;
+  }
+
+  .toast-success {
+    background-color: #d4e8c8;
+    color: #2a4020;
+    border-color: #5a8a4a;
+  }
+
+  .toast-warning {
+    background-color: #f5e0a0;
+    color: #5a4010;
+    border-color: #c9a84c;
+  }
+
+  .toast-danger {
+    background-color: #f0c0b0;
+    color: #6a1a08;
+    border-color: #c84b31;
+  }
+
+  /* ─── Dialog / Modal ────────────────────────────────── */
+  .alert-dialog-wrapper {
+    @apply max-w-lg space-y-4 border bg-border border-rust p-8 rounded-xl;
+  }
+
+  .dialog-wrapper {
+    @apply max-w-lg space-y-4 border bg-border border-rust p-8 rounded-xl;
+  }
+
+  /* ─── Date Picker ───────────────────────────────────── */
   .rdp-root {
     --rdp-accent-color: var(--color-clay) !important;
     --rdp-accent-background-color: var(--btn-primary-bg) !important;

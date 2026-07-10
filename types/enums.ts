@@ -7,6 +7,12 @@ export enum EventType {
   Icon = "icon",
 }
 
+export enum EventState {
+  Subscribed = "subscribed",
+  Pending = "pending",
+  Cancelled = "cancelled",
+}
+
 export enum CardType {
   Announce = "announce",
   Vote = "vote",

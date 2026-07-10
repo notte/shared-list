@@ -1,42 +1,23 @@
 "use client"
-import { useEffect, useState } from "react"
 import { EventType } from "@/types/enums"
+import { useEffect } from "react"
+import { toastStore } from "@/lib/toastStore"
 
 export interface ToastProps {
+  id: string
   eventType: EventType
   message: string
-  visible: boolean
-  onClose: () => void
 }
 
-export default function Toast({
-  eventType,
-  message,
-  visible,
-  onClose,
-}: ToastProps) {
-  const [show, setShow] = useState(false)
-
+export default function Toast({ id, eventType, message }: ToastProps) {
   useEffect(() => {
-    if (!visible) return
-    const showTimer = setTimeout(() => setShow(true), 0)
     const timer = setTimeout(() => {
-      setShow(false)
-      setTimeout(onClose, 300)
-    }, 3000)
+      toastStore.remove(id)
+    }, 10000)
     return () => {
-      clearTimeout(showTimer)
       clearTimeout(timer)
     }
-  }, [visible, onClose])
+  }, [id])
 
-  return (
-    <div
-      className={`toast btn-${eventType} ${
-        show ? "opacity-100" : "opacity-0 pointer-events-none"
-      }`}
-    >
-      {message}
-    </div>
-  )
+  return <div className={`toast toast-${eventType}`}>{message}</div>
 }

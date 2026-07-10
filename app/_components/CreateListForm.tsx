@@ -6,6 +6,7 @@ import Select from "@/components/ui/Select"
 import { EventType, ButtonAction } from "@/types/enums"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { CreateListRequest } from "@/features/lists/adapters/request"
 import * as z from "zod"
 
 const themeColors = [
@@ -36,15 +37,12 @@ const createListsSchema = z.object({
   }),
 })
 
-// 推導表單型態
-type CreateListsInput = z.infer<typeof createListsSchema>
-
 export default function CreateListForm() {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateListsInput>({
+  } = useForm<CreateListRequest>({
     resolver: zodResolver(createListsSchema),
     defaultValues: {
       title: "",
@@ -54,7 +52,7 @@ export default function CreateListForm() {
   })
 
   // 表單驗證成功後的處理
-  const onSubmit = (data: CreateListsInput) => {
+  const onSubmit = (data: CreateListRequest) => {
     console.log("Submitted Data:", data)
   }
 

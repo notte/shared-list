@@ -1,12 +1,19 @@
 "use client"
 import CardForm from "@/features/cards/components/client/CardForm"
 import Dialog from "@/components/ui/Dialog"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { EventType, DialogRole } from "@/types/enums"
 import Button from "@/components/ui/Button"
+import { toastStore } from "@/lib/toastStore"
 
 export default function Page() {
   const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    toastStore.add(EventType.Danger, "Test error")
+    console.log("test")
+  }, [])
+
   return (
     <>
       <h1>Edit Card</h1>
