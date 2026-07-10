@@ -29,6 +29,10 @@ export const toastStore: IToastStore = {
     return emptyArray // 伺服器端永遠是空的
   },
   add(eventType, message) {
+    const isDuplicate = toasts.some(
+      (item) => item.message === message && item.eventType === eventType,
+    )
+    if (isDuplicate) return
     const id = uuidv4()
     toasts = toasts.concat({ id, eventType, message })
     listeners.forEach((fn) => fn())

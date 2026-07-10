@@ -3,6 +3,7 @@
 import Input from "@/components/ui/Input"
 import Button from "@/components/ui/Button"
 import Select from "@/components/ui/Select"
+import { httpClient } from "@/services/http/client"
 import { EventType, ButtonAction } from "@/types/enums"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -52,8 +53,14 @@ export default function CreateListForm() {
   })
 
   // 表單驗證成功後的處理
-  const onSubmit = (data: CreateListRequest) => {
-    console.log("Submitted Data:", data)
+  const onSubmit = async (data: CreateListRequest) => {
+    await httpClient<CreateListRequest, void>({
+      url: "/api/lists",
+      method: "POST",
+      revalidate: 0,
+      payload: data,
+      successMessage: "新增成功",
+    })
   }
 
   return (
