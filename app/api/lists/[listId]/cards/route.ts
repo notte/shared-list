@@ -28,19 +28,10 @@ export async function GET(
         cardType: d.cardType,
         title: d.title,
         description: d.description,
-        content: d.content,
         createdAt: d.createdAt?.toDate()
           ? d.createdAt.toDate().toISOString()
           : null,
         createdBy: d.createdBy,
-        publishTime: d.publishTime?.toDate()
-          ? d.publishTime.toDate().toISOString()
-          : null,
-        endTime: d.endTime?.toDate() ? d.endTime.toDate().toISOString() : null,
-        eventTime: d.eventTime?.toDate()
-          ? d.eventTime.toDate().toISOString()
-          : null,
-        address: d.address,
         vote: d.vote,
         readBy: d.readBy,
       }

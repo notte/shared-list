@@ -1,8 +1,8 @@
 import { auth, db } from "@/lib/firebaseAdmin"
 import { NextResponse } from "next/server"
-import { SubmitVoteRequest } from "@/features/cards/adapters/request"
 import { getAuthToken } from "@/services/http/apiUtils"
 import { FieldValue } from "firebase-admin/firestore"
+import { Vote, VoteOption } from "@/features/cards/schemas/card.schema"
 
 // ✅ 進行投票或更新投票選項 (在 voteRecords 建立紀錄並更新卡片票數)
 export async function POST(
@@ -37,42 +37,55 @@ export async function POST(
         throw new Error("Card not found.")
       }
 
+      const cardData = cardSnap.data()
+      const voteData = cardData?.vote as Vote | undefined
+
+      if (!voteData || !voteData.options) {
+        throw new Error("Vote configuration not found on this card.")
+      }
+
       // 取得該使用者先前的投票紀錄（若無則為空陣列）
       const oldOptionIds: string[] = oldRecordSnap.exists
         ? oldRecordSnap.data()?.optionIds || []
         : []
 
-      // 準備用來更新卡片票數的物件
-      const votesUpdate: Record<string, FieldValue> = {}
+      // 深拷貝一份現有的選項陣列，準備在記憶體中進行計票增減
+      const updatedOptions = JSON.parse(
+        JSON.stringify(voteData.options),
+      ) as VoteOption[]
 
-      // 扣除舊選項的票數 (找出哪些選項在舊紀錄有，但新紀錄沒有)
-      for (const oldId of oldOptionIds) {
-        if (!optionIds.includes(oldId)) {
-          // 在 Firestore 內將該選項的票數原子性減 1
-          votesUpdate[`votes.${oldId}`] = FieldValue.increment(-1)
-        }
-      }
+      let isChanged = false
 
-      // 增加新選項的票數 (找出哪些選項是新勾選的)
-      for (const newId of optionIds) {
-        if (!oldOptionIds.includes(newId)) {
-          // 在 Firestore 內將該選項的票數原子性加 1
-          votesUpdate[`votes.${newId}`] = FieldValue.increment(1)
+      // 遍歷所有選項，根據新舊勾選狀態精準增減計票
+      for (const option of updatedOptions) {
+        const wasSelected = oldOptionIds.includes(option.voteOptionId)
+        const isSelected = optionIds.includes(option.voteOptionId)
+
+        if (wasSelected && !isSelected) {
+          // 原本有勾，現在沒勾 -> 減 1
+          option.voteCount = Math.max(0, option.voteCount - 1)
+          isChanged = true
+        } else if (!wasSelected && isSelected) {
+          // 原本沒勾，現在有勾 -> 加 1
+          option.voteCount = (option.voteCount || 0) + 1
+          isChanged = true
         }
       }
 
       // 【寫入階段】
 
-      // 更新使用者的投票紀錄
+      // 1. 更新使用者的投票紀錄
       transaction.set(
         voteRecordRef,
         { optionIds, updatedAt: FieldValue.serverTimestamp() },
         { merge: true },
       )
 
-      // 如果票數有變動，才更新卡片文件頂層的 votes 統計欄位
-      if (Object.keys(votesUpdate).length > 0) {
-        transaction.update(cardRef, votesUpdate)
+      // 2. 如果票數有變動，才將更新後的整個 options 陣列寫回卡片文件
+      if (isChanged) {
+        transaction.update(cardRef, {
+          "vote.options": updatedOptions,
+        })
       }
     })
 

@@ -1,7 +1,6 @@
 import { User } from "@/features/user/schemas/user.schema"
 import { CardType } from "@/types/enums"
 
-// Voting configuration for a card
 export interface Vote {
   isMultipleChoice: boolean
   maxChoices: number
@@ -14,12 +13,10 @@ export interface VoteOption {
   voteCount: number
 }
 
-// Tracks which options a user voted for
 export interface VoteRecord {
   optionIds: string[]
 }
 
-// Core card data, shared across all users
 export interface Card {
   cardId: string
   cardType: CardType
@@ -28,9 +25,9 @@ export interface Card {
   content: string
   createdAt: Date
   createdBy: User
-  publishTime: Date
-  endTime: Date
-  eventTime: Date
+  publishTime: Date | null
+  endTime: Date | null
+  eventTime: Date | null
   readBy: string[]
   address?: string
   vote?: Vote

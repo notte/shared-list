@@ -12,39 +12,35 @@ export async function POST(
     const { inviteCode } = await params
     const { userName, color } = await request.json()
 
-    // 身份驗證解出真實的 UID，防範前端偽造
     const token = await getAuthToken()
     const decodedToken = await auth.verifyIdToken(token)
     const currentUserId = decodedToken.uid
 
     const inviteRef = db.collection("invites").doc(inviteCode)
 
+    let targetListId = ""
+
     // 使用 Transaction 確保整套權限寫入的一致性
     await db.runTransaction(async (transaction) => {
-      // 【讀取階段】必須全部放在最前面
+      // 【讀取階段】
       const inviteSnap = await transaction.get(inviteRef)
 
-      // 無效的邀請碼
       if (!inviteSnap.exists) {
         throw new Error("Invalid invitation code.")
       }
 
-      // 邀請碼已被使用
       const inviteData = inviteSnap.data()
       if (inviteData?.status !== "pending") {
         throw new Error("This invitation code has been used or has expired.")
       }
 
-      const listId = inviteData.listId
-      const listRef = db.collection("lists").doc(listId)
+      targetListId = inviteData.listId
+      const listRef = db.collection("lists").doc(targetListId)
       const memberRef = listRef.collection("members").doc(currentUserId)
 
-      // 【寫入階段】當上面的讀取與檢查全部通過，才開始執行寫入
-
-      // 更新邀請碼狀態為已使用
+      // 【寫入階段】
       transaction.update(inviteRef, { status: "joined", usedBy: currentUserId })
 
-      // 更新 lists/{listId} 文件內的 members 快取
       transaction.update(listRef, {
         [`members.${currentUserId}`]: {
           role: "member",
@@ -52,7 +48,6 @@ export async function POST(
         },
       })
 
-      // 在子集合 lists/{listId}/members/{currentUserId} 建立完整的個人權限與設定檔
       transaction.set(memberRef, {
         userName,
         color,
@@ -61,7 +56,10 @@ export async function POST(
     })
 
     return NextResponse.json(
-      { message: "Successfully added to the list." },
+      {
+        message: "Successfully added to the list.",
+        listId: targetListId,
+      },
       { status: 200 },
     )
   } catch (error) {
