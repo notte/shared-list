@@ -1,43 +1,58 @@
 import { NextResponse } from "next/server"
-import { db } from "@/lib/firebaseAdmin"
+import { auth, db } from "@/lib/firebaseAdmin"
 import { FieldValue } from "firebase-admin/firestore"
+import { getAuthToken } from "@/services/http/apiUtils"
 
+// ✅ 使用者接受邀請，正式加入該清單
 export async function POST(
   request: Request,
-  { params }: { params: { inviteCode: string } },
+  { params }: { params: Promise<{ inviteCode: string }> },
 ) {
   try {
-    const { inviteCode } = params
-    const { userId, userName, color } = await request.json() // 從前端傳入匿名登入後的真實 userId
+    const { inviteCode } = await params
+    const { userName, color } = await request.json()
+
+    // 身份驗證解出真實的 UID，防範前端偽造
+    const token = await getAuthToken()
+    const decodedToken = await auth.verifyIdToken(token)
+    const currentUserId = decodedToken.uid
 
     const inviteRef = db.collection("invites").doc(inviteCode)
 
     // 使用 Transaction 確保整套權限寫入的一致性
     await db.runTransaction(async (transaction) => {
+      // 【讀取階段】必須全部放在最前面
       const inviteSnap = await transaction.get(inviteRef)
 
+      // 無效的邀請碼
       if (!inviteSnap.exists) {
-        throw new Error("邀請碼無效")
+        throw new Error("Invalid invitation code.")
       }
 
+      // 邀請碼已被使用
       const inviteData = inviteSnap.data()
       if (inviteData?.status !== "pending") {
-        throw new Error("此邀請碼已被使用或已失效")
+        throw new Error("This invitation code has been used or has expired.")
       }
 
       const listId = inviteData.listId
       const listRef = db.collection("lists").doc(listId)
-      const memberRef = listRef.collection("members").doc(userId)
+      const memberRef = listRef.collection("members").doc(currentUserId)
 
-      // 1. 更新邀請碼狀態為已使用
-      transaction.update(inviteRef, { status: "joined", usedBy: userId })
+      // 【寫入階段】當上面的讀取與檢查全部通過，才開始執行寫入
 
-      // 2. 更新 lists/{listId} 文件內的 members map (對應結構圖：members: {userId: role})
+      // 更新邀請碼狀態為已使用
+      transaction.update(inviteRef, { status: "joined", usedBy: currentUserId })
+
+      // 更新 lists/{listId} 文件內的 members 快取
       transaction.update(listRef, {
-        [`members.${userId}`]: "member", // 賦予預設角色
+        [`members.${currentUserId}`]: {
+          role: "member",
+          name: userName,
+        },
       })
 
-      // 3. 在子集合 lists/{listId}/members/{userId} 建立個人資料
+      // 在子集合 lists/{listId}/members/{currentUserId} 建立完整的個人權限與設定檔
       transaction.set(memberRef, {
         userName,
         color,
@@ -45,8 +60,13 @@ export async function POST(
       })
     })
 
-    return NextResponse.json({ message: "成功加入清單" }, { status: 200 })
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 })
+    return NextResponse.json(
+      { message: "Successfully added to the list." },
+      { status: 200 },
+    )
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown Error."
+    return NextResponse.json({ error: errorMessage }, { status: 400 })
   }
 }

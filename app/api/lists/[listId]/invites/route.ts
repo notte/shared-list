@@ -1,29 +1,96 @@
 import { NextResponse } from "next/server"
-import { db } from "@/lib/firebaseAdmin"
+import { auth, db } from "@/lib/firebaseAdmin"
 import { FieldValue } from "firebase-admin/firestore"
+import { getAuthToken } from "@/services/http/apiUtils"
+import {
+  GetListInvitesResponse,
+  GetInviteItemResponse,
+} from "@/features/lists/adapters/response"
 
-export async function POST(
+// ✅ 取得該清單目前所有有效的邀請碼列表
+export async function GET(
   request: Request,
-  { params }: { params: { listId: string } },
+  { params }: { params: Promise<{ listId: string }> },
 ) {
   try {
-    const { listId } = params
+    const { listId } = await params
 
-    // 1. 使用 Node.js 內建的原生方法產生安全且隨機的 UUID 作為邀請碼
+    // 查詢 listId 相符的所有邀請碼
+    const invitesSnapshot = await db
+      .collection("invites")
+      .where("listId", "==", listId)
+      .get()
+
+    // 透過 loops 拿取資料
+    const invites = invitesSnapshot.docs.map((doc) => {
+      const data = doc.data()
+      return {
+        inviteCode: doc.id,
+        listId: data.listId,
+        createdAt: data.createdAt ? data.createdAt.toDate() : new Date(),
+        status: data.status,
+      }
+    }) as unknown as GetInviteItemResponse[]
+
+    // 額外拼出來前端需要的 Response 格式
+    const responseData: GetListInvitesResponse = {
+      invites: invites,
+    }
+
+    return NextResponse.json(responseData)
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "An error occurred"
+    return NextResponse.json({ error: errorMessage }, { status: 500 })
+  }
+}
+
+// ✅ 為該清單建立一組新的邀請碼
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ listId: string }> },
+) {
+  try {
+    const { listId } = await params
+
+    // 身份驗證解出真實的 UID
+    const token = await getAuthToken()
+    const decodedToken = await auth.verifyIdToken(token)
+    const currentUserId = decodedToken.uid
+
+    // 權限檢查（至頂層清單檢查該使用者是否為 Admin）
+    const listRef = db.collection("lists").doc(listId)
+    const listDoc = await listRef.get()
+
+    if (!listDoc.exists) {
+      return NextResponse.json({ error: "List not found." }, { status: 404 })
+    }
+
+    const listData = listDoc.data()
+    const memberInfo = listData?.members?.[currentUserId]
+
+    // 核心：如果不是成員，或者角色不是 admin，直接回傳 403 拒絕存取
+    if (!memberInfo || memberInfo.role !== "admin") {
+      return NextResponse.json(
+        { error: "Forbidden: Only administrators can generate invite codes." },
+        { status: 403 },
+      )
+    }
+
+    // 使用 Node.js 內建的原生方法產生安全且隨機的 UUID 作為邀請碼
     const inviteCode = crypto.randomUUID()
 
-    // 2. 將邀請資訊寫入根集合 `invites` 中
-    // 這裡不寫入 members，因為此時還沒有使用者的真實 userId
+    // 對齊完整樹狀結構欄位
     await db.collection("invites").doc(inviteCode).set({
       listId: listId,
-      status: "pending", // 狀態：等待加入
       createdAt: FieldValue.serverTimestamp(),
-      // 可以加上由誰建立、或限定此邀請碼的過期時間
+      expiredAt: null, // 預設永不過期，作廢時直接由管理員下 DELETE 即可
     })
 
-    // 3. 回傳邀請碼給前端，前端可以拼成網址（例如：/join?code=xxxx-xxxx...）
+    // 回傳邀請碼給前端
     return NextResponse.json({ inviteCode }, { status: 201 })
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error"
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

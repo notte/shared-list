@@ -1,28 +1,19 @@
 import { NextResponse } from "next/server"
 import { auth, db } from "@/lib/firebaseAdmin" // 假設您的 admin 初始化在這裡
 import { FieldValue } from "firebase-admin/firestore"
-import { headers } from "next/headers"
+import { getAuthToken } from "@/services/http/apiUtils"
+import { UserRole } from "@/features/user/constants/user-status"
 
-// 使用者輸入資料，建立清單
+// ✅ 建立新的共享清單
 export async function POST(request: Request) {
   try {
-    // 從 Request Headers 中取得 Authorization Token
-    const headerList = await headers()
-    const authorization = headerList.get("authorization")
+    const token = await getAuthToken()
 
-    if (!authorization || !authorization.startsWith("Bearer ")) {
-      return NextResponse.json(
-        { error: "No verification token provided, access denied." },
-        { status: 401 },
-      )
-    }
+    // 透過 Firebase Admin SDK 驗證 Token，解析出真實的匿名 UID
+    const decodedToken = await auth.verifyIdToken(token)
+    const currentUserId = decodedToken.uid
 
-    const idToken = authorization.split("Bearer ")[1]
-
-    // 2. 🔐 透過 Firebase Admin SDK 驗證 Token，解析出真實的匿名 UID
-    const decodedToken = await auth.verifyIdToken(idToken)
-    const currentUserId = decodedToken.uid // 🌟 這裡就真正拿到您的 userId 了！
-    // 1. 從前端 Request Body 接收完整的建立資訊
+    // 從前端 Request Body 接收完整的建立資訊
     const { title, userName, color } = await request.json()
 
     if (!title || !userName || !color) {
@@ -32,11 +23,11 @@ export async function POST(request: Request) {
       )
     }
 
-    // 自動生成隨機 listId
+    // 自動生成 listId
     const newListRef = db.collection("lists").doc()
     const batch = db.batch()
 
-    // 2. 寫入 lists/{listId} 本體
+    // 寫入 lists/{listId} 本體
     const newListData = {
       title: title,
       createdAt: FieldValue.serverTimestamp(),
@@ -46,21 +37,26 @@ export async function POST(request: Request) {
         color: color,
       },
       members: {
-        [currentUserId]: "admin",
+        [currentUserId]: {
+          userName: userName,
+          color: color,
+          role: UserRole.Admin,
+        },
       },
     }
     batch.set(newListRef, newListData)
 
-    // 3. 同步在子集合 lists/{listId}/members/{userId} 建立成員詳細資料
+    // 同步在子集合 lists/{listId}/members/{userId} 建立成員詳細資料
     const memberSubRef = newListRef.collection("members").doc(currentUserId)
     const newMemberData = {
       userName: userName,
       color: color,
       joinedAt: FieldValue.serverTimestamp(),
+      role: UserRole.Admin,
     }
     batch.set(memberSubRef, newMemberData)
 
-    // 執行批量寫入
+    // 批量寫入
     await batch.commit()
 
     return NextResponse.json(
@@ -76,3 +72,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }
+
+// 取得目前使用者加入的所有清單 💜 暫時不實作
+export async function GET(request: Request) {}

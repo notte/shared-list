@@ -1,9 +1,4 @@
-import {
-  Card,
-  UserCardState,
-  Vote,
-  VoteRecord,
-} from "@/features/cards/schemas/card.schema"
+import { Card, Vote, VoteRecord } from "@/features/cards/schemas/card.schema"
 
 // 卡片列表回應
 export interface GetCardListResponse {
@@ -14,7 +9,6 @@ export interface GetCardListResponse {
 // 卡片詳情回應 (進入卡片時，通常會合併回傳該卡片主體與當前使用者的已讀狀態)
 export interface GetCardDetailResponse {
   card: Card
-  userCardState: UserCardState
 }
 
 // 取得投票資訊與個人投票紀錄的回應 (發送至 /api/lists/[listId]/cards/[cardId]/vote)

@@ -31,11 +31,7 @@ export interface Card {
   publishTime: Date
   endTime: Date
   eventTime: Date
+  readBy: string[]
   address?: string
   vote?: Vote
-}
-
-// Per-user state for a card
-export interface UserCardState {
-  isRead: boolean
 }

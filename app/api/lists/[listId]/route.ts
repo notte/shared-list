@@ -2,16 +2,14 @@ import { NextResponse } from "next/server"
 import { db } from "@/lib/firebaseAdmin"
 import { GetListDetailResponse } from "@/features/lists/adapters/response"
 
-// 清單已建立，取得當前清單基本資料
+// ✅ 取得特定清單的詳細資訊（或成員快取）
 export async function GET(
   request: Request,
-  // 將 params 宣告為 Promise 以符合新版 Next.js 規範
   { params }: { params: Promise<{ listId: string }> },
 ) {
   try {
-    const { listId } = await params // 🌟 2. 使用 await 解構參數
+    const { listId } = await params
 
-    // 撈取清單主體
     const listDoc = await db.collection("lists").doc(listId).get()
     if (!listDoc.exists) {
       return NextResponse.json(
@@ -25,10 +23,13 @@ export async function GET(
       return NextResponse.json({ error: "Data corrupted." }, { status: 500 })
     }
 
-    // 修正序列化問題：手動將主體的 Timestamp 轉為字串
+    // 將頂層文件中可能帶有的成員快取解構移出，避免影響 list 資料主體
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { members: _, ...listBody } = rawListData
+
     const listData = {
-      ...rawListData,
-      createdAt: rawListData.createdAt?.toDate
+      ...listBody,
+      createdAt: rawListData.createdAt?.toDate()
         ? rawListData.createdAt.toDate().toISOString()
         : null,
     } as unknown as GetListDetailResponse["list"]
@@ -46,8 +47,9 @@ export async function GET(
         id: doc.id,
         userName: d.userName,
         color: d.color,
-        // 將 Firestore Timestamp 轉為 ISO 字串，或為 null
-        joinedAt: d.joinedAt?.toDate ? d.joinedAt.toDate().toISOString() : null,
+        joinedAt: d.joinedAt?.toDate()
+          ? d.joinedAt.toDate().toISOString()
+          : null,
       }
     }) as unknown as GetListDetailResponse["members"]
 
@@ -64,3 +66,15 @@ export async function GET(
     return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }
+
+// 修改清單名稱 💜 暫時不實作
+export async function PUT(
+  request: Request,
+  { params }: { params: Promise<{ listId: string }> },
+) {}
+
+// 刪除該清單（及其底下的子集合資料）💜 暫時不實作
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ listId: string }> },
+) {}
