@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { auth, db } from "@/lib/firebaseAdmin" // 假設您的 admin 初始化在這裡
+import { auth, db } from "@/lib/firebaseAdmin"
 import { FieldValue } from "firebase-admin/firestore"
 import { getAuthToken } from "@/services/http/apiUtils"
 import { UserRole } from "@/features/user/constants/user-status"

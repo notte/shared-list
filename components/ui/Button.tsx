@@ -2,6 +2,7 @@
 
 import { Button as HeadlessButton } from "@headlessui/react"
 import { EventType, ButtonAction } from "@/types/enums"
+import { useRouter, useParams } from "next/navigation"
 
 export interface ButtonProps {
   disabled?: boolean
@@ -10,6 +11,7 @@ export interface ButtonProps {
   children?: React.ReactNode
   onClick?: () => void
   action?: ButtonAction
+  path?: string
 }
 
 export default function Button({
@@ -19,18 +21,13 @@ export default function Button({
   variant,
   onClick,
   action,
+  path,
 }: ButtonProps) {
+  const router = useRouter()
+
   const handleClick = () => {
     if (onClick) onClick()
-
-    switch (action) {
-      case ButtonAction.Navigate:
-        break
-      case ButtonAction.Submit:
-        break
-      default:
-        break
-    }
+    if (action === ButtonAction.Navigate && path) router.push(path)
   }
 
   return (

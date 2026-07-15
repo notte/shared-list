@@ -1,6 +1,6 @@
 import { initializeApp, getApps, cert } from "firebase-admin/app"
 import { getFirestore } from "firebase-admin/firestore"
-import { getAuth } from "firebase-admin/auth" // 🌟 1. 確保有引入 getAuth
+import { getAuth } from "firebase-admin/auth"
 
 const serviceAccount = JSON.parse(
   process.env.FIREBASE_SERVICE_ACCOUNT_KEY as string,
@@ -12,6 +12,5 @@ if (getApps().length === 0) {
   })
 }
 
-// 🌟 2. 確保同時 export db 與 auth
 export const db = getFirestore()
 export const auth = getAuth()

@@ -27,7 +27,7 @@ const createListsSchema = z.object({
   }),
 })
 
-export default function CreateListForm() {
+export default function JoinForm() {
   const {
     control,
     handleSubmit,

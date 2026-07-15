@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { db } from "@/lib/firebaseAdmin"
 import { GetListDetailResponse } from "@/features/lists/adapters/response"
 
-// ✅ 取得特定清單的詳細資訊（或成員快取）
+// ✅ 取得特定清單的詳細資訊
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ listId: string }> },
