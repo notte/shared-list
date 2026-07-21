@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/firebaseAdmin"
-import { GetInviteItemResponse } from "@/features/lists/adapters/response"
+import { revalidatePath } from "next/cache"
 
 // ✅ 驗證該邀請碼是否存在、有效，並取得對應的清單資訊
 export async function GET(
@@ -27,7 +27,7 @@ export async function GET(
     // if (data?.status !== "pending") { ... }
 
     // 額外拼出來前端需要的 Response 格式
-    const responseData: GetInviteItemResponse = {
+    const responseData = {
       inviteCode: inviteDoc.id, // 文件 ID 就是邀請碼
       listId: data?.listId,
       createdAt: data?.createdAt ? data.createdAt.toDate() : new Date(),
@@ -43,12 +43,9 @@ export async function GET(
 }
 
 // ✅ 作廢特定的邀請碼
-export async function DELETE(
-  request: Request,
-  { params }: { params: Promise<{ inviteCode: string }> },
-) {
+export async function DELETE(request: Request) {
   try {
-    const { inviteCode } = await params
+    const { inviteCode } = await request.json()
 
     const inviteRef = db.collection("invites").doc(inviteCode)
     const inviteDoc = await inviteRef.get()
@@ -62,18 +59,13 @@ export async function DELETE(
     }
 
     const data = inviteDoc.data()
-
-    // 嚴格限制只有 pending 狀態才可以被徹底刪除
-    if (data?.status !== "pending") {
-      return NextResponse.json(
-        { error: "Only pending invitation codes can be deleted." },
-        { status: 400 }, // 400 Bad Request 代表此操作不符合業務規則
-      )
-    }
+    const listId = data?.listId
 
     const batch = db.batch()
     batch.delete(inviteRef)
     await batch.commit()
+
+    revalidatePath(`/list/${listId}/setting`)
 
     return NextResponse.json(
       {

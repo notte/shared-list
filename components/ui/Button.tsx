@@ -1,12 +1,12 @@
 "use client"
 
 import { Button as HeadlessButton } from "@headlessui/react"
-import { EventType, ButtonAction } from "@/types/enums"
-import { useRouter, useParams } from "next/navigation"
+import { Variant, ButtonAction } from "@/types/enums"
+import { useRouter } from "next/navigation"
 
 export interface ButtonProps {
   disabled?: boolean
-  variant: EventType
+  variant: Variant
   buttonText?: string
   children?: React.ReactNode
   onClick?: () => void
@@ -37,7 +37,14 @@ export default function Button({
       className={`btn btn-${variant}`}
       type={action === ButtonAction.Submit ? "submit" : "button"}
     >
-      {buttonText || children}
+      {variant === Variant.Icon ? (
+        children
+      ) : (
+        <div className={`flex justify-center items-center gap-1`}>
+          {children}
+          {buttonText}
+        </div>
+      )}
     </HeadlessButton>
   )
 }

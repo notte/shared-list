@@ -4,8 +4,9 @@ import { FieldValue } from "firebase-admin/firestore"
 import { getAuthToken } from "@/services/http/apiUtils"
 import {
   GetListInvitesResponse,
-  GetInviteItemResponse,
+  InviteItem,
 } from "@/features/lists/adapters/response"
+import { revalidatePath } from "next/cache"
 
 // ✅ 取得該清單目前所有有效的邀請碼列表
 export async function GET(
@@ -30,7 +31,7 @@ export async function GET(
         createdAt: data.createdAt ? data.createdAt.toDate() : new Date(),
         status: data.status,
       }
-    }) as unknown as GetInviteItemResponse[]
+    }) as unknown as InviteItem[]
 
     // 額外拼出來前端需要的 Response 格式
     const responseData: GetListInvitesResponse = {
@@ -67,10 +68,11 @@ export async function POST(
     }
 
     const listData = listDoc.data()
-    const memberInfo = listData?.members?.[currentUserId]
+    const isCreator = listData?.createdBy.userId === currentUserId
+    // const memberInfo = listData?.members?.[currentUserId] 未來可能多個 admin 情況
 
-    // 核心：如果不是成員，或者角色不是 admin，直接回傳 403 拒絕存取
-    if (!memberInfo || memberInfo.role !== "admin") {
+    // 核心：如果不是建立者，直接回傳 403 拒絕存取
+    if (!isCreator) {
       return NextResponse.json(
         { error: "Forbidden: Only administrators can generate invite codes." },
         { status: 403 },
@@ -83,9 +85,13 @@ export async function POST(
     // 對齊完整樹狀結構欄位
     await db.collection("invites").doc(inviteCode).set({
       listId: listId,
+      title: listData?.title,
+      creator: listData?.createdBy.userName,
       createdAt: FieldValue.serverTimestamp(),
-      expiredAt: null, // 預設永不過期，作廢時直接由管理員下 DELETE 即可
+      expiredAt: null, // 先預設永不過期，作廢時直接由管理員下 DELETE 即可
     })
+
+    revalidatePath(`/list/${listId}/setting`)
 
     // 回傳邀請碼給前端
     return NextResponse.json({ inviteCode }, { status: 201 })

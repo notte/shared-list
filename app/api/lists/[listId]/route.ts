@@ -32,7 +32,7 @@ export async function GET(
       createdAt: rawListData.createdAt?.toDate()
         ? rawListData.createdAt.toDate().toISOString()
         : null,
-    } as unknown as GetListDetailResponse["list"]
+    } as unknown as GetListDetailResponse
 
     // 撈取之下的 members 子集合
     const membersSnap = await db
@@ -55,7 +55,7 @@ export async function GET(
 
     // 額外拼出來前端需要的 Response 格式
     const responseData: GetListDetailResponse = {
-      list: listData,
+      ...listData,
       members: membersList,
     }
 

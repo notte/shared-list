@@ -4,6 +4,35 @@
     @apply bg-background text-foreground font-sans;
   }
 
+  /* ─── Typography ───────────────────────────────────── */
+  /* h1: 專案唯一標題 (直接寫在 page.tsx 上的 className) */
+  /* text-5xl font-bold text-clay text-center line-clamp-1 */
+
+  /* h2: 頁面大區塊、對話框主要標題 */
+  .subheading {
+    @apply text-3xl font-bold text-ink;
+  }
+
+  /* h3: 卡片內標題、表單分組標題 */
+  .section-title {
+    @apply text-xl font-semibold tracking-wide;
+    color: var(--color-ink);
+  }
+
+  /* ─── Alert Wrapper ────────────────────────────────── */
+  .alert-wrapper {
+    background-color: var(--btn-warning-bg);
+    border: 1px solid var(--btn-warning-border);
+    color: var(--btn-warning-text);
+    @apply w-full max-w-md rounded-xl p-4 mb-6 space-y-2 -z-10;
+  }
+
+  /* 調整提示框內描述文字的顏色與字級 */
+  .alert-wrapper p {
+    color: var(--btn-warning-text);
+    @apply text-sm leading-relaxed opacity-90;
+  }
+
   /* ─── Layout ────────────────────────────────────────── */
   section,
   form {
@@ -167,5 +196,25 @@
     --rdp-range-start-color: var(--color-clay) !important;
     --rdp-range-end-color: var(--color-clay) !important;
     --rdp-range-middle-background-color: var(--btn-primary-bg) !important;
+  }
+
+  /* ─── User Status Badges ───────────────────────────── */
+  /* 基礎樣式 */
+  .status-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border transition-colors duration-200;
+  }
+
+  /* 待處理狀態 (Pending) - 採用枯葉黃 */
+  .status-pending {
+    background-color: var(--btn-warning-bg);
+    border-color: var(--btn-warning-border);
+    color: var(--btn-warning-text);
+  }
+
+  /* 已加入狀態 (Joined) - 採用苔綠色 */
+  .status-joined {
+    background-color: var(--btn-success-bg);
+    border-color: var(--btn-success-border);
+    color: var(--btn-success-text);
   }
 }

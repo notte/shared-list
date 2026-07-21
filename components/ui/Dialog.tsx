@@ -1,6 +1,5 @@
 "use client"
-
-import React, { useEffect, useState } from "react"
+import React from "react"
 import {
   Dialog as HeadlessDialog,
   DialogPanel,
@@ -11,7 +10,7 @@ import {
 import { XMarkIcon } from "@heroicons/react/24/solid"
 
 import Button from "@/components/ui/Button"
-import { EventType, DialogRole, Size } from "@/types/enums"
+import { Variant, DialogRole, Size } from "@/types/enums"
 import Icon from "./Icon"
 
 export interface DialogProps extends Omit<HeadlessDialogProps, "onClose"> {
@@ -54,12 +53,8 @@ export default function Dialog({
           <DialogTitle className="flex justify-between items-center">
             <div className="text-xl font-bold">{title}</div>
             {role === DialogRole.Dialog && (
-              <Button
-                variant={EventType.Icon}
-                disabled={false}
-                onClick={handleOnClose}
-              >
-                <Icon eventType={EventType.Primary} size={Size.Large}>
+              <Button variant={Variant.Icon} onClick={handleOnClose}>
+                <Icon Variant={Variant.Primary} size={Size.Large}>
                   <XMarkIcon />
                 </Icon>
               </Button>
@@ -72,12 +67,12 @@ export default function Dialog({
                 <Button
                   onClick={handleOnClose}
                   buttonText="Cancel"
-                  variant={EventType.Danger}
+                  variant={Variant.Danger}
                 />
                 <Button
                   onClick={handleOnConfirm}
                   buttonText="Deactivate"
-                  variant={EventType.Primary}
+                  variant={Variant.Primary}
                 />
               </div>
             </>

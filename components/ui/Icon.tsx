@@ -1,19 +1,19 @@
-import { EventType, Size } from "@/types/enums"
+import { Variant, Size } from "@/types/enums"
 import { colorMap, iconSizeMap } from "@/lib/map"
 
 export interface IconProps {
-  eventType: EventType
+  Variant: Variant
   size: Size
 }
 
 export default function Icon({
   children,
-  eventType,
+  Variant,
   size,
 }: IconProps & React.PropsWithChildren) {
   return (
     <div
-      className={`${colorMap[eventType]} ${iconSizeMap[size]} flex items-center justify-center`}
+      className={`${colorMap[Variant]} ${iconSizeMap[size]} flex items-center justify-center`}
     >
       {children}
     </div>

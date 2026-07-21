@@ -17,14 +17,20 @@ export default async function Layout({
 
   return (
     <div className="flex flex-col min-h-screen">
-      <nav className="fixed top-0 left-0 right-0 flex justify-between items-center py-16 h-16 bg-background">
-        <NavLeft />
-        <h1 className="text-5xl font-bold text-clay text-center line-clamp-1">
-          {listData.title}
-        </h1>
-        <NavRight listId={listId} listData={listData} />
+      <nav className="fixed top-0 left-0 right-0 flex justify-between items-center bg-background p-10">
+        <div className="flex-1">
+          <NavLeft listId={listId} />
+        </div>
+        <div className="flex-5">
+          <h1 className="text-5xl font-bold text-clay text-center line-clamp-1">
+            {listData.title}
+          </h1>
+        </div>
+        <div className="flex-1 flex justify-end items-end">
+          <NavRight listId={listId} listData={listData} />
+        </div>
       </nav>
-      <div className="flex-1 p-4 mt-32 h-[calc(100vh-8rem)] flex justify-center items-center flex-col">
+      <div className="flex-1 mt-32 h-[calc(100vh-8rem)] flex justify-center items-center flex-col">
         {children}
       </div>
     </div>

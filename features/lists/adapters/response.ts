@@ -1,26 +1,40 @@
-import { List, ListMember, Invite } from "@/features/lists/schemas/list.schema"
+import {
+  List,
+  ListMember,
+  InviteCodeItem,
+} from "@/features/lists/schemas/list.schema"
 
+// 建立邀請碼
 export interface CreateInviteResponse {
   inviteCode: string
 }
 
-export interface GetInviteItemResponse {
+export interface InviteItem extends InviteCodeItem {
   inviteCode: string
-  listId: string
-  createdAt: Date
-  status: Invite["status"] // "pending" | "joined"
 }
 
+// 邀請碼列表
 export interface GetListInvitesResponse {
-  invites: GetInviteItemResponse[]
+  invites: InviteItem[]
 }
 
-export interface GetListDetailResponse {
-  list: List
-  members: ListMember[]
+export interface GetInviteCodeDetailResponse {
+  inviteItem: InviteItem
 }
 
+// 清單詳細
+export type GetListDetailResponse = List
+
+export interface MemberItem extends ListMember {
+  userId: string
+}
+// 成員列表
+export interface GetListMembersResponse {
+  members: MemberItem[]
+}
+
+// 清單成員加入
 export interface JoinListResponse {
   message: string
-  listId: string // 讓前端知道加入成功後，要跳轉到哪一個 list 頁面
+  listId: string
 }

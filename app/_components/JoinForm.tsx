@@ -1,23 +1,23 @@
 "use client"
-
 import Input from "@/components/ui/Input"
 import Button from "@/components/ui/Button"
 import Select from "@/components/ui/Select"
+import Dialog from "@/components/ui/Dialog"
+import { useState } from "react"
 import { httpClient } from "@/services/http/client"
-import { EventType, ButtonAction } from "@/types/enums"
+import { Variant, ButtonAction, DialogRole } from "@/types/enums"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CreateListRequest } from "@/features/lists/adapters/request"
-import * as z from "zod"
+import { JoinListRequest } from "@/features/lists/adapters/request"
 import { saveUserId } from "@/services/storage/userStorage"
 import { themeColors } from "@/lib/utils"
+import * as z from "zod"
+import { JoinListResponse } from "@/features/lists/adapters/response"
+import { useRouter } from "next/navigation"
+import { toastStore } from "@/lib/toastStore"
 
 // 定義驗證 Schema
-const createListsSchema = z.object({
-  title: z
-    .string()
-    .max(15, { message: "List name must be 15 characters or less" })
-    .min(1, { message: "List name is required" }),
+const joinListSchema = z.object({
   userName: z
     .string()
     .max(15, { message: "Nickname must be 15 characters or less" })
@@ -27,59 +27,63 @@ const createListsSchema = z.object({
   }),
 })
 
-export default function JoinForm() {
+export default function JoinForm({
+  inviteCode,
+  title,
+}: {
+  inviteCode: string
+  title: string
+}) {
+  const router = useRouter()
+  const [open, setOpen] = useState<boolean>(false)
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateListRequest>({
-    resolver: zodResolver(createListsSchema),
+    getValues,
+  } = useForm<JoinListRequest>({
+    resolver: zodResolver(joinListSchema),
     defaultValues: {
-      title: "",
       userName: "",
       color: themeColors[0].value,
     },
   })
+  const [tempData, setTempData] = useState<JoinListRequest | null>(null)
 
-  // 表單驗證成功後的處理
-  const onSubmit = async (data: CreateListRequest) => {
-    await saveUserId()
-    await httpClient<CreateListRequest, void>({
-      url: "/api/lists",
+  const onSubmit = async (data: JoinListRequest) => {
+    setTempData(data)
+    setOpen(true)
+  }
+
+  const handleFinalSubmit = async () => {
+    if (!tempData) return
+
+    await httpClient<JoinListRequest, JoinListResponse>({
+      url: `/api/invites/${[inviteCode]}/join`,
       method: "POST",
       revalidate: 0,
-      payload: data,
-      successMessage: "Added successfully.",
+      payload: tempData,
+    }).then(async (res) => {
+      if (res) {
+        await saveUserId()
+        setOpen(false)
+        toastStore.add(Variant.Success, res.message)
+        router.push(`${window.location.origin}/lists/${res.listId}`)
+      }
     })
   }
 
   return (
     <>
-      {/* 使用 HTML form 元素包覆，並綁定 onSubmit */}
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Title 欄位 */}
-        <Controller
-          name="title"
-          control={control}
-          render={({ field }) => (
-            <Input
-              label="List Name"
-              description="Give your list a recognizable name."
-              value={field.value || ""}
-              onChange={field.onChange}
-              errorText={errors.title?.message}
-            />
-          )}
-        />
-
         {/* UserName 欄位 */}
         <Controller
           name="userName"
           control={control}
           render={({ field }) => (
             <Input
-              label="Creator Nickname"
-              description="The nickname shown to other members."
+              label="Display Name"
+              description="The name other members will see on your cards and activities in this list."
               value={field.value || ""}
               onChange={field.onChange}
               errorText={errors.userName?.message}
@@ -88,13 +92,12 @@ export default function JoinForm() {
         />
 
         {/* Color 欄位 */}
-
         <Controller
           name="color"
           control={control}
           render={({ field }) => (
             <Select
-              label="Your Color"
+              label="Your Theme Color"
               description="Choose a color to represent yourself in this list."
               value={field.value}
               onChange={field.onChange}
@@ -114,12 +117,22 @@ export default function JoinForm() {
 
         {/* 調整 Button，使其可以觸發 form 的 submit */}
         <Button
-          buttonText="Submit"
-          variant={EventType.Primary}
-          disabled={false}
+          buttonText="Yes, Join List"
+          variant={Variant.Primary}
           action={ButtonAction.Submit}
         />
       </form>
+      <Dialog
+        open={open}
+        onClose={() => {
+          setOpen(false)
+          setTempData(null)
+        }}
+        onConfirm={handleFinalSubmit}
+        title="Join this list？"
+        description={`You are about to join "${title}" as "${getValues("userName")}".`}
+        role={DialogRole.AlertDialog}
+      />
     </>
   )
 }

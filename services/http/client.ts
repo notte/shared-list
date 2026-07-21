@@ -1,11 +1,11 @@
 import { toastStore } from "@/lib/toastStore"
-import { EventType } from "@/types/enums"
+import { Variant } from "@/types/enums"
 import { auth } from "@/lib/firebaseClient"
 
 // RequestInit：定義 fetch() 函數的第二個參數 可以傳入哪些設定項目
 export interface IHttpClientRequest<T> extends RequestInit {
   url: string
-  revalidate: number
+  revalidate?: number
   payload?: T
   successMessage?: string
 }
@@ -17,7 +17,7 @@ export async function httpClient<T, U>(
 
   if (!currentUser) {
     toastStore.add(
-      EventType.Danger,
+      Variant.Danger,
       "The user is not logged in and cannot send a request.",
     )
     return undefined
@@ -69,12 +69,12 @@ export async function httpClient<T, U>(
         break
     }
 
-    toastStore.add(EventType.Danger, response.statusText || errorText)
+    toastStore.add(Variant.Danger, response.statusText || errorText)
     return undefined
   }
 
   if (response.ok && successMessage) {
-    toastStore.add(EventType.Success, successMessage)
+    toastStore.add(Variant.Success, successMessage)
   }
 
   return response.json()

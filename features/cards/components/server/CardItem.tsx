@@ -1,5 +1,5 @@
 import Button from "@/components/ui/Button"
-import { EventType, ButtonAction } from "@/types/enums"
+import { Variant, ButtonAction } from "@/types/enums"
 import { Card as CardItemProps } from "@/features/cards/schemas/card.schema"
 
 export default function CardItem({
@@ -20,8 +20,7 @@ export default function CardItem({
       <p className="mb-4 line-clamp-2 text-sm">{description}</p>
       <Button
         buttonText="read more"
-        variant={EventType.Primary}
-        disabled={true}
+        variant={Variant.Primary}
         action={ButtonAction.Navigate}
       />
     </div>

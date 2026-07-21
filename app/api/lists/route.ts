@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { auth, db } from "@/lib/firebaseAdmin"
 import { FieldValue } from "firebase-admin/firestore"
 import { getAuthToken } from "@/services/http/apiUtils"
-import { UserRole } from "@/features/user/constants/user-status"
+import { UserRole } from "@/types/enums"
 
 // ✅ 建立新的共享清單
 export async function POST(request: Request) {
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // 自動生成 listId
+    // .doc 會自動生成 listId
     const newListRef = db.collection("lists").doc()
     const batch = db.batch()
 

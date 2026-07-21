@@ -4,7 +4,7 @@ import Input from "@/components/ui/Input"
 import Button from "@/components/ui/Button"
 import Select from "@/components/ui/Select"
 import { httpClient } from "@/services/http/client"
-import { EventType, ButtonAction } from "@/types/enums"
+import { Variant, ButtonAction } from "@/types/enums"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CreateListRequest } from "@/features/lists/adapters/request"
@@ -47,7 +47,6 @@ export default function CreateListForm() {
     await httpClient<CreateListRequest, void>({
       url: "/api/lists",
       method: "POST",
-      revalidate: 0,
       payload: data,
       successMessage: "Added successfully.",
     })
@@ -115,7 +114,7 @@ export default function CreateListForm() {
         {/* 調整 Button，使其可以觸發 form 的 submit */}
         <Button
           buttonText="Submit"
-          variant={EventType.Primary}
+          variant={Variant.Primary}
           disabled={false}
           action={ButtonAction.Submit}
         />

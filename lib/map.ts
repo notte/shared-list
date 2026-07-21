@@ -1,12 +1,12 @@
-import { EventType, Size } from "@/types/enums"
+import { Variant, Size } from "@/types/enums"
 
-export const colorMap: Record<EventType, string> = {
-  [EventType.Default]: "text-[var(--btn-default-text)]",
-  [EventType.Primary]: "text-[var(--btn-primary-text)]",
-  [EventType.Success]: "text-[var(--btn-success-text)]",
-  [EventType.Warning]: "text-[var(--btn-warning-text)]",
-  [EventType.Danger]: "text-[var(--btn-danger-text)]",
-  [EventType.Icon]: "text-[var(--btn-primary-text)]",
+export const colorMap: Record<Variant, string> = {
+  [Variant.Default]: "text-[var(--btn-default-text)]",
+  [Variant.Primary]: "text-[var(--btn-primary-text)]",
+  [Variant.Success]: "text-[var(--btn-success-text)]",
+  [Variant.Warning]: "text-[var(--btn-warning-text)]",
+  [Variant.Danger]: "text-[var(--btn-danger-text)]",
+  [Variant.Icon]: "text-[var(--btn-primary-text)]",
 }
 
 export const iconSizeMap: Record<Size, string> = {
