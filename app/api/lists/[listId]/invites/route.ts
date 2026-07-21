@@ -2,10 +2,7 @@ import { NextResponse } from "next/server"
 import { auth, db } from "@/lib/firebaseAdmin"
 import { FieldValue } from "firebase-admin/firestore"
 import { getAuthToken } from "@/services/http/apiUtils"
-import {
-  GetListInvitesResponse,
-  InviteItem,
-} from "@/features/lists/adapters/response"
+import { GetListInvitesResponse } from "@/features/lists/adapters/response"
 import { revalidatePath } from "next/cache"
 
 // ✅ 取得該清單目前所有有效的邀請碼列表
@@ -28,10 +25,12 @@ export async function GET(
       return {
         inviteCode: doc.id,
         listId: data.listId,
+        title: data.title,
+        creator: data.creator,
         createdAt: data.createdAt ? data.createdAt.toDate() : new Date(),
-        status: data.status,
+        expiredAt: data.expiredAt ?? null,
       }
-    }) as unknown as InviteItem[]
+    })
 
     // 額外拼出來前端需要的 Response 格式
     const responseData: GetListInvitesResponse = {

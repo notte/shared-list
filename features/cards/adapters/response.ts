@@ -1,18 +1,20 @@
 import { Card } from "@/features/cards/schemas/card.schema"
 
-export type CardSummary = Pick<
+export type SerializedCardSummary = Pick<
   Card,
   | "cardId"
   | "cardType"
   | "title"
   | "description"
-  | "createdAt"
   | "createdBy"
   | "readBy"
->
+  | "createdAt"
+> & {
+  createdAt: string | null
+}
 
 export interface GetCardListResponse {
-  cards: CardSummary[]
+  cards: SerializedCardSummary[]
   count: number
 }
 

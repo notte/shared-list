@@ -31,7 +31,9 @@ export async function GET(
       inviteCode: inviteDoc.id, // 文件 ID 就是邀請碼
       listId: data?.listId,
       createdAt: data?.createdAt ? data.createdAt.toDate() : new Date(),
-      status: data?.status,
+      title: data?.title,
+      creator: data?.creator,
+      expiredAt: data?.expiredAt ?? null,
     }
 
     return NextResponse.json(responseData)

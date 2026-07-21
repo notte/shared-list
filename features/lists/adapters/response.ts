@@ -1,26 +1,16 @@
-import {
-  List,
-  ListMember,
-  InviteCodeItem,
-} from "@/features/lists/schemas/list.schema"
+import { List, ListMember, Invite } from "@/features/lists/schemas/list.schema"
 
 // 建立邀請碼
 export interface CreateInviteResponse {
   inviteCode: string
 }
 
-export interface InviteItem extends InviteCodeItem {
-  inviteCode: string
-}
-
 // 邀請碼列表
 export interface GetListInvitesResponse {
-  invites: InviteItem[]
+  invites: Invite[]
 }
 
-export interface GetInviteCodeDetailResponse {
-  inviteItem: InviteItem
-}
+export type GetInviteCodeDetailResponse = Invite
 
 export type SerializedMember = Omit<List["members"][string], "joinedAt"> & {
   joinedAt: string | null

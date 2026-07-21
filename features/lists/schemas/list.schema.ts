@@ -28,11 +28,12 @@ export interface ListMember {
 
 // 設定頁面，邀請 & 成員列表
 export interface Invite {
-  listId: string
   inviteCode: string
-  createdAt: Date
+  listId: string
   title: string
   creator: string
+  createdAt: Date
+  expiredAt: Date | null
 }
 
 export interface Member {
@@ -42,13 +43,4 @@ export interface Member {
   joinedAt: Date
   color: string
   role: UserRole
-}
-
-// 邀請碼列表項目
-export interface InviteCodeItem {
-  listId: string
-  title: string
-  creator: string
-  createdAt: Date
-  expiredAt: null
 }

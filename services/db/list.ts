@@ -1,5 +1,4 @@
 import {
-  InviteItem,
   GetListDetailResponse,
   GetListInvitesResponse,
   GetListMembersResponse,
@@ -41,7 +40,7 @@ export const getListInvites = cache(
       return { invites: [] }
     }
 
-    const invites: InviteItem[] = invitesSnapshot.docs.map((doc) => {
+    const invites = invitesSnapshot.docs.map((doc) => {
       const data = doc.data()
       return {
         inviteCode: doc.id,
@@ -97,14 +96,12 @@ export const getInviteCodeDetail = cache(
     if (!inviteData) return null
 
     return {
-      inviteItem: {
-        inviteCode: docSnap.id,
-        listId: inviteData.listId,
-        title: inviteData.title,
-        creator: inviteData.creator,
-        createdAt: inviteData.createdAt?.toDate() || new Date(),
-        expiredAt: inviteData.expiredAt?.toDate() || null,
-      },
+      inviteCode: docSnap.id,
+      listId: inviteData.listId,
+      title: inviteData.title,
+      creator: inviteData.creator,
+      createdAt: inviteData.createdAt?.toDate() || new Date(),
+      expiredAt: inviteData.expiredAt?.toDate() || null,
     }
   },
 )
