@@ -41,22 +41,26 @@ export async function GET(
       .collection("members")
       .get()
 
-    const membersList = membersSnap.docs.map((doc) => {
-      const d = doc.data()
-      return {
-        id: doc.id,
-        userName: d.userName,
-        color: d.color,
-        joinedAt: d.joinedAt?.toDate()
-          ? d.joinedAt.toDate().toISOString()
-          : null,
-      }
-    }) as unknown as GetListDetailResponse["members"]
+    const members = membersSnap.docs.reduce<GetListDetailResponse["members"]>(
+      (sum, current) => {
+        const d = current.data()
+        sum[current.id] = {
+          userName: d.userName,
+          color: d.color,
+          role: d.role,
+          joinedAt: d.joinedAt?.toDate()
+            ? d.joinedAt.toDate().toISOString()
+            : null,
+        }
+        return sum
+      },
+      {} as GetListDetailResponse["members"],
+    )
 
     // 額外拼出來前端需要的 Response 格式
     const responseData: GetListDetailResponse = {
       ...listData,
-      members: membersList,
+      members,
     }
 
     return NextResponse.json(responseData)

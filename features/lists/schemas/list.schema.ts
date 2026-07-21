@@ -12,7 +12,10 @@ export interface List {
   title: string
   createdBy: User
   createdAt: Date
-  members: Record<string, { role: UserRole; name: string }>
+  members: Record<
+    string,
+    { role: UserRole; userName: string; color: string; joinedAt: Date }
+  >
 }
 
 // 清單成員
@@ -26,11 +29,19 @@ export interface ListMember {
 // 設定頁面，邀請 & 成員列表
 export interface Invite {
   listId: string
-  userId: string
   inviteCode: string
   createdAt: Date
+  title: string
+  creator: string
+}
+
+export interface Member {
+  listId: string
+  userId: string
   userName: string
   joinedAt: Date
+  color: string
+  role: UserRole
 }
 
 // 邀請碼列表項目

@@ -1,4 +1,4 @@
-import { User } from "@/features/user/schemas/user.schema"
+import { User } from "@/features/lists/schemas/list.schema"
 import { CardType } from "@/types/enums"
 
 export interface Vote {

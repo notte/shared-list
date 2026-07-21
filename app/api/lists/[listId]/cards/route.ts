@@ -3,8 +3,8 @@ import { auth, db } from "@/lib/firebaseAdmin"
 import { GetCardListResponse } from "@/features/cards/adapters/response"
 import { CreateCardRequest } from "@/features/cards/adapters/request"
 import { FieldValue, Timestamp } from "firebase-admin/firestore"
-import { headers } from "next/headers"
 import { getAuthToken } from "@/services/http/apiUtils"
+import { CardType } from "@/types/enums"
 
 // ✅ 取得某清單的卡片列表
 export async function GET(
@@ -32,7 +32,6 @@ export async function GET(
           ? d.createdAt.toDate().toISOString()
           : null,
         createdBy: d.createdBy,
-        vote: d.vote,
         readBy: d.readBy,
       }
     }) as unknown as GetCardListResponse["cards"]
@@ -75,10 +74,11 @@ export async function POST(
       endTime,
       eventTime,
       address,
-      vote,
       userName,
       color,
     } = body
+
+    const vote = body.cardType === CardType.Vote ? body.vote : undefined
 
     // 這裡會自動生成卡片 id
     const newCardRef = db

@@ -22,8 +22,14 @@ export interface GetInviteCodeDetailResponse {
   inviteItem: InviteItem
 }
 
+export type SerializedMember = Omit<List["members"][string], "joinedAt"> & {
+  joinedAt: string | null
+}
+
 // 清單詳細
-export type GetListDetailResponse = List
+export type GetListDetailResponse = Omit<List, "members"> & {
+  members: Record<string, SerializedMember>
+}
 
 export interface MemberItem extends ListMember {
   userId: string
