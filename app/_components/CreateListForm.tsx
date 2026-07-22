@@ -8,9 +8,9 @@ import { Variant, ButtonAction } from "@/types/enums"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CreateListRequest } from "@/features/lists/adapters/request"
-import * as z from "zod"
 import { saveUserId } from "@/services/storage/userStorage"
 import { themeColors } from "@/lib/utils"
+import * as z from "zod"
 
 // 定義驗證 Schema
 const createListsSchema = z.object({

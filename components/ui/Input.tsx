@@ -26,7 +26,7 @@ export default function Input<T extends string | number | undefined>({
   errorText,
 }: InputProps<T>) {
   return (
-    <div className="input-wrapper">
+    <div className="w-full">
       <Field disabled={disabled}>
         <Label className="input-label">{label}</Label>
         {description && (

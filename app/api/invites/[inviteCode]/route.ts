@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/firebaseAdmin"
-import { revalidatePath } from "next/cache"
 
 // ✅ 驗證該邀請碼是否存在、有效，並取得對應的清單資訊
 export async function GET(
@@ -66,8 +65,6 @@ export async function DELETE(request: Request) {
     const batch = db.batch()
     batch.delete(inviteRef)
     await batch.commit()
-
-    revalidatePath(`/list/${listId}/setting`)
 
     return NextResponse.json(
       {

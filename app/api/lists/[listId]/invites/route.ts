@@ -3,7 +3,6 @@ import { auth, db } from "@/lib/firebaseAdmin"
 import { FieldValue } from "firebase-admin/firestore"
 import { getAuthToken } from "@/services/http/apiUtils"
 import { GetListInvitesResponse } from "@/features/lists/adapters/response"
-import { revalidatePath } from "next/cache"
 
 // ✅ 取得該清單目前所有有效的邀請碼列表
 export async function GET(
@@ -89,8 +88,6 @@ export async function POST(
       createdAt: FieldValue.serverTimestamp(),
       expiredAt: null, // 先預設永不過期，作廢時直接由管理員下 DELETE 即可
     })
-
-    revalidatePath(`/list/${listId}/setting`)
 
     // 回傳邀請碼給前端
     return NextResponse.json({ inviteCode }, { status: 201 })

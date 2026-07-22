@@ -8,6 +8,7 @@ export interface IHttpClientRequest<T> extends RequestInit {
   revalidate?: number
   payload?: T
   successMessage?: string
+  cache?: "no-store" | "force-cache"
 }
 
 export async function httpClient<T, U>(

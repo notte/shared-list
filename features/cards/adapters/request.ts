@@ -3,28 +3,27 @@ import { CardType } from "@/types/enums"
 
 type BaseCreateCardRequest = Omit<
   Card,
-  "cardId" | "createdAt" | "createdBy" | "readBy" | "vote" | "cardType"
-> & {
-  userName: string
-  color: string
-}
+  | "cardId"
+  | "createdAt"
+  | "createdBy"
+  | "readBy"
+  | "vote"
+  | "cardType"
+  | "userName"
+  | "color"
+>
 
-type CreateAnnounceCardRequest = Omit<BaseCreateCardRequest, "vote"> & {
+export interface CreateAnnounceCardRequest extends BaseCreateCardRequest {
   cardType: CardType.Announce
 }
 
-type CreateVoteCardRequest = Omit<BaseCreateCardRequest, "vote"> & {
+export interface CreateVoteCardRequest extends BaseCreateCardRequest {
   cardType: CardType.Vote
-  vote: Vote
+  vote?: Vote
 }
 
-export type CreateCardRequest =
-  CreateAnnounceCardRequest | CreateVoteCardRequest
-
-// 編輯卡片
-export type EditCardRequest = Partial<
-  Omit<Card, "cardId" | "createdAt" | "createdBy" | "readBy">
->
+// 編輯 & 新增卡片
+export type CardRequest = CreateAnnounceCardRequest | CreateVoteCardRequest
 
 // 投票動作
 export interface SubmitVoteRequest {

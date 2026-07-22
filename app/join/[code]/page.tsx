@@ -15,9 +15,8 @@ export default async function Page({ params }: PageProps) {
     <div className="w-full h-full p-0 m-0 fixed flex justify-center items-center">
       <div className="flex flex-col justify-center items-center w-full h-fit">
         <h2 className="subheading mb-10">
-          <span className="text-clay">{inviteItem?.inviteItem.creator}</span>{" "}
-          invited you to join{" "}
-          <span className="text-moss">{inviteItem?.inviteItem.title}</span>
+          <span className="text-clay">{inviteItem?.creator}</span> invited you
+          to join <span className="text-moss">{inviteItem?.title}</span>
         </h2>
         <div className="alert-wrapper">
           <h3 className="section-title">
@@ -29,10 +28,7 @@ export default async function Page({ params }: PageProps) {
             remove your ID, and you may lose access to this list.
           </p>
         </div>
-        <JoinForm
-          inviteCode={code}
-          title={inviteItem?.inviteItem.title ?? ""}
-        />
+        <JoinForm inviteCode={code} title={inviteItem?.title ?? ""} />
       </div>
     </div>
   )

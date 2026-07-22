@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/firebaseAdmin"
 import { FieldValue } from "firebase-admin/firestore"
-import { revalidatePath } from "next/cache"
 
 // 取得該清單下的所有成員列表 💜 暫時不實作
 export async function GET(
@@ -55,8 +54,6 @@ export async function DELETE(
 
     // 執行批次寫入
     await batch.commit()
-
-    revalidatePath(`/list/${listId}/setting`)
 
     return NextResponse.json(
       { message: "Member successfully removed from the list." },

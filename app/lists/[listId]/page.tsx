@@ -1,4 +1,5 @@
 import { getListDetail } from "@/services/db/list"
+import CardForm from "@/features/cards/components/client/CardForm"
 
 interface PageProps {
   params: Promise<{ listId: string }>
@@ -19,8 +20,16 @@ export default async function Page({ params }: PageProps) {
   if (!listData) return <>The list does not exist.</>
 
   return (
-    <div>
-      <h1>{listData.title}</h1>
-    </div>
+    <>
+      <div className="w-full flex flex-col m-0 p-0 items-center justify-center">
+        <div className="w-1/2 flex flex-col mb-6">
+          <h2 className="subheading">Create Card</h2>
+          <h3 className="section-title">
+            Share an update, plan an event, or start a vote — all in one place.
+          </h3>
+        </div>
+        <CardForm />
+      </div>
+    </>
   )
 }

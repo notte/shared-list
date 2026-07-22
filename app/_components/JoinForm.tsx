@@ -11,10 +11,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { JoinListRequest } from "@/features/lists/adapters/request"
 import { saveUserId } from "@/services/storage/userStorage"
 import { themeColors } from "@/lib/utils"
-import * as z from "zod"
 import { JoinListResponse } from "@/features/lists/adapters/response"
 import { useRouter } from "next/navigation"
 import { toastStore } from "@/lib/toastStore"
+import * as z from "zod"
 
 // 定義驗證 Schema
 const joinListSchema = z.object({
@@ -36,6 +36,7 @@ export default function JoinForm({
 }) {
   const router = useRouter()
   const [open, setOpen] = useState<boolean>(false)
+
   const {
     control,
     handleSubmit,

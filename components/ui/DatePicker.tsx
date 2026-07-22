@@ -188,7 +188,7 @@ export default function DatePicker(props: DatePickerProps) {
   }
 
   return (
-    <Popover className="w-full max-w-md">
+    <Popover className="w-full">
       <PopoverButton as="div" className="w-full">
         <Input
           label={label}
@@ -259,7 +259,7 @@ export default function DatePicker(props: DatePickerProps) {
                   placeholder="00"
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="">
                 <span className="text-sm text-muted w-8">To</span>
                 <Select
                   options={hourOptions}
@@ -267,7 +267,7 @@ export default function DatePicker(props: DatePickerProps) {
                   onChange={(v) => handleRangeTimeChange("toHour", v)}
                   placeholder="00"
                 />
-                <span className="text-foreground">:</span>
+                <span className="text-foreground">：</span>
                 <Select
                   options={minuteOptions}
                   value={toMinute}

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server"
 import { auth, db } from "@/lib/firebaseAdmin"
 import { GetCardListResponse } from "@/features/cards/adapters/response"
-import { CreateCardRequest } from "@/features/cards/adapters/request"
 import { FieldValue, Timestamp } from "firebase-admin/firestore"
 import { getAuthToken } from "@/services/http/apiUtils"
 import { CardType } from "@/types/enums"
@@ -63,7 +62,7 @@ export async function POST(
     const currentUserId = decodedToken.uid
 
     // 從 HTTP Request Body 取得前端傳過來的卡片內容
-    const body: CreateCardRequest = await request.json()
+    const body = await request.json()
 
     const {
       title,
