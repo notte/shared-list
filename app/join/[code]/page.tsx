@@ -1,4 +1,4 @@
-import JoinForm from "@/app/_components/JoinForm"
+import JoinForm from "@/features/lists/components/client/JoinForm"
 import { getInviteCodeDetail } from "@/services/db/list"
 
 interface PageProps {

@@ -10,6 +10,8 @@ if (getApps().length === 0) {
   initializeApp({
     credential: cert(serviceAccount),
   })
+
+  getFirestore().settings({ ignoreUndefinedProperties: true })
 }
 
 export const db = getFirestore()

@@ -14,6 +14,7 @@ export interface SelectProps {
   label?: string
   description?: string
   errorText?: string
+  noError?: boolean
   options: { label: string; value: string; slot?: React.ReactNode }[]
   value: string
   onChange: (value: string) => void
@@ -30,6 +31,7 @@ export default function Select({
   onChange,
   placeholder = "Please select",
   disabled,
+  noError = false,
 }: SelectProps) {
   const selected = options?.find((o) => o.value === value)
 
@@ -60,7 +62,7 @@ export default function Select({
             ))}
           </MenuItems>
         </Menu>
-        <p className="input-error">{errorText}</p>
+        {!noError && <p className="input-error">{errorText}</p>}
       </Field>
     </div>
   )

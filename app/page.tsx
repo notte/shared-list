@@ -1,4 +1,4 @@
-import CreateListForm from "@/app/_components/CreateListForm"
+import CreateListForm from "@/features/lists/components/client/CreateListForm"
 
 export default function Home() {
   return (

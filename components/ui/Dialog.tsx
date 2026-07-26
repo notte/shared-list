@@ -17,7 +17,7 @@ export interface DialogProps extends Omit<HeadlessDialogProps, "onClose"> {
   open: boolean
   onClose: () => void
   onConfirm?: () => void
-  title: string
+  title?: string
   role: DialogRole
   description?: string
   children?: React.ReactNode
@@ -77,7 +77,7 @@ export default function Dialog({
               </div>
             </>
           )}
-          {children}
+          <div className="w-full overflow-y-auto">{children}</div>
         </DialogPanel>
       </div>
     </HeadlessDialog>

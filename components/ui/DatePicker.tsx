@@ -207,13 +207,13 @@ export default function DatePicker(props: DatePickerProps) {
         {mode === "single" ? (
           <>
             <DayPicker
-              autoFocus
               locale={enUS}
               mode="single"
               month={month}
               onMonthChange={setMonth}
               onSelect={handleSingleSelect}
               selected={selectedDate}
+              captionLayout="dropdown"
             />
             <div className="flex items-center gap-2 mt-2 px-1">
               <Select
@@ -221,6 +221,7 @@ export default function DatePicker(props: DatePickerProps) {
                 value={hour}
                 onChange={handleSingleHourChange}
                 placeholder="00"
+                noError={true}
               />
               <span className="text-foreground">:</span>
               <Select
@@ -228,19 +229,20 @@ export default function DatePicker(props: DatePickerProps) {
                 value={minute}
                 onChange={handleSingleMinuteChange}
                 placeholder="00"
+                noError={true}
               />
             </div>
           </>
         ) : (
           <>
             <DayPicker
-              autoFocus
               locale={enUS}
               mode="range"
               month={month}
               onMonthChange={setMonth}
               onSelect={handleRangeSelect}
               selected={selectedRange}
+              captionLayout="dropdown"
             />
             <div className="flex flex-col gap-2 mt-2 px-1">
               <div className="flex items-center gap-2">
@@ -250,6 +252,7 @@ export default function DatePicker(props: DatePickerProps) {
                   value={fromHour}
                   onChange={(v) => handleRangeTimeChange("fromHour", v)}
                   placeholder="00"
+                  noError={true}
                 />
                 <span className="text-foreground">:</span>
                 <Select
@@ -257,15 +260,17 @@ export default function DatePicker(props: DatePickerProps) {
                   value={fromMinute}
                   onChange={(v) => handleRangeTimeChange("fromMinute", v)}
                   placeholder="00"
+                  noError={true}
                 />
               </div>
-              <div className="">
+              <>
                 <span className="text-sm text-muted w-8">To</span>
                 <Select
                   options={hourOptions}
                   value={toHour}
                   onChange={(v) => handleRangeTimeChange("toHour", v)}
                   placeholder="00"
+                  noError={true}
                 />
                 <span className="text-foreground">：</span>
                 <Select
@@ -273,8 +278,9 @@ export default function DatePicker(props: DatePickerProps) {
                   value={toMinute}
                   onChange={(v) => handleRangeTimeChange("toMinute", v)}
                   placeholder="00"
+                  noError={true}
                 />
-              </div>
+              </>
             </div>
           </>
         )}

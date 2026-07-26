@@ -1,9 +1,9 @@
 "use client"
 import Icon from "@/components/ui/Icon"
+import { usePathname } from "next/navigation"
 import { HomeIcon, ArrowUturnLeftIcon } from "@heroicons/react/24/solid"
 import { ButtonAction, Variant, Size } from "@/types/enums"
 import Button from "@/components/ui/Button"
-import { usePathname } from "next/navigation"
 
 export default function NavLeft({ listId }: { listId: string }) {
   const pathname = usePathname()

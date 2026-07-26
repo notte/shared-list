@@ -2,13 +2,17 @@
 import Button from "@/components/ui/Button"
 import Dialog from "@/components/ui/Dialog"
 import { Variant, ButtonAction, DialogRole } from "@/types/enums"
-import { Invite } from "@/features/lists/schemas/list.schema"
+import {
+  GetInviteCodeDetailResponse,
+  MemberItem as IMemberItem,
+} from "@/features/lists/adapters/response"
 import { useState } from "react"
 import { toastStore } from "@/lib/toastStore"
 import { httpClient } from "@/services/http/client"
 import { useRouter } from "next/navigation"
+import { dateOptions } from "@/lib/utils"
 
-export type MemberItemProps = Partial<Invite>
+export type MemberItemProps = Partial<GetInviteCodeDetailResponse & IMemberItem>
 
 export default function MemberItem({
   inviteCode,
@@ -77,9 +81,17 @@ export default function MemberItem({
           </div>
           <div className="text-sm text-stone flex items-end mr-2">
             {createdAt && (
-              <p>Created: {createdAt?.toLocaleDateString("zh-TW")}</p>
+              <p>
+                Created:{" "}
+                {new Date(createdAt).toLocaleString("en-US", dateOptions)}
+              </p>
             )}
-            {joinedAt && <p>Joined: {joinedAt?.toLocaleDateString("zh-TW")}</p>}
+            {joinedAt && (
+              <p>
+                Joined:{" "}
+                {new Date(joinedAt).toLocaleString("en-US", dateOptions)}
+              </p>
+            )}
           </div>
         </div>
         <div className="flex justify-end items-center">

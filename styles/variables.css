@@ -4,6 +4,12 @@
     @apply bg-background text-foreground font-sans;
   }
 
+  hr {
+    width: 100%;
+    border-top: 1px solid var(--border);
+    margin: 1.5rem 0;
+  }
+
   /* ─── Typography ───────────────────────────────────── */
   /* h1: 專案唯一標題 (直接寫在 page.tsx 上的 className) */
   /* text-5xl font-bold text-clay text-center line-clamp-1 */
@@ -183,7 +189,7 @@
   }
 
   .dialog-wrapper {
-    @apply max-w-lg space-y-4 border bg-border border-rust p-8 rounded-xl;
+    @apply flex flex-col w-1/2 max-h-11/12 space-y-4 border bg-border border-rust p-8 rounded-xl;
   }
 
   /* ─── Date Picker ───────────────────────────────────── */

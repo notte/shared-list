@@ -77,7 +77,7 @@ export async function POST(
       color,
     } = body
 
-    const vote = body.cardType === CardType.Vote ? body.vote : undefined
+    const vote = body.cardType === CardType.Vote ? body.vote : null
 
     // 這裡會自動生成卡片 id
     const newCardRef = db
@@ -85,15 +85,16 @@ export async function POST(
       .doc(listId)
       .collection("cards")
       .doc()
+
     const newCardId = newCardRef.id
     const batch = db.batch()
 
     const newCardData = {
       cardId: newCardId,
       title,
+      description,
       content,
       cardType,
-      description,
       publishTime: publishTime
         ? Timestamp.fromDate(new Date(publishTime))
         : null,
@@ -114,7 +115,8 @@ export async function POST(
     batch.set(newCardRef, newCardData)
     await batch.commit()
     return NextResponse.json({ message: "Card created successfully" })
-  } catch {
+  } catch (error) {
+    console.log(error)
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
   }
 }

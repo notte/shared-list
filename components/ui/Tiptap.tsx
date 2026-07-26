@@ -160,7 +160,7 @@ const Tiptap = ({ value, onChange, errorText }: TiptapProps) => {
   }, [value, editor])
 
   return (
-    <>
+    <div className="w-full">
       <label className="input-label">Content</label>
       <p className="input-description">
         Detailed description with text formatting.
@@ -168,12 +168,12 @@ const Tiptap = ({ value, onChange, errorText }: TiptapProps) => {
       <div className="w-full mb-4 border border-border rounded-xl overflow-hidden">
         <MenuBar editor={editor} />
         <EditorContent
-          className="p-4 bg-surface overflow-y-auto"
+          className="p-4 bg-surface overflow-y-auto bg-background"
           editor={editor}
         />
       </div>
       <p className="input-error">{errorText}</p>
-    </>
+    </div>
   )
 }
 

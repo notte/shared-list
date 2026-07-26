@@ -1,7 +1,7 @@
-import MemberList from "@/features/lists/components/server/MemberList"
+import MemberList from "@/features/lists/components/client/MemberList"
 import MemberItem, {
   MemberItemProps,
-} from "@/features/lists/components/server/MemberItem"
+} from "@/features/lists/components/client/MemberItem"
 import { getListInvites, getListMembers } from "@/services/db/list"
 
 export default async function Page({

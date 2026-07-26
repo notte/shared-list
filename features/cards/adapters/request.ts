@@ -19,7 +19,7 @@ export interface CreateAnnounceCardRequest extends BaseCreateCardRequest {
 
 export interface CreateVoteCardRequest extends BaseCreateCardRequest {
   cardType: CardType.Vote
-  vote?: Vote
+  vote: Vote
 }
 
 // 編輯 & 新增卡片
