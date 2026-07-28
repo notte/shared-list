@@ -54,7 +54,7 @@ export default function Dialog({
             <div className="text-xl font-bold">{title}</div>
             {role === DialogRole.Dialog && (
               <Button variant={Variant.Icon} onClick={handleOnClose}>
-                <Icon Variant={Variant.Primary} size={Size.Large}>
+                <Icon variant={Variant.Primary} size={Size.Large}>
                   <XMarkIcon />
                 </Icon>
               </Button>
@@ -77,7 +77,7 @@ export default function Dialog({
               </div>
             </>
           )}
-          <div className="w-full overflow-y-auto">{children}</div>
+          {children && <div className="w-full overflow-y-auto">{children}</div>}
         </DialogPanel>
       </div>
     </HeadlessDialog>

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/firebaseAdmin"
 import { GetCardDetailResponse } from "@/features/cards/adapters/response"
+import { toIsoString } from "@/lib/date"
 
 // ✅ 取得單一卡片的詳細資訊
 export async function GET(
@@ -38,18 +39,17 @@ export async function GET(
       content: cardBody.content,
       createdAt: cardBody.createdAt,
       createdBy: cardBody.createdBy,
-      publishTime: cardBody.publishTime,
-      endTime: cardBody.endTime,
-      eventTime: cardBody.eventTime,
+      publishTime: toIsoString(cardBody.publishTime),
+      endTime: toIsoString(cardBody.endTime),
+      eventTime: toIsoString(cardBody.eventTime),
+      eventStartTime: toIsoString(cardBody.eventStartTime),
+      eventEndTime: toIsoString(cardBody.eventEndTime),
       readBy: cardBody.readBy,
       address: cardBody.address,
       vote: cardBody.vote,
-    } as unknown as GetCardDetailResponse["card"]
+    } as unknown as GetCardDetailResponse
 
-    const responseData: GetCardDetailResponse = {
-      card: cardData,
-    }
-    return NextResponse.json(responseData)
+    return NextResponse.json(cardData)
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "An error occurred"
@@ -73,6 +73,8 @@ export async function PUT(
       publishTime,
       endTime,
       eventTime,
+      eventStartTime,
+      eventEndTime,
       readBy,
       address,
       vote,
@@ -101,6 +103,8 @@ export async function PUT(
       publishTime,
       endTime,
       eventTime,
+      eventStartTime,
+      eventEndTime,
       readBy,
       address,
       vote,

@@ -8,7 +8,7 @@ import { Variant, ButtonAction } from "@/types/enums"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CreateListRequest } from "@/features/lists/adapters/request"
-import { saveUserData } from "@/services/storage/userStorage"
+import { saveUserData } from "@/services/storage/user.client"
 import { themeColors } from "@/lib/utils"
 import * as z from "zod"
 

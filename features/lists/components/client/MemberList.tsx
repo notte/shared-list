@@ -36,7 +36,7 @@ export default function MemberList({
           action={ButtonAction.Navigate}
           onClick={createListInvite}
         >
-          <Icon Variant={Variant.Primary} size={Size.Small}>
+          <Icon variant={Variant.Primary} size={Size.Small}>
             <UserPlusIcon />
           </Icon>
         </Button>

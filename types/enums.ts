@@ -19,6 +19,7 @@ export enum EventStatus {
 export enum CardType {
   Announce = "announce",
   Vote = "vote",
+  Closed = "closed",
 }
 
 // 按鈕行為

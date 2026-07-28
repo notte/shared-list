@@ -1,17 +1,22 @@
 "use client"
 
-import { useState } from "react"
 import Button from "@/components/ui/Button"
+import { useState } from "react"
+import { httpClient } from "@/services/http/client"
+import { useRouter } from "next/navigation"
 import { Variant, ButtonAction } from "@/types/enums"
 import { GetCardDetailResponse } from "@/features/cards/adapters/response"
 
-export type VoteCardViewProps = GetCardDetailResponse["card"]["vote"] & {
+export type VoteCardViewProps = {
+  vote: GetCardDetailResponse["vote"]
   listId: string
   cardId: string
 }
 
 export default function VoteCardView(props: VoteCardViewProps) {
-  const { isMultipleChoice, maxChoices, options, listId, cardId } = props!
+  const router = useRouter()
+  const { vote, listId, cardId } = props!
+  const { isMultipleChoice, maxChoices, options } = vote!
   const totalVotes = options.reduce((sum, o) => sum + o.voteCount, 0)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
@@ -28,19 +33,23 @@ export default function VoteCardView(props: VoteCardViewProps) {
   }
 
   const handleSubmit = async () => {
-    console.log(selectedIds)
+    await httpClient({
+      url: `/api/lists/${listId}/cards/${cardId}/vote`,
+      method: "POST",
+      payload: { optionIds: selectedIds },
+      successMessage: "",
+    }).then(() => {
+      router.refresh()
+    })
   }
 
   return (
     <div className="w-full space-y-4">
-      {/* ─── 說明 ────────────────────────────────── */}
       <p className="text-sm" style={{ color: "var(--muted)" }}>
         {isMultipleChoice
           ? `Select up to ${maxChoices} options.`
           : "Select one option."}
       </p>
-
-      {/* ─── 選項列表 ────────────────────────────── */}
       <div className="space-y-3">
         {options.map((option) => {
           const isSelected = selectedIds.includes(option.voteOptionId)
@@ -91,15 +100,10 @@ export default function VoteCardView(props: VoteCardViewProps) {
           )
         })}
       </div>
-
-      {/* ─── 總票數 ──────────────────────────────── */}
       <p className="text-xs text-right" style={{ color: "var(--muted)" }}>
         Total votes: {totalVotes}
       </p>
-
       <hr />
-
-      {/* ─── 送出按鈕 ────────────────────────────── */}
       <div className="flex justify-end">
         <Button
           variant={selectedIds.length > 0 ? Variant.Primary : Variant.Default}

@@ -13,7 +13,7 @@ export default function NavLeft({ listId }: { listId: string }) {
   return (
     <div className="flex items-center gap-4">
       <Button variant={Variant.Icon} action={ButtonAction.Navigate} path={path}>
-        <Icon Variant={Variant.Primary} size={Size.Large}>
+        <Icon variant={Variant.Primary} size={Size.Large}>
           {isRoot ? <HomeIcon /> : <ArrowUturnLeftIcon />}
         </Icon>
       </Button>

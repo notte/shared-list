@@ -4,6 +4,12 @@ import { GetCardListResponse } from "@/features/cards/adapters/response"
 import { FieldValue, Timestamp } from "firebase-admin/firestore"
 import { getAuthToken } from "@/services/http/apiUtils"
 import { CardType } from "@/types/enums"
+import { parseToDate } from "@/lib/date"
+
+function parseToTimestamp(value: unknown): Timestamp | null {
+  const date = parseToDate(value)
+  return date ? Timestamp.fromDate(date) : null
+}
 
 // ✅ 取得某清單的卡片列表
 export async function GET(
@@ -72,6 +78,8 @@ export async function POST(
       publishTime,
       endTime,
       eventTime,
+      eventStartTime,
+      eventEndTime,
       address,
       userName,
       color,
@@ -95,11 +103,11 @@ export async function POST(
       description,
       content,
       cardType,
-      publishTime: publishTime
-        ? Timestamp.fromDate(new Date(publishTime))
-        : null,
-      endTime: endTime ? Timestamp.fromDate(new Date(endTime)) : null,
-      eventTime: eventTime ? Timestamp.fromDate(new Date(eventTime)) : null,
+      publishTime: parseToTimestamp(publishTime),
+      endTime: parseToTimestamp(endTime),
+      eventTime: parseToTimestamp(eventTime),
+      eventStartTime: parseToTimestamp(eventStartTime),
+      eventEndTime: parseToTimestamp(eventEndTime),
       address,
       vote,
       createdAt: FieldValue.serverTimestamp(),

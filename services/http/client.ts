@@ -1,6 +1,6 @@
 import { toastStore } from "@/lib/toastStore"
 import { Variant } from "@/types/enums"
-import { auth } from "@/lib/firebaseClient"
+import { auth, getCurrentUser } from "@/lib/firebaseClient"
 
 // RequestInit：定義 fetch() 函數的第二個參數 可以傳入哪些設定項目
 export interface IHttpClientRequest<T> extends RequestInit {
@@ -14,7 +14,7 @@ export interface IHttpClientRequest<T> extends RequestInit {
 export async function httpClient<T, U>(
   request: IHttpClientRequest<T>,
 ): Promise<U | undefined> {
-  const currentUser = auth.currentUser
+  const currentUser = auth.currentUser ?? (await getCurrentUser())
 
   if (!currentUser) {
     toastStore.add(
@@ -23,6 +23,7 @@ export async function httpClient<T, U>(
     )
     return undefined
   }
+
   const idToken = await currentUser.getIdToken()
 
   const { url, payload, successMessage, revalidate, ...options } = request

@@ -23,11 +23,13 @@ export interface Card {
   title: string
   description: string
   content: string
-  createdAt: Date
+  createdAt: string
   createdBy: User
-  publishTime: Date | null
-  endTime: Date | null
-  eventTime: Date | null
+  publishTime: string
+  endTime: string
+  eventTime: string | null
+  eventStartTime: string | null
+  eventEndTime: string | null
   readBy: string[]
   address?: string
   vote?: Vote

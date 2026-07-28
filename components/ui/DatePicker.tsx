@@ -1,10 +1,10 @@
 "use client"
 
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react"
-import { DayPicker, DateRange } from "@daypicker/react"
 import "@daypicker/react/style.css"
 import Input, { InputProps } from "@/components/ui/Input"
 import Select from "@/components/ui/Select"
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react"
+import { DayPicker, DateRange } from "@daypicker/react"
 import { useState } from "react"
 import { format, parse, isValid } from "date-fns"
 import { enUS } from "@daypicker/react/locale"
@@ -246,7 +246,7 @@ export default function DatePicker(props: DatePickerProps) {
             />
             <div className="flex flex-col gap-2 mt-2 px-1">
               <div className="flex items-center gap-2">
-                <span className="text-sm text-muted w-8">From</span>
+                <div className="text-sm text-muted w-1/3">From</div>
                 <Select
                   options={hourOptions}
                   value={fromHour}
@@ -254,7 +254,7 @@ export default function DatePicker(props: DatePickerProps) {
                   placeholder="00"
                   noError={true}
                 />
-                <span className="text-foreground">:</span>
+                <span className="text-foreground">：</span>
                 <Select
                   options={minuteOptions}
                   value={fromMinute}
@@ -263,8 +263,8 @@ export default function DatePicker(props: DatePickerProps) {
                   noError={true}
                 />
               </div>
-              <>
-                <span className="text-sm text-muted w-8">To</span>
+              <div className="flex items-center gap-2">
+                <div className="text-sm text-muted w-1/3">To</div>
                 <Select
                   options={hourOptions}
                   value={toHour}
@@ -280,7 +280,7 @@ export default function DatePicker(props: DatePickerProps) {
                   placeholder="00"
                   noError={true}
                 />
-              </>
+              </div>
             </div>
           </>
         )}

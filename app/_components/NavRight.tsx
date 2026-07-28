@@ -5,9 +5,9 @@ import Dialog from "@/components/ui/Dialog"
 import CardForm from "@/features/cards/components/client/CardForm"
 import { useState } from "react"
 import { usePathname } from "next/navigation"
-import { PlusCircleIcon, Cog8ToothIcon } from "@heroicons/react/24/solid"
+import { PlusCircleIcon, UserGroupIcon } from "@heroicons/react/24/solid"
 import { ButtonAction, Variant, Size, DialogRole } from "@/types/enums"
-import { useUserData } from "@/services/storage/userStorage"
+import { useUserData } from "@/services/storage/user.client"
 import { GetListDetailResponse } from "@/features/lists/adapters/response"
 
 export default function NavRight({
@@ -35,8 +35,8 @@ export default function NavRight({
             action={ButtonAction.Navigate}
             path={`/lists/${listId}/setting`}
           >
-            <Icon Variant={Variant.Primary} size={Size.Large}>
-              <Cog8ToothIcon />
+            <Icon variant={Variant.Primary} size={Size.Large}>
+              <UserGroupIcon />
             </Icon>
           </Button>
         )}
@@ -48,7 +48,7 @@ export default function NavRight({
               setOpenCreateCardDialog(true)
             }}
           >
-            <Icon Variant={Variant.Primary} size={Size.Large}>
+            <Icon variant={Variant.Primary} size={Size.Large}>
               <PlusCircleIcon />
             </Icon>
           </Button>

@@ -9,6 +9,8 @@ export type SerializedCardSummary = Pick<
   | "createdBy"
   | "readBy"
   | "createdAt"
+  | "publishTime"
+  | "endTime"
 > & {
   createdAt: string | null
 }
@@ -18,6 +20,4 @@ export interface GetCardListResponse {
   count: number
 }
 
-export interface GetCardDetailResponse {
-  card: Card
-}
+export type GetCardDetailResponse = Card

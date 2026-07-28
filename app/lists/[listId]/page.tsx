@@ -1,6 +1,7 @@
 import EmptyState from "@/components/ui/EmptyState"
 import CardItem from "@/features/cards/components/server/CardItem"
 import { getListCards } from "@/services/db/card"
+import { getUserDataServer } from "@/services/storage/user.server"
 
 interface PageProps {
   params: Promise<{ listId: string }>
@@ -12,7 +13,10 @@ export default async function Page({ params }: PageProps) {
 
   if (!listId) return <>Invalid list path.</>
 
-  const cardList = await getListCards(listId)
+  const userData = await getUserDataServer()
+
+  if (!userData || !userData?.userId) return <>Invalid user.</>
+  const cardList = await getListCards(listId, userData?.userId)
   if (!cardList) return <>Failed to load cards. Please try again later.</>
 
   return (

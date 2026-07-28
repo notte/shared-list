@@ -34,7 +34,7 @@ export default function Button({
     <HeadlessButton
       disabled={disabled}
       onClick={handleClick}
-      className={`btn btn-${variant}`}
+      className={`btn btn-${variant} ${disabled ? "pointer-events-none opacity-50" : ""}`}
       type={action === ButtonAction.Submit ? "submit" : "button"}
     >
       {variant === Variant.Icon ? (
