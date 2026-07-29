@@ -6,7 +6,6 @@ import {
   ClockIcon,
   UserIcon,
 } from "@heroicons/react/24/outline"
-import { dateOptions } from "@/lib/utils"
 import { formatForDisplay } from "@/lib/date"
 
 export interface CardDetailProps {
@@ -108,7 +107,7 @@ export default function CardDetail({ card, children }: CardDetailProps) {
             <ClockIcon className="w-4 h-4 shrink-0" />
             <span>
               Ends：
-              {new Date(card.endTime).toLocaleString("en-US", dateOptions)}
+              {formatForDisplay(card.endTime)}
             </span>
           </div>
         )}

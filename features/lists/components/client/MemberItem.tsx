@@ -10,7 +10,7 @@ import { useState } from "react"
 import { toastStore } from "@/lib/toastStore"
 import { httpClient } from "@/services/http/client"
 import { useRouter } from "next/navigation"
-import { dateOptions } from "@/lib/utils"
+import { formatForDisplay } from "@/lib/date"
 
 export type MemberItemProps = Partial<GetInviteCodeDetailResponse & IMemberItem>
 
@@ -80,18 +80,8 @@ export default function MemberItem({
             {userName && <p>{userName}</p>}
           </div>
           <div className="text-sm text-stone flex items-end mr-2">
-            {createdAt && (
-              <p>
-                Created:{" "}
-                {new Date(createdAt).toLocaleString("en-US", dateOptions)}
-              </p>
-            )}
-            {joinedAt && (
-              <p>
-                Joined:{" "}
-                {new Date(joinedAt).toLocaleString("en-US", dateOptions)}
-              </p>
-            )}
+            {createdAt && <p>Created: {formatForDisplay(createdAt)}</p>}
+            {joinedAt && <p>Joined: {formatForDisplay(joinedAt)}</p>}
           </div>
         </div>
         <div className="flex justify-end items-center">

@@ -1,8 +1,11 @@
+import EmptyState from "@/components/ui/EmptyState"
 import MemberList from "@/features/lists/components/client/MemberList"
 import MemberItem, {
   MemberItemProps,
 } from "@/features/lists/components/client/MemberItem"
 import { getListInvites, getListMembers } from "@/services/db/list"
+import { checkUserInList } from "@/lib/auth"
+import { redirect } from "next/navigation"
 
 export default async function Page({
   params,
@@ -10,6 +13,10 @@ export default async function Page({
   params: Promise<{ listId: string }>
 }) {
   const { listId } = await params
+
+  const isMember = await checkUserInList(listId)
+
+  if (!isMember) redirect("/forbidden")
 
   const invites = await getListInvites(listId)
   const members = await getListMembers(listId)
@@ -32,9 +39,18 @@ export default async function Page({
 
   return (
     <MemberList listId={listId}>
-      {memberList.map((member, index) => (
-        <MemberItem key={`${member.listId}-${index}`} {...member} />
-      ))}
+      {memberList.length > 0 ? (
+        <>
+          {memberList.map((member, index) => (
+            <MemberItem key={`${member.listId}-${index}`} {...member} />
+          ))}
+        </>
+      ) : (
+        <EmptyState
+          title="No members yet."
+          description="Invite people to join this list using an invite link."
+        />
+      )}
     </MemberList>
   )
 }

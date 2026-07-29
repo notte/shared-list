@@ -79,16 +79,39 @@ export function formatForInput(value: unknown): string {
 }
 
 // 純文字顯示專用格式：Jul 28, 2026, 01:53 PM
-export function formatForDisplay(value: unknown): string {
-  const date = parseToDate(value)
-  if (!date) return ""
+export function formatForDisplay(dateInput: string | Date) {
+  if (!dateInput) return ""
 
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  }).format(date)
+  // 如果傳進來的是 string，轉成 Date 物件；如果是 Date 物件就直接使用
+  const date = typeof dateInput === "string" ? new Date(dateInput) : dateInput
+
+  // 檢查是否為無效的 Date (Invalid Date)
+  if (isNaN(date.getTime())) return ""
+
+  // 固定格式化輸出，防止 Safari / SSR 產生 Hydration Error
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ]
+  const month = months[date.getMonth()]
+  const day = String(date.getDate()).padStart(2, "0")
+  const year = date.getFullYear()
+
+  let hours = date.getHours()
+  const minutes = String(date.getMinutes()).padStart(2, "0")
+  const ampm = hours >= 12 ? "PM" : "AM"
+  hours = hours % 12 || 12
+  const strHours = String(hours).padStart(2, "0")
+
+  return `${month} ${day}, ${year}, ${strHours}:${minutes} ${ampm}`
 }

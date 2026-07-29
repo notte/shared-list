@@ -12,12 +12,12 @@ export default async function Page({ params }: PageProps) {
   const inviteItem = await getInviteCodeDetail(code)
 
   return (
-    <div className="w-full h-full p-0 m-0 fixed flex justify-center items-center">
-      <div className="flex flex-col justify-center items-center w-full h-fit">
-        <h2 className="subheading mb-10">
+    <div className="w-full flex flex-col items-center justify-center p-24">
+      <section className="flex justify-center items-center flex-col w-1/2">
+        <h1 className="text-3xl font-bold text-clay text-center line-clamp-1 mb-10">
           <span className="text-clay">{inviteItem?.creator}</span> invited you
           to join <span className="text-moss">{inviteItem?.title}</span>
-        </h2>
+        </h1>
         <div className="alert-wrapper">
           <h3 className="section-title">
             🔔 Quick Access (No Account Required)
@@ -29,7 +29,7 @@ export default async function Page({ params }: PageProps) {
           </p>
         </div>
         <JoinForm inviteCode={code} title={inviteItem?.title ?? ""} />
-      </div>
+      </section>
     </div>
   )
 }

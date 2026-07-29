@@ -4,6 +4,8 @@ import CardDetail from "@/features/cards/components/server/CardDetail"
 import { getCardDetail } from "@/services/db/card"
 import { CardType } from "@/types/enums"
 import { getUserDataServer } from "@/services/storage/user.server"
+import { checkUserInList } from "@/lib/auth"
+import { redirect, notFound } from "next/navigation"
 
 interface PageProps {
   params: Promise<{ listId: string; cardId: string }>
@@ -15,12 +17,11 @@ export default async function Page({ params }: PageProps) {
   const cardId = resolvedParams.cardId
 
   const userData = await getUserDataServer()
-
-  if (!listId || !cardId) return <>Invalid page URL.</>
-
+  const isMember = await checkUserInList(listId)
   const cardDetailData = await getCardDetail(listId, cardId)
 
-  if (!cardDetailData) return <>Card not found.</>
+  if (!isMember) redirect("/forbidden")
+  if (!listId || !cardId || !cardDetailData) notFound()
 
   console.log(cardDetailData)
   return (

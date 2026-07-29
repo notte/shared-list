@@ -33,7 +33,7 @@ export default function ReadStatusController(props: ReadStatusControllerProps) {
         disabled={isRead}
         variant={isRead ? Variant.Default : Variant.Success}
         action={ButtonAction.Custom}
-        onClick={() => handleSubmit}
+        onClick={handleSubmit}
         buttonText={isRead ? "Already Read" : "Mark as Read"}
       />
     </div>

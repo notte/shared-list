@@ -63,7 +63,11 @@ export default async function CardItem({
           size={Size.Small}
         >
           {cardType === CardType.Announce &&
-            (isRead ? <EnvelopeOpenIcon /> : <EnvelopeIcon />)}
+            (isRead ? (
+              <EnvelopeOpenIcon className="w-4 h-4" />
+            ) : (
+              <EnvelopeIcon className="w-4 h-4" />
+            ))}
         </Icon>
       </div>
     </div>

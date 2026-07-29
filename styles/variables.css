@@ -30,7 +30,7 @@
     background-color: var(--btn-warning-bg);
     border: 1px solid var(--btn-warning-border);
     color: var(--btn-warning-text);
-    @apply w-full max-w-md rounded-xl p-4 mb-6 space-y-2 -z-10;
+    @apply w-full max-w-xl rounded-xl p-4 mb-6 space-y-2 -z-10;
   }
 
   /* 調整提示框內描述文字的顏色與字級 */

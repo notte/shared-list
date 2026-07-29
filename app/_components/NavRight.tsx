@@ -33,7 +33,7 @@ export default function NavRight({
           <Button
             variant={Variant.Icon}
             action={ButtonAction.Navigate}
-            path={`/lists/${listId}/setting`}
+            path={`/lists/${listId}/members`}
           >
             <Icon variant={Variant.Primary} size={Size.Large}>
               <UserGroupIcon />

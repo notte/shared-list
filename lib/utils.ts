@@ -18,12 +18,3 @@ export const themeColors = [
   { value: "#b83b5e", label: "Camellia" },
   { value: "#b87333", label: "Ochre" },
 ]
-
-export const dateOptions: Intl.DateTimeFormatOptions = {
-  year: "numeric",
-  month: "short",
-  day: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-  hour12: true,
-}

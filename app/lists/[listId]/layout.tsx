@@ -1,6 +1,6 @@
-import { getListDetail } from "@/services/db/list"
 import NavLeft from "@/app/_components/NavLeft"
 import NavRight from "@/app/_components/NavRight"
+import { getListDetail } from "@/services/db/list"
 
 export default async function Layout({
   children,
@@ -12,7 +12,9 @@ export default async function Layout({
   const { listId } = await params
 
   if (!listId) return <div>Invalid list path.</div>
+
   const listData = await getListDetail(listId)
+
   if (!listData) return <>The list does not exist.</>
 
   return (
@@ -30,7 +32,7 @@ export default async function Layout({
           <NavRight listId={listId} listData={listData} />
         </div>
       </nav>
-      <div className="flex-1 mt-32 h-[calc(100vh-8rem)] flex justify-center items-center flex-col">
+      <div className="flex-1 mt-32 w-full h-[calc(100vh-8rem)] flex justify-center items-center flex-col">
         {children}
       </div>
     </div>

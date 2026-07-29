@@ -2,6 +2,9 @@ import EmptyState from "@/components/ui/EmptyState"
 import CardItem from "@/features/cards/components/server/CardItem"
 import { getListCards } from "@/services/db/card"
 import { getUserDataServer } from "@/services/storage/user.server"
+import { redirect, notFound } from "next/navigation"
+import { getListDetail } from "@/services/db/list"
+import { checkUserInList } from "@/lib/auth"
 
 interface PageProps {
   params: Promise<{ listId: string }>
@@ -11,13 +14,16 @@ export default async function Page({ params }: PageProps) {
   const resolvedParams = await params
   const listId = resolvedParams.listId
 
-  if (!listId) return <>Invalid list path.</>
-
   const userData = await getUserDataServer()
+  const listData = await getListDetail(listId)
+  const isMember = await checkUserInList(listId)
 
-  if (!userData || !userData?.userId) return <>Invalid user.</>
+  if (!userData || !userData?.userId) redirect("/forbidden")
+
   const cardList = await getListCards(listId, userData?.userId)
-  if (!cardList) return <>Failed to load cards. Please try again later.</>
+
+  if (!cardList || !listId || !listData) notFound()
+  if (!isMember) redirect("/forbidden")
 
   return (
     <>
@@ -31,7 +37,10 @@ export default async function Page({ params }: PageProps) {
             return <CardItem key={card.cardId} listId={listId} {...card} />
           })
       ) : (
-        <EmptyState />
+        <EmptyState
+          title="No cards yet."
+          description="Cards will appear here once they are published."
+        />
       )}
     </>
   )
