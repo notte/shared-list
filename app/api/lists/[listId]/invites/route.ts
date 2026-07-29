@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
-import { auth, db } from "@/lib/firebaseAdmin"
+import { auth, db } from "@/lib/firebase.admin"
 import { FieldValue } from "firebase-admin/firestore"
-import { getAuthToken } from "@/services/http/apiUtils"
+import { getAuthToken } from "@/services/http/authToken"
 import { GetListInvitesResponse } from "@/features/lists/adapters/response"
 
 // ✅ 取得該清單目前所有有效的邀請碼列表

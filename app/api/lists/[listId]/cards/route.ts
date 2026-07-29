@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { auth, db } from "@/lib/firebaseAdmin"
+import { auth, db } from "@/lib/firebase.admin"
 import { GetCardListResponse } from "@/features/cards/adapters/response"
 import { FieldValue, Timestamp } from "firebase-admin/firestore"
-import { getAuthToken } from "@/services/http/apiUtils"
+import { getAuthToken } from "@/services/http/authToken"
 import { CardType } from "@/types/enums"
 import { parseToDate } from "@/lib/date"
 

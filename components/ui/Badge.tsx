@@ -1,5 +1,5 @@
 import { User } from "@/features/lists/schemas/list.schema"
-import { getContrastColor } from "@/lib/utils"
+import { getContrastColor } from "@/lib/theme"
 
 export interface BadgeProps {
   user: User

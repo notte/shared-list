@@ -3,7 +3,7 @@
 
 import { useEffect } from "react"
 import { signInAnonymously, onAuthStateChanged } from "firebase/auth"
-import { auth } from "@/lib/firebaseClient"
+import { auth } from "@/lib/firebase.client"
 
 export default function AuthProvider({
   children,

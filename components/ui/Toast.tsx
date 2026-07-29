@@ -5,11 +5,11 @@ import { toastStore } from "@/lib/toastStore"
 
 export interface ToastProps {
   id: string
-  Variant: Variant
+  variant: Variant
   message: string
 }
 
-export default function Toast({ id, Variant, message }: ToastProps) {
+export default function Toast({ id, variant, message }: ToastProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       toastStore.remove(id)
@@ -19,5 +19,5 @@ export default function Toast({ id, Variant, message }: ToastProps) {
     }
   }, [id])
 
-  return <div className={`toast toast-${Variant}`}>{message}</div>
+  return <div className={`toast toast-${variant}`}>{message}</div>
 }

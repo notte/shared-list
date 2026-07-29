@@ -3,8 +3,7 @@ import CardItem from "@/features/cards/components/server/CardItem"
 import { getListCards } from "@/services/db/card"
 import { getUserDataServer } from "@/services/storage/user.server"
 import { redirect, notFound } from "next/navigation"
-import { getListDetail } from "@/services/db/list"
-import { checkUserInList } from "@/lib/auth"
+import { getListDetail, checkUserInList } from "@/services/db/list"
 
 interface PageProps {
   params: Promise<{ listId: string }>

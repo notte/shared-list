@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { db } from "@/lib/firebaseAdmin"
+import { db } from "@/lib/firebase.admin"
 import { GetListDetailResponse } from "@/features/lists/adapters/response"
 
 // ✅ 取得特定清單的詳細資訊

@@ -1,11 +1,12 @@
 "use client"
 import { signInAnonymously } from "firebase/auth"
-import { auth } from "@/lib/firebaseClient"
+import { auth } from "@/lib/firebase.client"
 import { useSyncExternalStore } from "react"
-
-const USER_ID_KEY = "anonymous_user_id"
-const USER_COLOR = "anonymous_user_color"
-const USER_NAME = "anonymous_user_name"
+import {
+  USER_ID_KEY,
+  USER_COLOR_KEY,
+  USER_NAME_KEY,
+} from "@/services/storage/constants"
 
 // 設定 10 年過期時間，達致永遠保存的效果
 const MAX_AGE_10_YEARS = 315360000
@@ -41,25 +42,29 @@ function deleteCookie(name: string) {
 
 export async function saveUserData(color: string, userName: string) {
   const hasMember =
-    getCookie(USER_ID_KEY) && getCookie(USER_COLOR) && getCookie(USER_NAME)
+    getCookie(USER_ID_KEY) &&
+    getCookie(USER_COLOR_KEY) &&
+    getCookie(USER_NAME_KEY)
   if (hasMember) return
 
   const { user } = await signInAnonymously(auth)
 
   setCookie(USER_ID_KEY, user.uid, MAX_AGE_10_YEARS)
-  setCookie(USER_COLOR, color, MAX_AGE_10_YEARS)
-  setCookie(USER_NAME, userName, MAX_AGE_10_YEARS)
+  setCookie(USER_COLOR_KEY, color, MAX_AGE_10_YEARS)
+  setCookie(USER_NAME_KEY, userName, MAX_AGE_10_YEARS)
 
   window.dispatchEvent(new Event("userDataChange"))
 }
 
 export function clearUserId() {
   const hasMember =
-    getCookie(USER_ID_KEY) && getCookie(USER_COLOR) && getCookie(USER_NAME)
+    getCookie(USER_ID_KEY) &&
+    getCookie(USER_COLOR_KEY) &&
+    getCookie(USER_NAME_KEY)
   if (hasMember) {
     deleteCookie(USER_ID_KEY)
-    deleteCookie(USER_COLOR)
-    deleteCookie(USER_NAME)
+    deleteCookie(USER_COLOR_KEY)
+    deleteCookie(USER_NAME_KEY)
     window.dispatchEvent(new Event("userDataChange"))
   }
 }
@@ -71,8 +76,8 @@ export function getUserData() {
   if (typeof window === "undefined") return null
 
   const userId = getCookie(USER_ID_KEY)
-  const color = getCookie(USER_COLOR)
-  const userName = getCookie(USER_NAME)
+  const color = getCookie(USER_COLOR_KEY)
+  const userName = getCookie(USER_NAME_KEY)
 
   if (!userId || !color || !userName) {
     cachedUserData = null

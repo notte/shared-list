@@ -6,7 +6,7 @@ export interface IToastStore {
   subscribe: (fn: () => void) => () => void
   getSnapshot: () => ToastProps[]
   getServerSnapshot?: () => ToastProps[]
-  add: (Variant: Variant, message: string) => void
+  add: (variant: Variant, message: string) => void
   remove: (id: string) => void
 }
 
@@ -28,13 +28,13 @@ export const toastStore: IToastStore = {
   getServerSnapshot() {
     return emptyArray // 伺服器端永遠是空的
   },
-  add(Variant, message) {
+  add(variant, message) {
     const isDuplicate = toasts.some(
-      (item) => item.message === message && item.Variant === Variant,
+      (item) => item.message === message && item.variant === variant,
     )
     if (isDuplicate) return
     const id = uuidv4()
-    toasts = toasts.concat({ id, Variant, message })
+    toasts = toasts.concat({ id, variant, message })
     listeners.forEach((fn) => fn())
   },
   remove(id) {

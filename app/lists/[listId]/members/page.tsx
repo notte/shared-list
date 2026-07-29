@@ -3,8 +3,11 @@ import MemberList from "@/features/lists/components/client/MemberList"
 import MemberItem, {
   MemberItemProps,
 } from "@/features/lists/components/client/MemberItem"
-import { getListInvites, getListMembers } from "@/services/db/list"
-import { checkUserInList } from "@/lib/auth"
+import {
+  getListInvites,
+  getListMembers,
+  checkUserInList,
+} from "@/services/db/list"
 import { redirect } from "next/navigation"
 
 export default async function Page({

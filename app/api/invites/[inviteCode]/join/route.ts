@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
-import { auth, db } from "@/lib/firebaseAdmin"
+import { auth, db } from "@/lib/firebase.admin"
 import { FieldValue } from "firebase-admin/firestore"
-import { getAuthToken } from "@/services/http/apiUtils"
+import { getAuthToken } from "@/services/http/authToken"
 
 // ✅ 使用者接受邀請，正式加入該清單
 export async function POST(

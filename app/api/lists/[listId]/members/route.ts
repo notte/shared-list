@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { db } from "@/lib/firebaseAdmin"
+import { db } from "@/lib/firebase.admin"
 import { FieldValue } from "firebase-admin/firestore"
 
 // 取得該清單下的所有成員列表 💜 暫時不實作

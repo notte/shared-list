@@ -4,7 +4,7 @@ import CardDetail from "@/features/cards/components/server/CardDetail"
 import { getCardDetail } from "@/services/db/card"
 import { CardType } from "@/types/enums"
 import { getUserDataServer } from "@/services/storage/user.server"
-import { checkUserInList } from "@/lib/auth"
+import { checkUserInList } from "@/services/db/list"
 import { redirect, notFound } from "next/navigation"
 
 interface PageProps {

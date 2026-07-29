@@ -1,6 +1,6 @@
-import { auth, db } from "@/lib/firebaseAdmin"
+import { auth, db } from "@/lib/firebase.admin"
 import { NextResponse } from "next/server"
-import { getAuthToken } from "@/services/http/apiUtils"
+import { getAuthToken } from "@/services/http/authToken"
 import { FieldValue } from "firebase-admin/firestore"
 import { Vote, VoteOption } from "@/features/cards/schemas/card.schema"
 

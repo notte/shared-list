@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { db } from "@/lib/firebaseAdmin"
+import { db } from "@/lib/firebase.admin"
 
 // ✅ 驗證該邀請碼是否存在、有效，並取得對應的清單資訊
 export async function GET(

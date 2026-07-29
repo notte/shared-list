@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
-import { auth, db } from "@/lib/firebaseAdmin"
-import { getAuthToken } from "@/services/http/apiUtils"
+import { auth, db } from "@/lib/firebase.admin"
+import { getAuthToken } from "@/services/http/authToken"
 import { FieldValue } from "firebase-admin/firestore"
 
 // ✅ 標記卡片為已讀 (將 userId 放入 readBy 陣列)

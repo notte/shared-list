@@ -1,6 +1,6 @@
 import { toastStore } from "@/lib/toastStore"
 import { Variant } from "@/types/enums"
-import { auth, getCurrentUser } from "@/lib/firebaseClient"
+import { auth, getCurrentUser } from "@/lib/firebase.client"
 
 // RequestInit：定義 fetch() 函數的第二個參數 可以傳入哪些設定項目
 export interface IHttpClientRequest<T> extends RequestInit {

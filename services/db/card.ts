@@ -3,7 +3,7 @@ import {
   GetCardDetailResponse,
 } from "@/features/cards/adapters/response"
 import { toIsoString } from "@/lib/date"
-import { db } from "@/lib/firebaseAdmin"
+import { db } from "@/lib/firebase.admin"
 import { cache } from "react"
 
 // 取得指定清單的卡片列表
@@ -22,18 +22,18 @@ export const getListCards = cache(
         .get()
 
       const cardsList = cardsSnap.docs.map((doc) => {
-        const d = doc.data()
+        const cardData = doc.data()
 
         return {
           cardId: doc.id,
-          cardType: d.cardType,
-          title: d.title,
-          description: d.description,
-          createdAt: toIsoString(d.createdAt)!,
-          publishTime: toIsoString(d.publishTime)!,
-          endTime: toIsoString(d.endTime)!,
-          createdBy: d.createdBy,
-          readBy: d.readBy,
+          cardType: cardData.cardType,
+          title: cardData.title,
+          description: cardData.description,
+          createdAt: toIsoString(cardData.createdAt)!,
+          publishTime: toIsoString(cardData.publishTime)!,
+          endTime: toIsoString(cardData.endTime)!,
+          createdBy: cardData.createdBy,
+          readBy: cardData.readBy,
         }
       })
 

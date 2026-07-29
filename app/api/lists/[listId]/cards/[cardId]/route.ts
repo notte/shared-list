@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { db } from "@/lib/firebaseAdmin"
+import { db } from "@/lib/firebase.admin"
 import { GetCardDetailResponse } from "@/features/cards/adapters/response"
 import { toIsoString } from "@/lib/date"
 

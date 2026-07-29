@@ -1,5 +1,5 @@
 import { Variant, Size } from "@/types/enums"
-import { colorMap, iconSizeMap } from "@/lib/map"
+import { colorMap, iconSizeMap } from "@/lib/theme"
 
 export interface IconProps {
   variant: Variant

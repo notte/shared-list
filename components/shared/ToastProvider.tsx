@@ -15,7 +15,7 @@ export default function ToastProvider() {
       {snapshot.map((item) => (
         <Toast
           key={item.id}
-          Variant={item.Variant}
+          variant={item.variant}
           message={item.message}
           id={item.id}
         />
