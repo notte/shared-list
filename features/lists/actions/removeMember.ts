@@ -2,7 +2,7 @@
 import { db } from "@/lib/firebase.admin"
 import { FieldValue } from "firebase-admin/firestore"
 import { getUserDataServer } from "@/services/storage/user.server"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { checkIsListAdmin } from "@/services/db/list"
 
 export async function removeMember(listId: string, deletedUserId: string) {
@@ -24,17 +24,13 @@ export async function removeMember(listId: string, deletedUserId: string) {
 
   const batch = db.batch()
 
-  // 刪除子集合中的成員文件
   batch.delete(memberRef)
-
-  // 將父文件中 members 欄位 (Map) 裡的該 userId 節點移除
-  // 使用點符號 (dot notation) "members.userId" 指定路徑，並賦予 FieldValue.delete()
   batch.update(listRef, {
     [`members.${deletedUserId}`]: FieldValue.delete(),
   })
 
-  // 執行批次寫入
   await batch.commit()
 
   revalidatePath(`/lists/${listId}/members`)
+  updateTag(`list-members-${listId}`)
 }

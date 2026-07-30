@@ -27,22 +27,18 @@ export default function MemberItem({
 }: MemberItemProps) {
   const [isPending, startTransition] = useTransition()
 
-  // 刪除成員 or 刪除邀請碼
   const [isRemoveMember, setIsRemoveMember] = useState<boolean>(false)
-
   const [open, setOpen] = useState<boolean>(false)
   const [copied, setCopied] = useState<boolean>(false)
+
   const status = inviteCode ? InviteStatus.Pending : InviteStatus.Joined
 
   const handleCopy = async () => {
-    // 動態組合目前的網域與邀請路徑
     const joinUrl = `${window.location.origin}/join/${inviteCode}`
 
     try {
-      // 呼叫原生剪貼簿 API
       await navigator.clipboard.writeText(joinUrl)
 
-      // 複製成功後的反饋邏輯
       toastStore.add(Variant.Success, "Copy successful.")
       setCopied(true)
       setTimeout(() => setCopied(false), 5000)

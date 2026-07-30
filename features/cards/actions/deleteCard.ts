@@ -1,7 +1,7 @@
 "use server"
 import { db } from "@/lib/firebase.admin"
 import { getUserDataServer } from "@/services/storage/user.server"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 
 export async function deleteCard(listId: string, cardId: string) {
   const userData = await getUserDataServer()
@@ -27,4 +27,6 @@ export async function deleteCard(listId: string, cardId: string) {
   await batch.commit()
 
   revalidatePath(`/lists/${listId}`)
+  updateTag(`list-${listId}-cards`)
+  updateTag(`card-${cardId}`)
 }

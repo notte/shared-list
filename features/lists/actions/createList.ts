@@ -15,7 +15,6 @@ export async function createList(
   const newListRef = db.collection("lists").doc()
   const batch = db.batch()
 
-  // 寫入 lists/{listId} 本體
   const newListData = {
     title: title,
     createdAt: FieldValue.serverTimestamp(),
@@ -35,7 +34,6 @@ export async function createList(
 
   batch.set(newListRef, newListData)
 
-  // 同步在子集合 lists/{listId}/members/{userId} 建立成員詳細資料
   const memberSubRef = newListRef.collection("members").doc(currentUserId)
   const newMemberData = {
     userName: userName,

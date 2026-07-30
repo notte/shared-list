@@ -33,7 +33,6 @@ export default function CardDetail({ card, children }: CardDetailProps) {
 
       <hr />
 
-      {/* ─── Meta ────────────────────────────────────── */}
       <div className="grid grid-cols-2 gap-3">
         <div
           className="flex items-center gap-2 text-sm"
@@ -115,13 +114,11 @@ export default function CardDetail({ card, children }: CardDetailProps) {
 
       <hr />
 
-      {/* ─── Content ─────────────────────────────────── */}
       <div
         className="tiptap"
         dangerouslySetInnerHTML={{ __html: card.content }}
       />
 
-      {/* ─── Vote（留空位）───────────────────────────── */}
       <>
         <hr />
         {children}

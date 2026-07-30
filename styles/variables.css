@@ -1,5 +1,5 @@
 @layer components {
-  /* ─── Body ─────────────────────────────────────────── */
+  /* Body */
   body {
     @apply bg-background text-foreground font-sans;
   }
@@ -10,22 +10,17 @@
     margin: 1.5rem 0;
   }
 
-  /* ─── Typography ───────────────────────────────────── */
-  /* h1: 專案唯一標題 (直接寫在 page.tsx 上的 className) */
-  /* text-5xl font-bold text-clay text-center line-clamp-1 */
-
-  /* h2: 頁面大區塊、對話框主要標題 */
+  /* Typography */
   .subheading {
     @apply text-3xl font-bold text-ink;
   }
 
-  /* h3: 卡片內標題、表單分組標題 */
   .section-title {
     @apply text-xl font-semibold tracking-wide;
     color: var(--color-ink);
   }
 
-  /* ─── Alert Wrapper ────────────────────────────────── */
+  /* Alert Wrapper */
   .alert-wrapper {
     background-color: var(--btn-warning-bg);
     border: 1px solid var(--btn-warning-border);
@@ -33,19 +28,18 @@
     @apply w-full max-w-xl rounded-xl p-4 mb-6 space-y-2 -z-10;
   }
 
-  /* 調整提示框內描述文字的顏色與字級 */
   .alert-wrapper p {
     color: var(--btn-warning-text);
     @apply text-sm leading-relaxed opacity-90;
   }
 
-  /* ─── Layout ────────────────────────────────────────── */
+  /* Layout */
   section,
   form {
     @apply w-full flex justify-center items-center my-4 flex-col;
   }
 
-  /* ─── Card ──────────────────────────────────────────── */
+  /* Card */
   .card-container {
     background-color: var(--surface);
     border: 1px solid var(--btn-default-border);
@@ -56,8 +50,7 @@
     @apply shadow-lg shadow-clay/20 dark:shadow-transparent;
   }
 
-  /* ─── Input ─────────────────────────────────────────── */
-
+  /* Input */
   .input-label {
     color: var(--foreground);
     @apply text-sm font-medium block mb-1;
@@ -89,7 +82,7 @@
     @apply mb-4 text-sm mt-1 h-3.5;
   }
 
-  /* ─── Select ────────────────────────────────────────── */
+  /* Select */
   .select-trigger {
     background-color: var(--background);
     color: var(--foreground);
@@ -113,7 +106,7 @@
     background-color: var(--color-sand);
   }
 
-  /* ─── Button ────────────────────────────────────────── */
+  /* Button */
   .btn {
     @apply px-4 py-1 rounded-md font-bold text-sm transition-colors duration-200 border cursor-pointer;
   }
@@ -152,13 +145,11 @@
     @apply p-2 cursor-pointer border-0;
   }
 
-  /* ─── Toast ─────────────────────────────────────────── */
-  /* 基底：定位、排版、動畫 */
+  /* Toast */
   .toast {
     @apply px-6 py-3 rounded-md text-sm font-medium border shadow-md fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-opacity duration-300;
   }
 
-  /* 提高飽和度，確保在頁面上足夠顯眼 */
   .toast-info {
     background-color: #daeef3;
     color: #1a5f6e;
@@ -183,7 +174,7 @@
     border-color: #c84b31;
   }
 
-  /* ─── Dialog / Modal ────────────────────────────────── */
+  /* Dialog */
   .alert-dialog-wrapper {
     @apply max-w-lg space-y-4 border bg-border border-rust p-8 rounded-xl;
   }
@@ -192,7 +183,7 @@
     @apply flex flex-col w-1/2 max-h-11/12 space-y-4 border bg-border border-rust p-8 rounded-xl;
   }
 
-  /* ─── Date Picker ───────────────────────────────────── */
+  /* Date Picker */
   .rdp-root {
     --rdp-accent-color: var(--color-clay) !important;
     --rdp-accent-background-color: var(--btn-primary-bg) !important;
@@ -201,27 +192,24 @@
     --rdp-range-middle-background-color: var(--btn-primary-bg) !important;
   }
 
-  /* ─── User Status Badges ───────────────────────────── */
-  /* 基礎樣式 */
+  /* User Status Badges */
   .status-badge {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border transition-colors duration-200;
   }
 
-  /* 待處理狀態 (Pending) - 採用枯葉黃 */
   .status-pending {
     background-color: var(--btn-warning-bg);
     border-color: var(--btn-warning-border);
     color: var(--btn-warning-text);
   }
 
-  /* 已加入狀態 (Joined) - 採用苔綠色 */
   .status-joined {
     background-color: var(--btn-success-bg);
     border-color: var(--btn-success-border);
     color: var(--btn-success-text);
   }
 
-  /* ─── Tiptap  ─────────────────────────────────── */
+  /* Tiptap */
   .tiptap-menu {
     background-color: var(--surface);
     border: 1px solid var(--border);

@@ -48,7 +48,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
   return (
     <div className="tiptap-menu">
-      {/* 文字格式 */}
       <Button
         variant={editorState?.isBold ? Variant.Primary : Variant.Default}
         action={ButtonAction.Custom}
@@ -78,7 +77,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         <XMarkIcon className="w-4 h-4" />
       </Button>
 
-      {/* 標題 */}
       {([1, 2, 3] as const).map((level) => (
         <Button
           key={level}
@@ -94,7 +92,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         </Button>
       ))}
 
-      {/* 清單 */}
       <Button
         variant={editorState?.isBulletList ? Variant.Primary : Variant.Default}
         action={ButtonAction.Custom}
@@ -110,7 +107,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         <NumberedListIcon className="w-4 h-4" />
       </Button>
 
-      {/* 其他 */}
       <Button
         variant={editorState?.isBlockquote ? Variant.Primary : Variant.Default}
         action={ButtonAction.Custom}
@@ -145,9 +141,8 @@ export interface TiptapProps {
 const Tiptap = ({ value, onChange, errorText }: TiptapProps) => {
   const editor = useEditor({
     extensions: [StarterKit],
-    content: value, // 初始化內容
+    content: value,
     onUpdate: ({ editor }) => {
-      // 當編輯器內容改變時，觸發外部的 onChange
       onChange(editor.getHTML())
     },
     immediatelyRender: false,

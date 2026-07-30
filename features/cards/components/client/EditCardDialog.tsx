@@ -73,7 +73,6 @@ export default function EditCardDialog({
           }}
         />
       )}
-      {/* 編輯卡片 Dialog */}
       <Dialog
         open={openEditCardDialog}
         onClose={() => {

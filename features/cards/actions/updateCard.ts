@@ -3,7 +3,7 @@ import { CardRequest } from "@/features/cards/adapters/request"
 import { db } from "@/lib/firebase.admin"
 import { getUserDataServer } from "@/services/storage/user.server"
 import { CardType } from "@/types/enums"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { parseToDate } from "@/lib/date"
 import { Timestamp } from "firebase-admin/firestore"
 
@@ -68,4 +68,6 @@ export async function updateCard(
 
   revalidatePath(`/lists/${listId}`)
   revalidatePath(`/lists/${listId}/cards/${cardId}`)
+  updateTag(`list-${listId}-cards`)
+  updateTag(`card-${cardId}`)
 }

@@ -62,7 +62,6 @@ export default function CardForm(props: CardFormProps) {
     defaultValues,
   })
 
-  // 監聽選擇的卡片類型
   const cardTypeValue = useWatch({
     control,
     name: "cardType",
@@ -79,11 +78,9 @@ export default function CardForm(props: CardFormProps) {
     setMode(newMode)
 
     if (newMode === "single") {
-      // 切到單選，清空範圍時間
       setValue("eventStartTime", null)
       setValue("eventEndTime", null)
     } else {
-      // 切到範圍，清空單一時間
       setValue("eventTime", null)
     }
   }
@@ -227,10 +224,8 @@ export default function CardForm(props: CardFormProps) {
                 mode="range"
                 label="Event Time"
                 description="Select the start and end dates."
-                // 修正：傳入串接後的 string，避免傳入物件
                 value={formattedRangeValue}
                 onChange={(range) => {
-                  // 假設 DatePicker 的 onChange 會回傳 { from: Date, to: Date }
                   setValue("eventStartTime", range?.from, {
                     shouldValidate: true,
                   })

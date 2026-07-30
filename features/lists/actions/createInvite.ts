@@ -2,7 +2,7 @@
 import { db } from "@/lib/firebase.admin"
 import { FieldValue } from "firebase-admin/firestore"
 import { getUserDataServer } from "@/services/storage/user.server"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 
 export async function createInvite(listId: string) {
   const userData = await getUserDataServer()
@@ -15,7 +15,6 @@ export async function createInvite(listId: string) {
 
   const listData = listDoc.data()
   const isCreator = listData?.createdBy.userId === userData.userId
-  // const memberInfo = listData?.members?.[userData.userId] 未來可能多個 admin 情況
 
   if (!isCreator)
     throw new Error("Only administrators can generate invite codes.")
@@ -27,9 +26,10 @@ export async function createInvite(listId: string) {
     title: listData?.title,
     creator: listData?.createdBy.userName,
     createdAt: FieldValue.serverTimestamp(),
-    expiredAt: null, // 先預設永不過期，作廢時直接由管理員下 DELETE 即可
+    expiredAt: null,
   })
 
   revalidatePath(`/lists/${listId}/members`)
+  updateTag(`list-${listId}-invites`)
   return inviteCode
 }

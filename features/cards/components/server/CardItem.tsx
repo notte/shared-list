@@ -52,7 +52,6 @@ export default async function CardItem({
             action={ButtonAction.Navigate}
             path={`/lists/${listId}/cards/${cardId}`}
           />
-          {/* 編輯 & 刪除按鈕 */}
           {isCreator && (
             <EditCardDialog
               listId={listId}

@@ -16,7 +16,6 @@ import { toastStore } from "@/lib/toastStore"
 import { joinList } from "@/features/lists/actions/joinList"
 import { auth, getCurrentUser } from "@/lib/firebase.client"
 
-// 定義驗證 Schema
 const joinListSchema = z.object({
   userName: z
     .string()
@@ -36,7 +35,9 @@ export default function JoinForm({
 }) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
+
   const [open, setOpen] = useState<boolean>(false)
+  const [tempData, setTempData] = useState<JoinListRequest | null>(null)
 
   const {
     control,
@@ -50,7 +51,6 @@ export default function JoinForm({
       color: themeColors[0].value,
     },
   })
-  const [tempData, setTempData] = useState<JoinListRequest | null>(null)
 
   const onSubmit = async (data: JoinListRequest) => {
     setTempData(data)
@@ -91,7 +91,6 @@ export default function JoinForm({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* UserName 欄位 */}
         <Controller
           name="userName"
           control={control}
@@ -106,7 +105,6 @@ export default function JoinForm({
           )}
         />
 
-        {/* Color 欄位 */}
         <Controller
           name="color"
           control={control}
@@ -130,7 +128,6 @@ export default function JoinForm({
           )}
         />
 
-        {/* 調整 Button，使其可以觸發 form 的 submit */}
         <Button
           buttonText="Yes, Join List"
           variant={Variant.Primary}

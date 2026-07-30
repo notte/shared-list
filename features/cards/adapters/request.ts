@@ -22,10 +22,8 @@ export interface CreateVoteCardRequest extends BaseCreateCardRequest {
   vote: Vote
 }
 
-// 編輯 & 新增卡片
 export type CardRequest = CreateAnnounceCardRequest | CreateVoteCardRequest
 
-// 投票動作
 export interface SubmitVoteRequest {
   optionIds: string[]
 }

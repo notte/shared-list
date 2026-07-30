@@ -16,7 +16,6 @@ import { auth, getCurrentUser } from "@/lib/firebase.client"
 import { toastStore } from "@/lib/toastStore"
 import { createList } from "@/features/lists/actions/createList"
 
-// 定義驗證 Schema
 const createListsSchema = z.object({
   title: z
     .string()
@@ -48,7 +47,6 @@ export default function CreateListForm() {
     },
   })
 
-  // 表單驗證成功後的處理
   const onSubmit = (data: CreateListRequest) => {
     startTransition(async () => {
       const currentUser = auth.currentUser ?? (await getCurrentUser())
@@ -85,9 +83,7 @@ export default function CreateListForm() {
 
   return (
     <>
-      {/* 使用 HTML form 元素包覆，並綁定 onSubmit */}
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Title 欄位 */}
         <Controller
           name="title"
           control={control}
@@ -102,7 +98,6 @@ export default function CreateListForm() {
           )}
         />
 
-        {/* UserName 欄位 */}
         <Controller
           name="userName"
           control={control}
@@ -116,8 +111,6 @@ export default function CreateListForm() {
             />
           )}
         />
-
-        {/* Color 欄位 */}
 
         <Controller
           name="color"
@@ -142,7 +135,6 @@ export default function CreateListForm() {
           )}
         />
 
-        {/* 調整 Button，使其可以觸發 form 的 submit */}
         <Button
           buttonText={isPending ? "Creating..." : "Submit"}
           variant={Variant.Primary}

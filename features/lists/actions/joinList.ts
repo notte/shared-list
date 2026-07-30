@@ -2,6 +2,7 @@
 import { db, auth } from "@/lib/firebase.admin"
 import { UserRole } from "@/types/enums"
 import { FieldValue } from "firebase-admin/firestore"
+import { updateTag } from "next/cache"
 
 export async function joinList(
   idToken: string,
@@ -16,9 +17,7 @@ export async function joinList(
 
   let targetListId = ""
 
-  // 使用 Transaction 確保整套權限寫入的一致性
   await db.runTransaction(async (transaction) => {
-    // 1. 【讀取與驗證階段】（所有的 get 都放這裡）
     const inviteSnap = await transaction.get(inviteRef)
 
     if (!inviteSnap.exists) {
@@ -38,7 +37,6 @@ export async function joinList(
     const memberSnap = await transaction.get(memberRef)
     if (memberSnap.exists) throw new Error("You are already a member.")
 
-    // 2. 【寫入與刪除階段】
     transaction.update(listRef, {
       [`members.${currentUserId}`]: {
         role: UserRole.Member,
@@ -57,5 +55,7 @@ export async function joinList(
     transaction.delete(inviteRef)
   })
 
+  updateTag(`list-members-${targetListId}`)
+  updateTag(`invite-${inviteCode}`)
   return targetListId
 }

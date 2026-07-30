@@ -5,7 +5,7 @@ import { CardRequest } from "@/features/cards/adapters/request"
 import { getUserDataServer } from "@/services/storage/user.server"
 import { CardType } from "@/types/enums"
 import { db } from "@/lib/firebase.admin"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 
 function parseToTimestamp(value: unknown): Timestamp | null {
   const date = parseToDate(value)
@@ -69,4 +69,5 @@ export async function createCard(
   await batch.commit()
 
   revalidatePath(`/lists/${listId}`)
+  updateTag(`list-${listId}-cards`)
 }

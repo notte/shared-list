@@ -1,4 +1,3 @@
-// 1. 定義可相容 Client 與 Server 端 Firebase Timestamp 的輕量介面 (不依賴任何外部套件)
 export interface FirestoreTimestampLike {
   toDate: () => Date
 }
@@ -7,7 +6,6 @@ export interface SecondsTimestampLike {
   _seconds: number
 }
 
-// 2. Type Guards (型別守衛) - 替代 instanceof Timestamp，且無型別盲點
 function isFirestoreTimestamp(value: unknown): value is FirestoreTimestampLike {
   return (
     typeof value === "object" &&
@@ -26,30 +24,21 @@ function isSecondsTimestamp(value: unknown): value is SecondsTimestampLike {
   )
 }
 
-// ==========================================
-// 匯出函式
-// ==========================================
-
-// 轉成 Date 物件 (前後端通用，不含 any)
 export function parseToDate(value: unknown): Date | null {
   if (!value) return null
 
-  // 原生 Date
   if (value instanceof Date) {
     return isNaN(value.getTime()) ? null : value
   }
 
-  // Firebase Timestamp (帶有 toDate 方法)
   if (isFirestoreTimestamp(value)) {
     return value.toDate()
   }
 
-  // Firebase Timestamp 物件結構 (帶有 _seconds)
   if (isSecondsTimestamp(value)) {
     return new Date(value._seconds * 1000)
   }
 
-  // 字串或數字 (例如 ISO 字串 "2026-07-28T16:00:00.000Z" 或 Timestamp 毫秒值)
   if (typeof value === "string" || typeof value === "number") {
     const date = new Date(value)
     return isNaN(date.getTime()) ? null : date
@@ -58,13 +47,11 @@ export function parseToDate(value: unknown): Date | null {
   return null
 }
 
-// GET 時轉 ISO 字串 (前後端通用)
 export function toIsoString(value: unknown): string | null {
   const date = parseToDate(value)
   return date ? date.toISOString() : null
 }
 
-// Input 欄位專用格式：2026/07/15 21:30
 export function formatForInput(value: unknown): string {
   const date = parseToDate(value)
   if (!date) return ""
@@ -78,17 +65,13 @@ export function formatForInput(value: unknown): string {
   return `${year}/${month}/${day} ${hours}:${minutes}`
 }
 
-// 純文字顯示專用格式：Jul 28, 2026, 01:53 PM
 export function formatForDisplay(dateInput: string | Date) {
   if (!dateInput) return ""
 
-  // 如果傳進來的是 string，轉成 Date 物件；如果是 Date 物件就直接使用
   const date = typeof dateInput === "string" ? new Date(dateInput) : dateInput
 
-  // 檢查是否為無效的 Date (Invalid Date)
   if (isNaN(date.getTime())) return ""
 
-  // 固定格式化輸出，防止 Safari / SSR 產生 Hydration Error
   const months = [
     "Jan",
     "Feb",

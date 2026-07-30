@@ -74,7 +74,6 @@ export default function VoteCardView(props: VoteCardViewProps) {
               }}
               onClick={() => handleSelect(option.voteOptionId)}
             >
-              {/* 得票率背景 bar */}
               <div
                 className="absolute inset-0 transition-all duration-500"
                 style={{
@@ -86,7 +85,6 @@ export default function VoteCardView(props: VoteCardViewProps) {
                 }}
               />
 
-              {/* 選項內容 */}
               <div className="relative flex justify-between items-center px-4 py-3">
                 <span
                   className="text-sm font-medium"

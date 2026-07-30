@@ -1,24 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  /* 基底：和紙白／土壁灰 */
   --background: #ece6da;
   --foreground: #3a332b;
 
-  /* 侘寂大地色票 */
-  --color-clay: #b08968; /* 陶土 */
-  --color-moss: #6b7a5e; /* 苔綠 */
-  --color-stone: #8c8378; /* 石灰 */
-  --color-ink: #3a332b; /* 墨色 */
-  --color-sand: #d9cdb8; /* 砂色 */
-  --color-rust: #a45c40; /* 鐵鏽 */
-  --color-leaf: #c9a84c; /* 枯葉黃 */
-  --surface: #f5f0e8; /* 卡片底色：比背景亮一階 */
+  --color-clay: #b08968;
+  --color-moss: #6b7a5e;
+  --color-stone: #8c8378;
+  --color-ink: #3a332b;
+  --color-sand: #d9cdb8;
+  --color-rust: #a45c40;
+  --color-leaf: #c9a84c;
+  --surface: #f5f0e8;
 
   --border: #d4c8b3;
   --muted: #7a7166;
 
-  /* 使用者預設標示色 */
   --color-maple: #c84b31;
   --color-persimmon: #d3753b;
   --color-ginkgo: #dfad34;
@@ -30,26 +27,25 @@
   --color-camellia: #b83b5e;
   --color-ochre: #b87333;
 
-  /* 按鈕狀態色票（方案 B：淡底 + 邊框） */
-  --btn-default-bg: #ece6da; /* 預設底色：和紙白 */
-  --btn-default-text: #3a332b; /* 預設文字：墨色 */
-  --btn-default-border: #d4c8b3; /* 預設邊框 */
+  --btn-default-bg: #ece6da;
+  --btn-default-text: #3a332b;
+  --btn-default-border: #d4c8b3;
 
-  --btn-primary-bg: #f0e5d8; /* 主要底色：淡陶土 */
-  --btn-primary-text: #7a5535; /* 主要文字：深陶土 */
-  --btn-primary-border: #c8a882; /* 主要邊框 */
+  --btn-primary-bg: #f0e5d8;
+  --btn-primary-text: #7a5535;
+  --btn-primary-border: #c8a882;
 
-  --btn-success-bg: #e0e8d8; /* 成功底色：淡苔綠 */
-  --btn-success-text: #3d4f32; /* 成功文字：深苔綠 */
-  --btn-success-border: #8fa87e; /* 成功邊框 */
+  --btn-success-bg: #e0e8d8;
+  --btn-success-text: #3d4f32;
+  --btn-success-border: #8fa87e;
 
-  --btn-warning-bg: #f5ecd0; /* 警告底色：淡枯葉黃 */
-  --btn-warning-text: #7a6020; /* 警告文字：深枯葉黃 */
-  --btn-warning-border: #c9a84c; /* 警告邊框 */
+  --btn-warning-bg: #f5ecd0;
+  --btn-warning-text: #7a6020;
+  --btn-warning-border: #c9a84c;
 
-  --btn-danger-bg: #f0ddd5; /* 危險底色：淡鐵鏽 */
-  --btn-danger-text: #7a3520; /* 危險文字：深鐵鏽 */
-  --btn-danger-border: #c07858; /* 危險邊框 */
+  --btn-danger-bg: #f0ddd5;
+  --btn-danger-text: #7a3520;
+  --btn-danger-border: #c07858;
 }
 
 @theme inline {
@@ -101,26 +97,25 @@
     --border: #3a342b;
     --muted: #9a9082;
 
-    /* 按鈕狀態色票 dark mode */
-    --btn-default-bg: #1f1c18; /* 預設底色 */
-    --btn-default-text: #e3d9c6; /* 預設文字 */
-    --btn-default-border: #3a342b; /* 預設邊框 */
+    --btn-default-bg: #1f1c18;
+    --btn-default-text: #e3d9c6;
+    --btn-default-border: #3a342b;
 
-    --btn-primary-bg: #3d2a18; /* 主要底色：深陶土 */
-    --btn-primary-text: #c9a07a; /* 主要文字 */
-    --btn-primary-border: #6b4d30; /* 主要邊框 */
+    --btn-primary-bg: #3d2a18;
+    --btn-primary-text: #c9a07a;
+    --btn-primary-border: #6b4d30;
 
-    --btn-success-bg: #1e2a1a; /* 成功底色：深苔綠 */
-    --btn-success-text: #7e9870; /* 成功文字 */
-    --btn-success-border: #4a6040; /* 成功邊框 */
+    --btn-success-bg: #1e2a1a;
+    --btn-success-text: #7e9870;
+    --btn-success-border: #4a6040;
 
-    --btn-warning-bg: #332a10; /* 警告底色：深枯葉黃 */
-    --btn-warning-text: #c9a84c; /* 警告文字 */
-    --btn-warning-border: #7a6020; /* 警告邊框 */
+    --btn-warning-bg: #332a10;
+    --btn-warning-text: #c9a84c;
+    --btn-warning-border: #7a6020;
 
-    --btn-danger-bg: #301810; /* 危險底色：深鐵鏽 */
-    --btn-danger-text: #c07858; /* 危險文字 */
-    --btn-danger-border: #7a3520; /* 危險邊框 */
+    --btn-danger-bg: #301810;
+    --btn-danger-text: #c07858;
+    --btn-danger-border: #7a3520;
   }
 }
 

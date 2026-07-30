@@ -24,7 +24,6 @@ export const auth = getAuth(app)
 
 export function getCurrentUser(): Promise<User | null> {
   return new Promise((resolve) => {
-    // onAuthStateChanged 在訂閱時會立刻觸發一次當前（或恢復後）的登入狀態
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       unsubscribe()
       resolve(user)

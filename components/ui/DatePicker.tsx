@@ -52,12 +52,10 @@ export default function DatePicker(props: DatePickerProps) {
   const [month, setMonth] = useState<Date>(new Date())
   const [inputValue, setInputValue] = useState(value ?? "")
 
-  // single
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
   const [hour, setHour] = useState("00")
   const [minute, setMinute] = useState("00")
 
-  // range
   const [selectedRange, setSelectedRange] = useState<DateRange | undefined>(
     undefined,
   )
@@ -82,7 +80,6 @@ export default function DatePicker(props: DatePickerProps) {
     return from && to ? `${from} - ${to}` : from
   }
 
-  // single handlers
   const handleSingleSelect = (date: Date | undefined) => {
     if (!date) {
       setSelectedDate(undefined)
@@ -132,7 +129,6 @@ export default function DatePicker(props: DatePickerProps) {
     }
   }
 
-  // range handlers
   const handleRangeSelect = (range: DateRange | undefined) => {
     if (!range) {
       setSelectedRange(undefined)

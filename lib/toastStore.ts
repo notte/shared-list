@@ -26,7 +26,7 @@ export const toastStore: IToastStore = {
     return toasts
   },
   getServerSnapshot() {
-    return emptyArray // 伺服器端永遠是空的
+    return emptyArray
   },
   add(variant, message) {
     const isDuplicate = toasts.some(

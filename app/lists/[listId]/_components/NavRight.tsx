@@ -54,7 +54,6 @@ export default function NavRight({
           </Button>
         )}
       </div>
-      {/* 建立卡片 Dialog */}
       <Dialog
         open={openCreateCardDialog}
         onClose={() => {
