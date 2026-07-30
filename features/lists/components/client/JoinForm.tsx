@@ -60,7 +60,7 @@ export default function JoinForm({
     if (!tempData) return
 
     await httpClient<JoinListRequest, JoinListResponse>({
-      url: `/api/invites/${[inviteCode]}/join`,
+      url: `/api/invites/${inviteCode}/join`,
       method: "POST",
       revalidate: 0,
       payload: tempData,

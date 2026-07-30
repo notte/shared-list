@@ -40,3 +40,8 @@ export enum UserRole {
   Admin = "admin",
   Member = "member",
 }
+
+export enum InviteStatus {
+  Pending = "pending",
+  Joined = "joined",
+}

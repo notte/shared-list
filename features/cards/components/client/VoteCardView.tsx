@@ -15,7 +15,7 @@ export type VoteCardViewProps = {
 
 export default function VoteCardView(props: VoteCardViewProps) {
   const router = useRouter()
-  const { vote, listId, cardId } = props!
+  const { vote, listId, cardId } = props
   const { isMultipleChoice, maxChoices, options } = vote!
   const totalVotes = options.reduce((sum, o) => sum + o.voteCount, 0)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
@@ -37,7 +37,6 @@ export default function VoteCardView(props: VoteCardViewProps) {
       url: `/api/lists/${listId}/cards/${cardId}/vote`,
       method: "POST",
       payload: { optionIds: selectedIds },
-      successMessage: "",
     }).then(() => {
       router.refresh()
     })

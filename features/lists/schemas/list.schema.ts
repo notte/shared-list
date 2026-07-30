@@ -35,12 +35,3 @@ export interface Invite {
   createdAt: Date
   expiredAt: Date | null
 }
-
-export interface Member {
-  listId: string
-  userId: string
-  userName: string
-  joinedAt: Date
-  color: string
-  role: UserRole
-}

@@ -3,7 +3,7 @@ import { Variant } from "@/types/enums"
 import { auth, getCurrentUser } from "@/lib/firebase.client"
 
 // RequestInit：定義 fetch() 函數的第二個參數 可以傳入哪些設定項目
-export interface IHttpClientRequest<T> extends RequestInit {
+export interface HttpClientRequest<T> extends RequestInit {
   url: string
   revalidate?: number
   payload?: T
@@ -12,7 +12,7 @@ export interface IHttpClientRequest<T> extends RequestInit {
 }
 
 export async function httpClient<T, U>(
-  request: IHttpClientRequest<T>,
+  request: HttpClientRequest<T>,
 ): Promise<U | undefined> {
   const currentUser = auth.currentUser ?? (await getCurrentUser())
 

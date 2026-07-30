@@ -1,10 +1,10 @@
 "use client"
 import Button from "@/components/ui/Button"
 import Dialog from "@/components/ui/Dialog"
-import { Variant, ButtonAction, DialogRole } from "@/types/enums"
+import { Variant, ButtonAction, DialogRole, InviteStatus } from "@/types/enums"
 import {
   GetInviteCodeDetailResponse,
-  MemberItem as IMemberItem,
+  MemberResponseItem,
 } from "@/features/lists/adapters/response"
 import { useState } from "react"
 import { toastStore } from "@/lib/toastStore"
@@ -12,7 +12,9 @@ import { httpClient } from "@/services/http/client"
 import { useRouter } from "next/navigation"
 import { formatForDisplay } from "@/lib/date"
 
-export type MemberItemProps = Partial<GetInviteCodeDetailResponse & IMemberItem>
+export type MemberItemProps = Partial<
+  GetInviteCodeDetailResponse & MemberResponseItem
+>
 
 export default function MemberItem({
   inviteCode,
@@ -29,7 +31,7 @@ export default function MemberItem({
 
   const [open, setOpen] = useState<boolean>(false)
   const [copied, setCopied] = useState<boolean>(false)
-  const status = inviteCode ? "pending" : "joined"
+  const status = inviteCode ? InviteStatus.Pending : InviteStatus.Joined
 
   const handleCopy = async () => {
     // 動態組合目前的網域與邀請路徑
@@ -127,7 +129,7 @@ export default function MemberItem({
             ? handleDeleteMember(userId!)
             : handleDeleteInvite(inviteCode!)
         }
-        title={isRemoveMember ? "Remove Member?" : "Revoke Invitation?"}
+        title={isRemoveMember ? "Remove Member？" : "Revoke Invitation?"}
         description={
           isRemoveMember
             ? `You are about to remove "${userName}".`

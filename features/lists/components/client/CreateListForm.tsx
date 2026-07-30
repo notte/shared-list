@@ -3,6 +3,7 @@
 import Input from "@/components/ui/Input"
 import Button from "@/components/ui/Button"
 import Select from "@/components/ui/Select"
+import * as z from "zod"
 import { httpClient } from "@/services/http/client"
 import { Variant, ButtonAction } from "@/types/enums"
 import { useForm, Controller } from "react-hook-form"
@@ -10,7 +11,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { CreateListRequest } from "@/features/lists/adapters/request"
 import { saveUserData } from "@/services/storage/user.client"
 import { themeColors } from "@/lib/theme"
-import * as z from "zod"
+import { useRouter } from "next/navigation"
+import { CreateListResponse } from "@/features/lists/adapters/response"
 
 // 定義驗證 Schema
 const createListsSchema = z.object({
@@ -28,6 +30,8 @@ const createListsSchema = z.object({
 })
 
 export default function CreateListForm() {
+  const router = useRouter()
+
   const {
     control,
     handleSubmit,
@@ -44,11 +48,13 @@ export default function CreateListForm() {
   // 表單驗證成功後的處理
   const onSubmit = async (data: CreateListRequest) => {
     await saveUserData(data.color, data.userName)
-    await httpClient<CreateListRequest, void>({
+    await httpClient<CreateListRequest, CreateListResponse>({
       url: "/api/lists",
       method: "POST",
       payload: data,
       successMessage: "Added successfully.",
+    }).then((res) => {
+      if (res?.listId) router.push(`/lists/${res.listId}`)
     })
   }
 

@@ -12,7 +12,7 @@ export type ReadStatusControllerProps = {
 
 export default function ReadStatusController(props: ReadStatusControllerProps) {
   const router = useRouter()
-  const { listId, cardId, isRead } = props!
+  const { listId, cardId, isRead } = props
 
   const handleSubmit = async () => {
     await httpClient({

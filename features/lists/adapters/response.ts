@@ -21,12 +21,12 @@ export type GetListDetailResponse = Omit<List, "members"> & {
   members: Record<string, SerializedMember>
 }
 
-export interface MemberItem extends ListMember {
+export interface MemberResponseItem extends ListMember {
   userId: string
 }
 // 成員列表
 export interface GetListMembersResponse {
-  members: MemberItem[]
+  members: MemberResponseItem[]
 }
 
 // 清單成員加入
@@ -34,3 +34,5 @@ export interface JoinListResponse {
   message: string
   listId: string
 }
+
+export type CreateListResponse = JoinListResponse

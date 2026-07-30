@@ -39,7 +39,7 @@ export default function EditCardDialog({
     await httpClient<undefined, GetCardDetailResponse>({
       url: `/api/lists/${listId}/cards/${cardId}`,
       method: "DELETE",
-      successMessage: "Member deleted successfully.",
+      successMessage: "Card deleted successfully.",
     })
     setAlertOpen(false)
     router.refresh()
@@ -86,7 +86,7 @@ export default function EditCardDialog({
         onClose={() => setAlertOpen(false)}
         onConfirm={handleDeleteCard}
         title="Remove Card？"
-        description="Are you sure you want to revoke this invitation code? Once deleted, it can no longer be used to join the list."
+        description="Are you sure you want to delete this card？This action cannot be undone."
         role={DialogRole.AlertDialog}
       />
     </>

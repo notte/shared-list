@@ -4,8 +4,8 @@ import Icon from "@/components/ui/Icon"
 import { ButtonAction, Variant, Size } from "@/types/enums"
 import { UserPlusIcon } from "@heroicons/react/16/solid"
 import { httpClient } from "@/services/http/client"
-import { CreateListRequest } from "@/features/lists/adapters/request"
 import { useRouter } from "next/navigation"
+import { CreateInviteResponse } from "@/features/lists/adapters/response"
 
 export default function MemberList({
   children,
@@ -17,7 +17,7 @@ export default function MemberList({
   const router = useRouter()
 
   const createListInvite = async () => {
-    await httpClient<CreateListRequest, void>({
+    await httpClient<void, CreateInviteResponse>({
       url: `/api/lists/${listId}/invites`,
       method: "POST",
       revalidate: 0,
