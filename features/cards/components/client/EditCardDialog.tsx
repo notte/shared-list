@@ -2,21 +2,26 @@
 import Button from "@/components/ui/Button"
 import Dialog from "@/components/ui/Dialog"
 import CardForm from "@/features/cards/components/client/CardForm"
-import { httpClient } from "@/services/http/client"
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect, useTransition } from "react"
 import { ButtonAction, Variant, DialogRole } from "@/types/enums"
+import { getCardForEdit } from "@/features/cards/actions/getCardForEdit"
+import { toastStore } from "@/lib/toastStore"
+import { deleteCard } from "@/features/cards/actions/deleteCard"
 import { GetCardDetailResponse } from "../../adapters/response"
 
 export default function EditCardDialog({
   listId,
   cardId,
+  isEnd,
+  isPublish,
 }: {
   listId: string
   cardId: string
+  isEnd: boolean
+  isPublish: boolean
 }) {
-  const router = useRouter()
   const [alertOpen, setAlertOpen] = useState<boolean>(false)
+  const [isPending, startTransition] = useTransition()
   const [openEditCardDialog, setOpenEditCardDialog] = useState<boolean>(false)
   const [cardDetail, setCardDetail] = useState<
     GetCardDetailResponse | undefined
@@ -24,45 +29,50 @@ export default function EditCardDialog({
 
   useEffect(() => {
     const fetchCardDetail = async () => {
-      const res = await httpClient<undefined, GetCardDetailResponse>({
-        url: `/api/lists/${listId}/cards/${cardId}`,
-        method: "GET",
-      })
-      setCardDetail(res)
+      const res = await getCardForEdit(listId, cardId)
+      setCardDetail(res ?? undefined)
     }
     fetchCardDetail()
   }, [cardId, listId, openEditCardDialog])
 
   if (!cardDetail) return <></>
 
-  const handleDeleteCard = async () => {
-    await httpClient<undefined, GetCardDetailResponse>({
-      url: `/api/lists/${listId}/cards/${cardId}`,
-      method: "DELETE",
-      successMessage: "Card deleted successfully.",
+  const handleDeleteCard = () => {
+    startTransition(async () => {
+      try {
+        await deleteCard(listId, cardId)
+        toastStore.add(Variant.Success, "Card successfully deleted.")
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "An error occurred"
+        toastStore.add(Variant.Danger, message)
+      }
+      setAlertOpen(false)
     })
-    setAlertOpen(false)
-    router.refresh()
   }
 
   return (
     <>
-      <Button
-        buttonText="edit"
-        variant={Variant.Success}
-        action={ButtonAction.Custom}
-        onClick={() => {
-          setOpenEditCardDialog(true)
-        }}
-      />
-      <Button
-        buttonText="delete"
-        variant={Variant.Danger}
-        action={ButtonAction.Custom}
-        onClick={() => {
-          setAlertOpen(true)
-        }}
-      />
+      {!isPublish && !isEnd && (
+        <Button
+          buttonText="edit"
+          variant={Variant.Success}
+          action={ButtonAction.Custom}
+          onClick={() => {
+            setOpenEditCardDialog(true)
+          }}
+        />
+      )}
+      {(!isPublish || isEnd) && (
+        <Button
+          buttonText="delete"
+          variant={Variant.Danger}
+          action={ButtonAction.Custom}
+          onClick={() => {
+            setAlertOpen(true)
+          }}
+        />
+      )}
       {/* 編輯卡片 Dialog */}
       <Dialog
         open={openEditCardDialog}
@@ -88,6 +98,8 @@ export default function EditCardDialog({
         title="Remove Card？"
         description="Are you sure you want to delete this card？This action cannot be undone."
         role={DialogRole.AlertDialog}
+        confirmDisabled={isPending}
+        confirmText={isPending ? "Deleting..." : "Delete"}
       />
     </>
   )

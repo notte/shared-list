@@ -6,7 +6,7 @@ import MemberItem, {
 import {
   getListInvites,
   getListMembers,
-  checkUserInList,
+  checkIsListAdmin,
 } from "@/services/db/list"
 import { redirect } from "next/navigation"
 
@@ -16,10 +16,9 @@ export default async function Page({
   params: Promise<{ listId: string }>
 }) {
   const { listId } = await params
+  const isAdmin = await checkIsListAdmin(listId)
 
-  const isMember = await checkUserInList(listId)
-
-  if (!isMember) redirect("/forbidden")
+  if (!isAdmin) redirect("/forbidden")
 
   const invites = await getListInvites(listId)
   const members = await getListMembers(listId)

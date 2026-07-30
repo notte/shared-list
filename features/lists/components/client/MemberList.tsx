@@ -3,9 +3,9 @@ import Button from "@/components/ui/Button"
 import Icon from "@/components/ui/Icon"
 import { ButtonAction, Variant, Size } from "@/types/enums"
 import { UserPlusIcon } from "@heroicons/react/16/solid"
-import { httpClient } from "@/services/http/client"
-import { useRouter } from "next/navigation"
-import { CreateInviteResponse } from "@/features/lists/adapters/response"
+import { useTransition } from "react"
+import { toastStore } from "@/lib/toastStore"
+import { createInvite } from "@/features/lists/actions/createInvite"
 
 export default function MemberList({
   children,
@@ -14,16 +14,19 @@ export default function MemberList({
   children: React.ReactNode
   listId: string
 }) {
-  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
 
   const createListInvite = async () => {
-    await httpClient<void, CreateInviteResponse>({
-      url: `/api/lists/${listId}/invites`,
-      method: "POST",
-      revalidate: 0,
-      successMessage: "Invite created.",
+    startTransition(async () => {
+      try {
+        await createInvite(listId)
+        toastStore.add(Variant.Success, "Invite created.")
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "An error occurred"
+        toastStore.add(Variant.Danger, message)
+      }
     })
-    router.refresh()
   }
 
   return (
@@ -31,13 +34,14 @@ export default function MemberList({
       <div className="w-1/2 flex justify-between mb-6">
         <h2 className="subheading">Member List</h2>
         <Button
-          buttonText="Add Memeber"
+          disabled={isPending}
+          buttonText={isPending ? "Adding..." : "Add Member"}
           variant={Variant.Primary}
-          action={ButtonAction.Navigate}
+          action={ButtonAction.Custom}
           onClick={createListInvite}
         >
           <Icon variant={Variant.Primary} size={Size.Small}>
-            <UserPlusIcon />
+            <UserPlusIcon className="w-4 h-4" />
           </Icon>
         </Button>
       </div>

@@ -6,11 +6,12 @@ import {
   GetInviteCodeDetailResponse,
   MemberResponseItem,
 } from "@/features/lists/adapters/response"
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { toastStore } from "@/lib/toastStore"
-import { httpClient } from "@/services/http/client"
-import { useRouter } from "next/navigation"
 import { formatForDisplay } from "@/lib/date"
+import { removeMember } from "@/features/lists/actions/removeMember"
+import { deleteInvite } from "@/features/lists/actions/deleteInvite"
+import { checkIsListAdmin } from "@/services/db/list"
 
 export type MemberItemProps = Partial<
   GetInviteCodeDetailResponse & MemberResponseItem
@@ -24,7 +25,7 @@ export default function MemberItem({
   listId,
   userId,
 }: MemberItemProps) {
-  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
 
   // 刪除成員 or 刪除邀請碼
   const [isRemoveMember, setIsRemoveMember] = useState<boolean>(false)
@@ -50,26 +51,35 @@ export default function MemberItem({
     }
   }
 
-  const handleDeleteMember = async (userId: string) => {
-    await httpClient({
-      url: `/api/lists/${listId}/members`,
-      method: "DELETE",
-      successMessage: "Member deleted successfully.",
-      payload: { userId },
+  const handleDeleteMember = (userId: string) => {
+    startTransition(async () => {
+      try {
+        await removeMember(listId!, userId)
+        toastStore.add(
+          Variant.Success,
+          "Member successfully removed from the list.",
+        )
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "An error occurred"
+        toastStore.add(Variant.Danger, message)
+      }
     })
     setOpen(false)
-    router.refresh()
   }
 
-  const handleDeleteInvite = async (inviteCode: string) => {
-    await httpClient({
-      url: `/api/invites/${inviteCode}`,
-      method: "DELETE",
-      successMessage: "Invitation code successfully deleted.",
-      payload: { inviteCode },
+  const handleDeleteInvite = (inviteCode: string) => {
+    startTransition(async () => {
+      try {
+        await deleteInvite(listId!, inviteCode)
+        toastStore.add(Variant.Success, "Invite Code successfully deleted.")
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "An error occurred"
+        toastStore.add(Variant.Danger, message)
+      }
     })
     setOpen(false)
-    router.refresh()
   }
 
   return (
@@ -97,7 +107,8 @@ export default function MemberItem({
                 disabled={copied}
               />
               <Button
-                buttonText="Delete"
+                disabled={isPending}
+                buttonText={isPending ? "Delete..." : "Delete"}
                 variant={Variant.Danger}
                 action={ButtonAction.Custom}
                 onClick={() => {
@@ -109,7 +120,8 @@ export default function MemberItem({
           )}
           {joinedAt && (
             <Button
-              buttonText="Delete"
+              disabled={isPending}
+              buttonText={isPending ? "Delete..." : "Delete"}
               variant={Variant.Danger}
               action={ButtonAction.Custom}
               onClick={() => {
@@ -136,6 +148,10 @@ export default function MemberItem({
             : "Are you sure you want to revoke this invitation code? Once deleted, it can no longer be used to join the list."
         }
         role={DialogRole.AlertDialog}
+        confirmDisabled={isPending}
+        confirmText={
+          isPending ? "Processing..." : isRemoveMember ? "Remove" : "Revoke"
+        }
       />
     </>
   )

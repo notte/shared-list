@@ -27,7 +27,8 @@ export default async function CardItem({
   const userData = await getUserDataServer()
   const isCreator = createdBy.userId === userData?.userId
   const isRead = userData?.userId ? readBy.includes(userData.userId) : false
-  const isEnd = new Date(endTime).toISOString() < new Date().toISOString()
+  const isEnd = new Date(endTime).toISOString() <= new Date().toISOString()
+  const isPublish = new Date().getTime() >= new Date(publishTime).getTime()
 
   return (
     <div className={`card-container ${isEnd ? "bg-sand" : null}`}>
@@ -51,12 +52,15 @@ export default async function CardItem({
             action={ButtonAction.Navigate}
             path={`/lists/${listId}/cards/${cardId}`}
           />
-          {/* 編輯按鈕：尚未到達公開時間，並且是建立者 */}
-          {isCreator &&
-            publishTime &&
-            new Date().getTime() < new Date(publishTime).getTime() && (
-              <EditCardDialog listId={listId} cardId={cardId} />
-            )}
+          {/* 編輯 & 刪除按鈕 */}
+          {isCreator && (
+            <EditCardDialog
+              listId={listId}
+              cardId={cardId}
+              isEnd={isEnd}
+              isPublish={isPublish}
+            />
+          )}
         </div>
         <Icon
           variant={isRead ? Variant.Success : Variant.Danger}

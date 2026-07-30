@@ -41,21 +41,19 @@ function deleteCookie(name: string) {
 }
 
 export async function saveUserData(color: string, userName: string) {
-  const hasMember =
-    getCookie(USER_ID_KEY) &&
-    getCookie(USER_COLOR_KEY) &&
-    getCookie(USER_NAME_KEY)
-  if (hasMember) return
-
   const { user } = await signInAnonymously(auth)
+  const existingUserId = getCookie(USER_ID_KEY)
 
-  setCookie(USER_ID_KEY, user.uid, MAX_AGE_10_YEARS)
-  setCookie(USER_COLOR_KEY, color, MAX_AGE_10_YEARS)
-  setCookie(USER_NAME_KEY, userName, MAX_AGE_10_YEARS)
-
-  window.dispatchEvent(new Event("userDataChange"))
+  // 只有「同一個使用者」才允許覆蓋暱稱／顏色
+  // （理論上匿名登入是裝置持久化的，existingUserId 存在時應該永遠等於 user.uid，
+  // 這裡保留判斷式是為了讓意圖明確，也防範萬一）
+  if (!existingUserId || existingUserId === user.uid) {
+    setCookie(USER_ID_KEY, user.uid, MAX_AGE_10_YEARS)
+    setCookie(USER_COLOR_KEY, color, MAX_AGE_10_YEARS)
+    setCookie(USER_NAME_KEY, userName, MAX_AGE_10_YEARS)
+    window.dispatchEvent(new Event("userDataChange"))
+  }
 }
-
 export function clearUserId() {
   const hasMember =
     getCookie(USER_ID_KEY) &&

@@ -3,18 +3,18 @@ import Input from "@/components/ui/Input"
 import Button from "@/components/ui/Button"
 import Select from "@/components/ui/Select"
 import Dialog from "@/components/ui/Dialog"
-import { useState } from "react"
-import { httpClient } from "@/services/http/client"
+import * as z from "zod"
+import { useState, useTransition } from "react"
 import { Variant, ButtonAction, DialogRole } from "@/types/enums"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { JoinListRequest } from "@/features/lists/adapters/request"
 import { saveUserData } from "@/services/storage/user.client"
 import { themeColors } from "@/lib/theme"
-import { JoinListResponse } from "@/features/lists/adapters/response"
 import { useRouter } from "next/navigation"
 import { toastStore } from "@/lib/toastStore"
-import * as z from "zod"
+import { joinList } from "@/features/lists/actions/joinList"
+import { auth, getCurrentUser } from "@/lib/firebase.client"
 
 // 定義驗證 Schema
 const joinListSchema = z.object({
@@ -35,6 +35,7 @@ export default function JoinForm({
   title: string
 }) {
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   const [open, setOpen] = useState<boolean>(false)
 
   const {
@@ -56,20 +57,33 @@ export default function JoinForm({
     setOpen(true)
   }
 
-  const handleFinalSubmit = async () => {
-    if (!tempData) return
-
-    await httpClient<JoinListRequest, JoinListResponse>({
-      url: `/api/invites/${inviteCode}/join`,
-      method: "POST",
-      revalidate: 0,
-      payload: tempData,
-    }).then(async (res) => {
-      if (res) {
+  const handleFinalSubmit = () => {
+    startTransition(async () => {
+      if (!tempData) return
+      const currentUser = auth.currentUser ?? (await getCurrentUser())
+      if (!currentUser) {
+        toastStore.add(
+          Variant.Danger,
+          "The user is not logged in and cannot send a request.",
+        )
+        return
+      }
+      const token = await currentUser.getIdToken()
+      try {
+        const listId = await joinList(
+          token,
+          inviteCode,
+          tempData.userName,
+          tempData.color,
+        )
         await saveUserData(tempData.color, tempData.userName)
         setOpen(false)
-        toastStore.add(Variant.Success, res.message)
-        router.push(`${window.location.origin}/lists/${res.listId}`)
+        toastStore.add(Variant.Success, "Joined successfully.")
+        router.push(`/lists/${listId}`)
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "An error occurred"
+        toastStore.add(Variant.Danger, message)
       }
     })
   }
@@ -133,6 +147,8 @@ export default function JoinForm({
         title="Join this list？"
         description={`You are about to join "${title}" as "${getValues("userName")}".`}
         role={DialogRole.AlertDialog}
+        confirmDisabled={isPending}
+        confirmText={isPending ? "Joining..." : "Yes, Join"}
       />
     </>
   )

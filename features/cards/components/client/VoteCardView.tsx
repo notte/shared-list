@@ -1,11 +1,11 @@
 "use client"
 
 import Button from "@/components/ui/Button"
-import { useState } from "react"
-import { httpClient } from "@/services/http/client"
-import { useRouter } from "next/navigation"
+import { useState, useTransition } from "react"
 import { Variant, ButtonAction } from "@/types/enums"
 import { GetCardDetailResponse } from "@/features/cards/adapters/response"
+import { toastStore } from "@/lib/toastStore"
+import { submitVote } from "@/features/cards/actions/submitVote"
 
 export type VoteCardViewProps = {
   vote: GetCardDetailResponse["vote"]
@@ -14,11 +14,11 @@ export type VoteCardViewProps = {
 }
 
 export default function VoteCardView(props: VoteCardViewProps) {
-  const router = useRouter()
   const { vote, listId, cardId } = props
   const { isMultipleChoice, maxChoices, options } = vote!
   const totalVotes = options.reduce((sum, o) => sum + o.voteCount, 0)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const [isPending, startTransition] = useTransition()
 
   const handleSelect = (id: string) => {
     if (isMultipleChoice) {
@@ -32,13 +32,16 @@ export default function VoteCardView(props: VoteCardViewProps) {
     }
   }
 
-  const handleSubmit = async () => {
-    await httpClient({
-      url: `/api/lists/${listId}/cards/${cardId}/vote`,
-      method: "POST",
-      payload: { optionIds: selectedIds },
-    }).then(() => {
-      router.refresh()
+  const handleSubmit = () => {
+    startTransition(async () => {
+      try {
+        await submitVote(listId, cardId, selectedIds)
+        toastStore.add(Variant.Success, "Vote successfully updated.")
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "An error occurred"
+        toastStore.add(Variant.Danger, message)
+      }
     })
   }
 
@@ -105,10 +108,11 @@ export default function VoteCardView(props: VoteCardViewProps) {
       <hr />
       <div className="flex justify-end">
         <Button
+          disabled={isPending}
           variant={selectedIds.length > 0 ? Variant.Primary : Variant.Default}
           action={ButtonAction.Submit}
           onClick={handleSubmit}
-          buttonText="Submit Vote"
+          buttonText={isPending ? "Submitting..." : "Submit Vote"}
         />
       </div>
     </div>

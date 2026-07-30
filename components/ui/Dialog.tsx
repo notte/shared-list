@@ -21,6 +21,8 @@ export interface DialogProps extends Omit<HeadlessDialogProps, "onClose"> {
   role: DialogRole
   description?: string
   children?: React.ReactNode
+  confirmDisabled?: boolean
+  confirmText?: string
 }
 
 export default function Dialog({
@@ -31,6 +33,8 @@ export default function Dialog({
   onConfirm,
   role,
   children,
+  confirmDisabled = false,
+  confirmText = "Deactivate",
 }: DialogProps) {
   const handleOnClose = () => {
     if (onClose) onClose()
@@ -70,8 +74,9 @@ export default function Dialog({
                   variant={Variant.Danger}
                 />
                 <Button
+                  disabled={confirmDisabled}
                   onClick={handleOnConfirm}
-                  buttonText="Deactivate"
+                  buttonText={confirmText}
                   variant={Variant.Primary}
                 />
               </div>

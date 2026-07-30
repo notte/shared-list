@@ -7,6 +7,7 @@ import {
 import { db } from "@/lib/firebase.admin"
 import { cache } from "react"
 import { getUserDataServer } from "@/services/storage/user.server"
+import { UserRole } from "@/types/enums"
 
 // 取得指定清單詳情
 export const getListDetail = cache(
@@ -176,6 +177,26 @@ export async function checkUserInList(listId: string): Promise<boolean> {
     return memberDoc.exists
   } catch (error) {
     console.error("Check user in list failed:", error)
+    return false
+  }
+}
+
+// 驗證是否為清單管理者
+export async function checkIsListAdmin(listId: string): Promise<boolean> {
+  const userData = await getUserDataServer()
+  if (!listId || !userData) return false
+
+  try {
+    const memberDoc = await db
+      .collection("lists")
+      .doc(listId)
+      .collection("members")
+      .doc(userData.userId)
+      .get()
+
+    return memberDoc.exists && memberDoc.data()?.role === UserRole.Admin
+  } catch (error) {
+    console.error("Check list admin failed:", error)
     return false
   }
 }

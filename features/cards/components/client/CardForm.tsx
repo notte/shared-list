@@ -5,20 +5,21 @@ import DatePicker from "@/components/ui/DatePicker"
 import Button from "@/components/ui/Button"
 import Select from "@/components/ui/Select"
 import VoteFormFields from "./VoteFormFields"
-import { useParams, useRouter } from "next/navigation"
-import { httpClient } from "@/services/http/client"
+import { useParams } from "next/navigation"
 import { useForm, Controller, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ButtonAction, CardType, Variant } from "@/types/enums"
 import { CardRequest } from "@/features/cards/adapters/request"
-import { useUserData } from "@/services/storage/user.client"
 import { GetCardDetailResponse } from "@/features/cards/adapters/response"
 import { formatForInput, parseToDate, toIsoString } from "@/lib/date"
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import {
   CardFormValues,
   cardFormSchema,
 } from "@/features/cards/schemas/cardForm.schema"
+import { toastStore } from "@/lib/toastStore"
+import { createCard } from "@/features/cards/actions/createCard"
+import { updateCard } from "@/features/cards/actions/updateCard"
 
 export type CardFormProps = {
   card?: GetCardDetailResponse
@@ -27,10 +28,9 @@ export type CardFormProps = {
 
 export default function CardForm(props: CardFormProps) {
   const params = useParams()
-  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   const listId = params.listId as string
 
-  const userData = useUserData()
   const { card, onSuccess } = props
   const vote = card && "vote" in card ? card.vote : undefined
 
@@ -93,7 +93,7 @@ export default function CardForm(props: CardFormProps) {
       ? `${formatForInput(eventStartTime)} - ${formatForInput(eventEndTime)}`
       : ""
 
-  const onSubmit = async (data: CardFormValues) => {
+  const onSubmit = (data: CardFormValues) => {
     const requestData = {
       ...data,
       publishTime: data.publishTime?.toISOString(),
@@ -101,21 +101,23 @@ export default function CardForm(props: CardFormProps) {
       eventTime: toIsoString(data.eventTime),
       eventStartTime: toIsoString(data.eventStartTime),
       eventEndTime: toIsoString(data.eventEndTime),
-      userName: userData?.userName,
-      color: userData?.color,
-    }
-    await httpClient<CardRequest, { message: string }>({
-      url: card
-        ? `/api/lists/${listId}/cards/${card.cardId}`
-        : `/api/lists/${listId}/cards`,
-      method: card ? "PUT" : "POST",
-      payload: requestData,
-      successMessage: card
-        ? "Card updated successfully."
-        : "Card created successfully.",
-    }).then(async () => {
-      if (onSuccess) onSuccess()
-      router.refresh()
+    } as CardRequest
+
+    startTransition(async () => {
+      try {
+        if (card) {
+          await updateCard(listId, card.cardId, requestData)
+          toastStore.add(Variant.Success, "Card updated successfully.")
+        } else {
+          await createCard(listId, requestData)
+          toastStore.add(Variant.Success, "Card created successfully.")
+        }
+        if (onSuccess) onSuccess()
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "An error occurred"
+        toastStore.add(Variant.Danger, message)
+      }
     })
   }
 
@@ -131,10 +133,12 @@ export default function CardForm(props: CardFormProps) {
               description="Choose a card type for this post."
               value={field.value}
               onChange={field.onChange}
-              options={Object.values(CardType).map((type) => ({
-                label: type,
-                value: type,
-              }))}
+              options={Object.values(CardType)
+                .filter((type) => type !== CardType.Closed)
+                .map((type) => ({
+                  label: type,
+                  value: type,
+                }))}
               errorText={errors.cardType?.message}
             />
           )}
@@ -274,7 +278,8 @@ export default function CardForm(props: CardFormProps) {
           <VoteFormFields control={control} errors={errors} trigger={trigger} />
         )}
         <Button
-          buttonText="Submit"
+          disabled={isPending}
+          buttonText={isPending ? "Submitting..." : "Submit"}
           variant={Variant.Primary}
           action={ButtonAction.Submit}
         />

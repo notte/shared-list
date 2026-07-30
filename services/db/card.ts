@@ -37,26 +37,14 @@ export const getListCards = cache(
         }
       })
 
+      const now = new Date().toISOString()
+
       const list = cardsList.filter((card) => {
         const isCreator = card.createdBy.userId === userId
-        const isPublish = card.publishTime > new Date().toISOString()
-        const isEnd = card.endTime < new Date().toISOString()
+        const isReleased = card.publishTime <= now
+        const isEnded = card.endTime < now
 
-        // 尚未到達 End 時間
-        const isBeforeEnd = !isEnd
-        // 或者已到達 End 時間，但是是建立者
-        const isEndedButIsCreator = isEnd && isCreator
-        // 已到達公開時間
-        const isPubliclyReleased = isPublish
-        // 未到達公開時間，但是是建立者
-        const isUnreleasedButIsCreator = !isPublish && isCreator
-
-        return (
-          isBeforeEnd ||
-          isEndedButIsCreator ||
-          isPubliclyReleased ||
-          isUnreleasedButIsCreator
-        )
+        return isCreator || (isReleased && !isEnded)
       })
 
       return {
