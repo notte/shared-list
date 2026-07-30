@@ -2,12 +2,6 @@ import { NextResponse } from "next/server"
 import { db } from "@/lib/firebase.admin"
 import { FieldValue } from "firebase-admin/firestore"
 
-// 取得該清單下的所有成員列表 💜 暫時不實作
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ listId: string }> },
-) {}
-
 // ✅ 刪除成員
 export async function DELETE(
   request: Request,

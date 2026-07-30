@@ -23,7 +23,6 @@ export default async function Page({ params }: PageProps) {
   if (!isMember) redirect("/forbidden")
   if (!listId || !cardId || !cardDetailData) notFound()
 
-  console.log(cardDetailData)
   return (
     <CardDetail card={cardDetailData}>
       {cardDetailData.cardType === CardType.Vote && cardDetailData.vote && (

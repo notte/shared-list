@@ -59,12 +59,12 @@ export default function MemberItem({
     router.refresh()
   }
 
-  const handleDeleteInvite = async (code: string) => {
+  const handleDeleteInvite = async (inviteCode: string) => {
     await httpClient({
-      url: `/api/invites/${code}`,
+      url: `/api/invites/${inviteCode}`,
       method: "DELETE",
       successMessage: "Invitation code successfully deleted.",
-      payload: { inviteCode: code },
+      payload: { inviteCode },
     })
     setOpen(false)
     router.refresh()

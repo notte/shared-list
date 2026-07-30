@@ -1,22 +1,11 @@
-import Image from "next/image"
+import EmptyState from "@/components/ui/EmptyState"
 
 export default function NotFound() {
   return (
-    <div className="w-screen h-screen p-0 m-0 flex justify-center items-center">
-      <div className="flex flex-col items-center justify-center h-120">
-        <Image
-          src="/not-found.svg"
-          alt="Hero Image"
-          width={200}
-          height={100}
-          className="mb-4"
-          priority
-        />
-        <h2 className="subheading mb-4">Not Found</h2>
-        <h3 className="section-title">
-          The page you are looking for does not exist.
-        </h3>
-      </div>
-    </div>
+    <EmptyState
+      imageSrc="/not-found.svg"
+      title="Not Found"
+      description="The page you are looking for does not exist."
+    />
   )
 }

@@ -2,14 +2,14 @@ import JoinForm from "@/features/lists/components/client/JoinForm"
 import { getInviteCodeDetail } from "@/services/db/list"
 
 interface PageProps {
-  params: Promise<{ code: string }>
+  params: Promise<{ inviteCode: string }>
 }
 
 export default async function Page({ params }: PageProps) {
   const resolvedParams = await params
-  const code = resolvedParams.code
+  const inviteCode = resolvedParams.inviteCode
 
-  const inviteItem = await getInviteCodeDetail(code)
+  const inviteItem = await getInviteCodeDetail(inviteCode)
 
   return (
     <div className="w-full flex flex-col items-center justify-center p-24">
@@ -28,7 +28,7 @@ export default async function Page({ params }: PageProps) {
             remove your ID, and you may lose access to this list.
           </p>
         </div>
-        <JoinForm inviteCode={code} title={inviteItem?.title ?? ""} />
+        <JoinForm inviteCode={inviteCode} title={inviteItem?.title ?? ""} />
       </section>
     </div>
   )

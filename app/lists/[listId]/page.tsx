@@ -17,12 +17,11 @@ export default async function Page({ params }: PageProps) {
   const listData = await getListDetail(listId)
   const isMember = await checkUserInList(listId)
 
-  if (!userData || !userData?.userId) redirect("/forbidden")
+  if (!userData || !userData?.userId || !isMember) redirect("/forbidden")
 
   const cardList = await getListCards(listId, userData?.userId)
 
   if (!cardList || !listId || !listData) notFound()
-  if (!isMember) redirect("/forbidden")
 
   return (
     <>
@@ -37,6 +36,7 @@ export default async function Page({ params }: PageProps) {
           })
       ) : (
         <EmptyState
+          imageSrc="/no-data.svg"
           title="No cards yet."
           description="Cards will appear here once they are published."
         />

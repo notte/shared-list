@@ -50,6 +50,7 @@ export default async function Page({
         </>
       ) : (
         <EmptyState
+          imageSrc="/no-data.svg"
           title="No members yet."
           description="Invite people to join this list using an invite link."
         />

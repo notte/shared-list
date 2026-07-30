@@ -8,13 +8,6 @@ export enum Variant {
   Icon = "icon",
 }
 
-// 活動/訂閱狀態
-export enum EventStatus {
-  Subscribed = "subscribed",
-  Pending = "pending",
-  Cancelled = "cancelled",
-}
-
 // 卡片類型
 export enum CardType {
   Announce = "announce",
@@ -40,12 +33,6 @@ export enum Size {
   Small = "small",
   Medium = "medium",
   Large = "large",
-}
-
-// 邀請狀態
-export enum InviteStatus {
-  Pending = "pending",
-  Joined = "joined",
 }
 
 // 使用者角色

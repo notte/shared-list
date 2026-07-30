@@ -1,5 +1,5 @@
-import NavLeft from "@/app/_components/NavLeft"
-import NavRight from "@/app/_components/NavRight"
+import NavLeft from "@/app/lists/[listId]/_components/NavLeft"
+import NavRight from "@/app/lists/[listId]/_components/NavRight"
 import { getListDetail } from "@/services/db/list"
 
 export default async function Layout({

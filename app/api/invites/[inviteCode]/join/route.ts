@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { auth, db } from "@/lib/firebase.admin"
 import { FieldValue } from "firebase-admin/firestore"
 import { getAuthToken } from "@/services/http/authToken"
+import { UserRole } from "@/types/enums"
 
 // ✅ 使用者接受邀請，正式加入該清單
 export async function POST(
@@ -46,7 +47,7 @@ export async function POST(
       // 2. 【寫入與刪除階段】
       transaction.update(listRef, {
         [`members.${currentUserId}`]: {
-          role: "member",
+          role: UserRole.Member,
           name: userName,
         },
       })
@@ -55,7 +56,7 @@ export async function POST(
         userName,
         color,
         joinedAt: FieldValue.serverTimestamp(),
-        role: "member",
+        role: UserRole.Member,
       })
 
       transaction.delete(inviteRef)

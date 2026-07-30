@@ -125,11 +125,11 @@ export const getListMembers = cache(
 
 // 取得指定邀請碼詳情
 export const getInviteCodeDetail = cache(
-  async (code: string): Promise<GetInviteCodeDetailResponse | null> => {
-    if (!code) return null
+  async (inviteCode: string): Promise<GetInviteCodeDetailResponse | null> => {
+    if (!inviteCode) return null
 
     try {
-      const docSnap = await db.collection("invites").doc(code).get()
+      const docSnap = await db.collection("invites").doc(inviteCode).get()
 
       if (!docSnap.exists) return null
 
@@ -152,7 +152,7 @@ export const getInviteCodeDetail = cache(
       }
     } catch (error) {
       console.error(
-        `[getInviteCodeDetail] Failed to fetch invite detail for code ${code}:`,
+        `[getInviteCodeDetail] Failed to fetch invite detail for code ${inviteCode}:`,
         error,
       )
       return null

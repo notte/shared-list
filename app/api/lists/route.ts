@@ -72,6 +72,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }
-
-// 取得目前使用者加入的所有清單 💜 暫時不實作
-export async function GET(request: Request) {}

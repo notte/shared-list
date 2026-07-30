@@ -101,9 +101,3 @@ export async function POST(
     return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }
-
-// 取消投票 (刪除該使用者的 voteRecords 紀錄並扣除卡片票數) 💜 暫時不實作
-export async function DELETE(
-  request: Request,
-  { params }: { params: Promise<{ listId: string; cardId: string }> },
-) {}
