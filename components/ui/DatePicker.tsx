@@ -28,9 +28,9 @@ const hourOptions = Array.from({ length: 24 }, (_, i) => ({
   value: String(i),
 }))
 
-const minuteOptions = ["00", "15", "30", "45"].map((m) => ({
-  label: m,
-  value: m,
+const minuteOptions = Array.from({ length: 60 }, (_, i) => ({
+  label: String(i).padStart(2, "0"),
+  value: String(i),
 }))
 
 const applyTime = (date: Date, h: string, m: string): Date => {

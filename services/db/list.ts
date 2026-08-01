@@ -143,7 +143,7 @@ export const getListMembers = cache(
 export const getInviteCodeDetail = cache(
   async (inviteCode: string): Promise<GetInviteCodeDetailResponse | null> => {
     if (!inviteCode) return null
-    const cache = unstable_cache(
+    const cached = unstable_cache(
       async (): Promise<GetInviteCodeDetailResponse | null> => {
         try {
           const docSnap = await db.collection("invites").doc(inviteCode).get()
@@ -178,7 +178,7 @@ export const getInviteCodeDetail = cache(
       ["getInviteCodeDetail", inviteCode],
       { tags: [`invite-${inviteCode}`] },
     )
-    return cache()
+    return cached()
   },
 )
 

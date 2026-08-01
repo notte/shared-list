@@ -1,5 +1,6 @@
 import JoinForm from "@/features/lists/components/client/JoinForm"
 import { getInviteCodeDetail } from "@/services/db/list"
+import { notFound } from "next/navigation"
 
 interface PageProps {
   params: Promise<{ inviteCode: string }>
@@ -10,6 +11,8 @@ export default async function Page({ params }: PageProps) {
   const inviteCode = resolvedParams.inviteCode
 
   const inviteItem = await getInviteCodeDetail(inviteCode)
+
+  if (!inviteItem) return notFound()
 
   return (
     <div className="w-full flex flex-col items-center justify-center p-24">

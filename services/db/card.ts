@@ -13,8 +13,12 @@ export const getListCards = cache(
     userId: string,
   ): Promise<GetCardListResponse | null> => {
     if (!listId) return null
-    const cache = unstable_cache(
-      async (): Promise<GetCardListResponse | null> => {
+    const cached = unstable_cache(
+      async (): Promise<
+        GetCardListResponse & {
+          cards: GetCardListResponse["cards"]
+        }
+      > => {
         try {
           const cardsSnap = await db
             .collection("lists")
@@ -24,7 +28,6 @@ export const getListCards = cache(
 
           const cardsList = cardsSnap.docs.map((doc) => {
             const cardData = doc.data()
-
             return {
               cardId: doc.id,
               cardType: cardData.cardType,
@@ -38,32 +41,30 @@ export const getListCards = cache(
             }
           })
 
-          const now = new Date().toISOString()
-
-          const list = cardsList.filter((card) => {
-            const isCreator = card.createdBy.userId === userId
-            const isReleased = card.publishTime <= now
-            const isEnded = card.endTime < now
-
-            return isCreator || (isReleased && !isEnded)
-          })
-
-          return {
-            cards: list,
-            count: list.length,
-          }
+          return { cards: cardsList, count: cardsList.length }
         } catch (error) {
           console.error(
             `[getListCards] Failed to fetch cards for listId ${listId}:`,
             error,
           )
-          return null
+          return { cards: [], count: 0 }
         }
       },
       ["getListCards", listId],
       { tags: [`list-${listId}-cards`] },
     )
-    return cache()
+
+    const result = await cached()
+    const now = new Date().toISOString()
+
+    const list = result.cards.filter((card) => {
+      const isCreator = card.createdBy.userId === userId
+      const isReleased = card.publishTime <= now
+      const isEnded = card.endTime < now
+      return isCreator || (isReleased && !isEnded)
+    })
+
+    return { cards: list, count: list.length }
   },
 )
 
@@ -73,7 +74,7 @@ export const getCardDetail = cache(
     cardId: string,
   ): Promise<GetCardDetailResponse | null> => {
     if (!listId || !cardId) return null
-    const cache = unstable_cache(
+    const cached = unstable_cache(
       async (): Promise<GetCardDetailResponse | null> => {
         try {
           const cardDetailDoc = await db
@@ -118,6 +119,6 @@ export const getCardDetail = cache(
         tags: [`card-${cardId}`],
       },
     )
-    return cache()
+    return cached()
   },
 )

@@ -219,23 +219,21 @@ export default function CardForm(props: CardFormProps) {
             />
           )}
           {mode === "range" && (
-            <>
-              <DatePicker
-                mode="range"
-                label="Event Time"
-                description="Select the start and end dates."
-                value={formattedRangeValue}
-                onChange={(range) => {
-                  setValue("eventStartTime", range?.from, {
-                    shouldValidate: true,
-                  })
-                  setValue("eventEndTime", range?.to, { shouldValidate: true })
-                }}
-                errorText={
-                  errors.eventStartTime?.message || errors.eventEndTime?.message
-                }
-              />
-            </>
+            <DatePicker
+              mode="range"
+              label="Event Time"
+              description="Select the start and end dates."
+              value={formattedRangeValue}
+              onChange={(range) => {
+                setValue("eventStartTime", range?.from, {
+                  shouldValidate: true,
+                })
+                setValue("eventEndTime", range?.to, { shouldValidate: true })
+              }}
+              errorText={
+                errors.eventStartTime?.message || errors.eventEndTime?.message
+              }
+            />
           )}
         </div>
         <div className="w-full grid grid-cols-2 gap-4">

@@ -46,6 +46,7 @@ export async function saveUserData(color: string, userName: string) {
     window.dispatchEvent(new Event("userDataChange"))
   }
 }
+
 export function clearUserId() {
   const hasMember =
     getCookie(USER_ID_KEY) &&
