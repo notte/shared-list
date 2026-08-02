@@ -2,7 +2,7 @@
 import { db } from "@/lib/firebase.admin"
 import { FieldValue } from "firebase-admin/firestore"
 import { getUserDataServer } from "@/services/storage/user.server"
-import { revalidatePath, updateTag } from "next/cache"
+import { revalidatePath, revalidateTag, updateTag } from "next/cache"
 
 export async function createInvite(listId: string) {
   const userData = await getUserDataServer()
@@ -31,5 +31,6 @@ export async function createInvite(listId: string) {
 
   revalidatePath(`/lists/${listId}/members`)
   updateTag(`list-${listId}-invites`)
+  revalidateTag(`list-${listId}-invites`, { expire: 0 })
   return inviteCode
 }

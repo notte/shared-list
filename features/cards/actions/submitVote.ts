@@ -2,7 +2,7 @@
 import { db } from "@/lib/firebase.admin"
 import { FieldValue } from "firebase-admin/firestore"
 import { getUserDataServer } from "@/services/storage/user.server"
-import { revalidatePath, updateTag } from "next/cache"
+import { revalidatePath, revalidateTag, updateTag } from "next/cache"
 import { Vote, VoteOption } from "@/features/cards/schemas/card.schema"
 
 export async function submitVote(
@@ -74,4 +74,5 @@ export async function submitVote(
   })
   revalidatePath(`/lists/${listId}/cards/${cardId}`)
   updateTag(`card-${cardId}`)
+  revalidateTag(`card-${cardId}`, { expire: 0 })
 }

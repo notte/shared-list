@@ -2,7 +2,7 @@
 import { db, auth } from "@/lib/firebase.admin"
 import { UserRole } from "@/types/enums"
 import { FieldValue } from "firebase-admin/firestore"
-import { updateTag } from "next/cache"
+import { revalidateTag, updateTag } from "next/cache"
 
 export async function joinList(
   idToken: string,
@@ -57,5 +57,7 @@ export async function joinList(
 
   updateTag(`list-members-${targetListId}`)
   updateTag(`invite-${inviteCode}`)
+  revalidateTag(`list-members-${targetListId}`, { expire: 0 })
+  revalidateTag(`invite-${inviteCode}`, { expire: 0 })
   return targetListId
 }

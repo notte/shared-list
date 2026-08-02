@@ -2,7 +2,7 @@
 import { db } from "@/lib/firebase.admin"
 import { FieldValue } from "firebase-admin/firestore"
 import { getUserDataServer } from "@/services/storage/user.server"
-import { revalidatePath, updateTag } from "next/cache"
+import { revalidatePath, revalidateTag, updateTag } from "next/cache"
 
 export async function markCardAsRead(listId: string, cardId: string) {
   const userData = await getUserDataServer()
@@ -19,4 +19,5 @@ export async function markCardAsRead(listId: string, cardId: string) {
   await cardRef.update({ readBy: FieldValue.arrayUnion(userData.userId) })
   revalidatePath(`/lists/${listId}/cards/${cardId}`)
   updateTag(`card-${cardId}`)
+  revalidateTag(`card-${cardId}`, { expire: 0 })
 }
