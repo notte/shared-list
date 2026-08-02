@@ -38,5 +38,10 @@
     "prettier": "^3.8.4",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "overrides": {
+      "jwks-rsa>jose": "^5"
+    }
   }
 }
