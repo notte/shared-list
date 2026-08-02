@@ -70,16 +70,20 @@ export default function JoinForm({
       }
       const token = await currentUser.getIdToken()
       try {
-        const listId = await joinList(
+        const result = await joinList(
           token,
           inviteCode,
           tempData.userName,
           tempData.color,
         )
-        await saveUserData(tempData.color, tempData.userName)
+        if (result.success) {
+          await saveUserData(tempData.color, tempData.userName)
+          toastStore.add(Variant.Success, "Joined successfully.")
+          router.push(`/lists/${result.data}`)
+        } else {
+          toastStore.add(Variant.Danger, result.error)
+        }
         setOpen(false)
-        toastStore.add(Variant.Success, "Joined successfully.")
-        router.push(`/lists/${listId}`)
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "An error occurred"

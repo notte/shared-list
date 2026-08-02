@@ -1,5 +1,6 @@
 "use server"
 import { db, auth } from "@/lib/firebase.admin"
+import { ActionResult } from "@/types/actionResult"
 import { UserRole } from "@/types/enums"
 import { FieldValue } from "firebase-admin/firestore"
 import { revalidateTag, updateTag } from "next/cache"
@@ -9,55 +10,55 @@ export async function joinList(
   inviteCode: string,
   userName: string,
   color: string,
-): Promise<string> {
+): Promise<ActionResult<string>> {
   const decodedToken = await auth.verifyIdToken(idToken)
   const currentUserId = decodedToken.uid
 
   const inviteRef = db.collection("invites").doc(inviteCode)
 
-  let targetListId = ""
+  const result = await db.runTransaction<ActionResult<string>>(
+    async (transaction) => {
+      const inviteSnap = await transaction.get(inviteRef)
+      if (!inviteSnap.exists)
+        return { success: false, error: "Invalid invitation code." }
 
-  await db.runTransaction(async (transaction) => {
-    const inviteSnap = await transaction.get(inviteRef)
+      const inviteData = inviteSnap.data()
+      if (!inviteData)
+        return { success: false, error: "Invalid invitation data." }
 
-    if (!inviteSnap.exists) {
-      throw new Error("Invalid invitation code.")
-    }
+      const listId = inviteData.listId
+      const listRef = db.collection("lists").doc(listId)
+      const memberRef = listRef.collection("members").doc(currentUserId)
 
-    const inviteData = inviteSnap.data()
-    if (!inviteData) {
-      throw new Error("This invitation code has been used or has expired.")
-    }
+      const memberSnap = await transaction.get(memberRef)
+      if (memberSnap.exists)
+        return { success: false, error: "You are already a member." }
 
-    targetListId = inviteData.listId
-
-    const listRef = db.collection("lists").doc(targetListId)
-    const memberRef = listRef.collection("members").doc(currentUserId)
-
-    const memberSnap = await transaction.get(memberRef)
-    if (memberSnap.exists) throw new Error("You are already a member.")
-
-    transaction.update(listRef, {
-      [`members.${currentUserId}`]: {
+      transaction.update(listRef, {
+        [`members.${currentUserId}`]: {
+          role: UserRole.Member,
+          userName,
+          color,
+        },
+      })
+      transaction.set(memberRef, {
+        userName,
+        color,
+        joinedAt: FieldValue.serverTimestamp(),
         role: UserRole.Member,
-        userName: userName,
-        color: color,
-      },
-    })
+      })
+      transaction.delete(inviteRef)
 
-    transaction.set(memberRef, {
-      userName,
-      color,
-      joinedAt: FieldValue.serverTimestamp(),
-      role: UserRole.Member,
-    })
+      return { success: true, data: listId }
+    },
+  )
 
-    transaction.delete(inviteRef)
-  })
+  if (!result.success) return result
 
-  updateTag(`list-members-${targetListId}`)
+  updateTag(`list-members-${result.data}`)
   updateTag(`invite-${inviteCode}`)
-  revalidateTag(`list-members-${targetListId}`, { expire: 0 })
+  revalidateTag(`list-members-${result.data}`, { expire: 0 })
   revalidateTag(`invite-${inviteCode}`, { expire: 0 })
-  return targetListId
+
+  return result
 }
