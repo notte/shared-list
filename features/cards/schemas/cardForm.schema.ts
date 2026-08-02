@@ -10,13 +10,20 @@ export const voteOptionSchema = z.object({
 export const voteSchema = z
   .object({
     isMultipleChoice: z.boolean(),
-    maxChoices: z.number().min(1, "Select at least one item."),
+    maxChoices: z.number(),
     options: z
       .array(voteOptionSchema)
       .min(2, "At least two options need to be provided."),
   })
-  .refine((data) => data.maxChoices <= data.options.length, {
-    message: "The number of options cannot exceed the total number of options.",
+  .refine(
+    (data) => !data.isMultipleChoice || data.maxChoices <= data.options.length,
+    {
+      message: "Max choices cannot exceed the total number of options.",
+      path: ["maxChoices"],
+    },
+  )
+  .refine((data) => !data.isMultipleChoice || data.maxChoices > 1, {
+    message: "Max choices must be greater than 1 for multiple choice votes.",
     path: ["maxChoices"],
   })
 

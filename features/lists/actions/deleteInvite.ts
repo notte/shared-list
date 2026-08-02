@@ -1,7 +1,7 @@
 "use server"
 import { db } from "@/lib/firebase.admin"
 import { getUserDataServer } from "@/services/storage/user.server"
-import { revalidatePath, updateTag } from "next/cache"
+import { revalidatePath, revalidateTag, updateTag } from "next/cache"
 import { checkIsListAdmin } from "@/services/db/list"
 
 export async function deleteInvite(listId: string, inviteCode: string) {
@@ -21,4 +21,6 @@ export async function deleteInvite(listId: string, inviteCode: string) {
   revalidatePath(`/lists/${listId}/members`)
   updateTag(`list-${listId}-invites`)
   updateTag(`invite-${inviteCode}`)
+  revalidateTag(`list-${listId}-invites`, { expire: 0 })
+  revalidateTag(`invite-${inviteCode}`, { expire: 0 })
 }

@@ -36,6 +36,10 @@ export default function VoteFormFields({
     name: "vote.options",
   })
 
+  const isMultipleChoice = useWatch({
+    control,
+    name: "vote.isMultipleChoice",
+  })
   const maxValue = useWatch({ control, name: "vote.maxChoices" })
 
   const { fields, append, remove } = useFieldArray({
@@ -52,10 +56,8 @@ export default function VoteFormFields({
   }
 
   useEffect(() => {
-    if (options || maxValue) {
-      trigger("vote.maxChoices")
-    }
-  }, [options, options?.length, trigger, maxValue])
+    trigger("vote.maxChoices")
+  }, [options, options?.length, trigger, maxValue, isMultipleChoice])
 
   return (
     <div className="w-full">
@@ -90,6 +92,7 @@ export default function VoteFormFields({
               label="Max Choices"
               description="How many options a member can select."
               value={field.value ?? 1}
+              disabled={!isMultipleChoice}
               onChange={(val) => {
                 const numVal = Number(val)
                 field.onChange(!val || isNaN(numVal) || numVal < 1 ? 1 : numVal)

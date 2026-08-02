@@ -11,7 +11,6 @@ import { toastStore } from "@/lib/toastStore"
 import { formatForDisplay } from "@/lib/date"
 import { removeMember } from "@/features/lists/actions/removeMember"
 import { deleteInvite } from "@/features/lists/actions/deleteInvite"
-import { checkIsListAdmin } from "@/services/db/list"
 
 export type MemberItemProps = Partial<
   GetInviteCodeDetailResponse & MemberResponseItem
