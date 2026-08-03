@@ -4,10 +4,10 @@ import Dialog from "@/components/ui/Dialog"
 import CardForm from "@/features/cards/components/client/CardForm"
 import { useState, useEffect, useTransition } from "react"
 import { ButtonAction, Variant, DialogRole } from "@/types/enums"
-import { getCardForEdit } from "@/features/cards/actions/getCardForEdit"
 import { toastStore } from "@/lib/toastStore"
 import { deleteCard } from "@/features/cards/actions/deleteCard"
-import { GetCardDetailResponse } from "../../adapters/response"
+import { GetCardDetailResponse } from "@/features/cards/adapters/response"
+import { getCardForEdit } from "@/features/cards/actions/getCardForEdit"
 
 export default function EditCardDialog({
   listId,
@@ -40,8 +40,15 @@ export default function EditCardDialog({
   const handleDeleteCard = () => {
     startTransition(async () => {
       try {
-        await deleteCard(listId, cardId)
-        toastStore.add(Variant.Success, "Card successfully deleted.")
+        const result = await deleteCard(listId, cardId)
+        if (result.success) {
+          toastStore.add(Variant.Success, "Card successfully deleted.")
+        } else {
+          toastStore.add(
+            Variant.Danger,
+            result.error ?? "Failed to delete card.",
+          )
+        }
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "An error occurred"

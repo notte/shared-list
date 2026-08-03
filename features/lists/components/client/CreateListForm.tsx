@@ -61,18 +61,25 @@ export default function CreateListForm() {
       try {
         const token = await currentUser.getIdToken()
         await saveUserData(data.color, data.userName)
-        const listId = await createList(
+        const result = await createList(
           token,
           data.title,
           data.userName,
           data.color,
         )
 
-        toastStore.add(
-          Variant.Success,
-          "List and personal information successfully created.",
-        )
-        router.push(`/lists/${listId}`)
+        if (result.success) {
+          toastStore.add(
+            Variant.Success,
+            "List and personal information successfully created.",
+          )
+          router.push(`/lists/${result.data}`)
+        } else {
+          toastStore.add(
+            Variant.Danger,
+            result.error || "An error occurred while creating the list.",
+          )
+        }
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "An error occurred"

@@ -19,8 +19,13 @@ export default function MemberList({
   const createListInvite = async () => {
     startTransition(async () => {
       try {
-        await createInvite(listId)
-        toastStore.add(Variant.Success, "Invite created.")
+        const result = await createInvite(listId)
+
+        if (result.success) {
+          toastStore.add(Variant.Success, "Invite created.")
+        } else {
+          toastStore.add(Variant.Danger, result.error || "An error occurred.")
+        }
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "An error occurred"

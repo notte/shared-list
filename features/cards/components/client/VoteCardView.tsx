@@ -35,8 +35,15 @@ export default function VoteCardView(props: VoteCardViewProps) {
   const handleSubmit = () => {
     startTransition(async () => {
       try {
-        await submitVote(listId, cardId, selectedIds)
-        toastStore.add(Variant.Success, "Vote successfully updated.")
+        const result = await submitVote(listId, cardId, selectedIds)
+        if (result.success) {
+          toastStore.add(Variant.Success, "Vote successfully updated.")
+        } else {
+          toastStore.add(
+            Variant.Danger,
+            result.error ?? "Failed to update vote.",
+          )
+        }
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "An error occurred"

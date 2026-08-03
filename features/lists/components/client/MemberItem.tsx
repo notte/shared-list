@@ -49,11 +49,15 @@ export default function MemberItem({
   const handleDeleteMember = (userId: string) => {
     startTransition(async () => {
       try {
-        await removeMember(listId!, userId)
-        toastStore.add(
-          Variant.Success,
-          "Member successfully removed from the list.",
-        )
+        const result = await removeMember(listId!, userId)
+        if (result.success) {
+          toastStore.add(
+            Variant.Success,
+            "Member successfully removed from the list.",
+          )
+        } else {
+          toastStore.add(Variant.Danger, result.error || "An error occurred")
+        }
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "An error occurred"
@@ -66,8 +70,12 @@ export default function MemberItem({
   const handleDeleteInvite = (inviteCode: string) => {
     startTransition(async () => {
       try {
-        await deleteInvite(listId!, inviteCode)
-        toastStore.add(Variant.Success, "Invite Code successfully deleted.")
+        const result = await deleteInvite(listId!, inviteCode)
+        if (result.success) {
+          toastStore.add(Variant.Success, "Invite Code successfully deleted.")
+        } else {
+          toastStore.add(Variant.Danger, result.error || "An error occurred")
+        }
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "An error occurred"

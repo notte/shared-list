@@ -2,13 +2,14 @@
 import { auth, db } from "@/lib/firebase.admin"
 import { FieldValue } from "firebase-admin/firestore"
 import { UserRole } from "@/types/enums"
+import { ActionResult } from "@/types/actionResult"
 
 export async function createList(
   idToken: string,
   title: string,
   userName: string,
   color: string,
-): Promise<string> {
+): Promise<ActionResult<string>> {
   const decodedToken = await auth.verifyIdToken(idToken)
   const currentUserId = decodedToken.uid
 
@@ -44,5 +45,5 @@ export async function createList(
   batch.set(memberSubRef, newMemberData)
 
   await batch.commit()
-  return newListRef.id
+  return { success: true, data: newListRef.id }
 }

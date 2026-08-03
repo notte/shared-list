@@ -21,8 +21,15 @@ export default function ReadStatusController({
   const handleSubmit = () => {
     startTransition(async () => {
       try {
-        await markCardAsRead(listId, cardId)
-        toastStore.add(Variant.Success, "Card successfully marked as read.")
+        const result = await markCardAsRead(listId, cardId)
+        if (result.success) {
+          toastStore.add(Variant.Success, "Card successfully marked as read.")
+        } else {
+          toastStore.add(
+            Variant.Danger,
+            result.error ?? "Failed to mark card as read.",
+          )
+        }
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "An error occurred"

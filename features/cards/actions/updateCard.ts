@@ -6,6 +6,7 @@ import { CardType } from "@/types/enums"
 import { revalidatePath, revalidateTag, updateTag } from "next/cache"
 import { parseToDate } from "@/lib/date"
 import { Timestamp } from "firebase-admin/firestore"
+import { ActionResult } from "@/types/actionResult"
 
 function parseToTimestamp(value: unknown): Timestamp | null {
   const date = parseToDate(value)
@@ -16,9 +17,11 @@ export async function updateCard(
   listId: string,
   cardId: string,
   data: CardRequest,
-): Promise<void> {
+): Promise<ActionResult<void>> {
   const userData = await getUserDataServer()
-  if (!userData?.userId) throw new Error("Not authenticated.")
+  if (!userData?.userId) {
+    return { success: false, error: "Not authenticated." }
+  }
 
   const cardRef = db
     .collection("lists")
@@ -28,12 +31,17 @@ export async function updateCard(
 
   const cardDoc = await cardRef.get()
 
-  if (!cardDoc.exists) throw new Error("Card not found.")
+  if (!cardDoc.exists) {
+    return { success: false, error: "Card not found." }
+  }
 
   const creatorId = cardDoc.data()?.createdBy?.userId
 
   if (creatorId !== userData.userId)
-    throw new Error("Only the card creator can edit this card.")
+    return {
+      success: false,
+      error: "Only the card creator can edit this card.",
+    }
 
   const {
     cardType,
@@ -72,4 +80,5 @@ export async function updateCard(
   updateTag(`card-${cardId}`)
   revalidateTag(`list-${listId}-cards`, { expire: 0 })
   revalidateTag(`card-${cardId}`, { expire: 0 })
+  return { success: true, data: undefined }
 }

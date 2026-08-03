@@ -103,11 +103,19 @@ export default function CardForm(props: CardFormProps) {
     startTransition(async () => {
       try {
         if (card) {
-          await updateCard(listId, card.cardId, requestData)
-          toastStore.add(Variant.Success, "Card updated successfully.")
+          const result = await updateCard(listId, card.cardId, requestData)
+          if (result.success) {
+            toastStore.add(Variant.Success, "Card updated successfully.")
+          } else {
+            toastStore.add(Variant.Danger, result.error)
+          }
         } else {
-          await createCard(listId, requestData)
-          toastStore.add(Variant.Success, "Card created successfully.")
+          const result = await createCard(listId, requestData)
+          if (result.success) {
+            toastStore.add(Variant.Success, "Card created successfully.")
+          } else {
+            toastStore.add(Variant.Danger, result.error)
+          }
         }
         if (onSuccess) onSuccess()
       } catch (error) {

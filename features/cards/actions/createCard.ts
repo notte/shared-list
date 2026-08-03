@@ -6,6 +6,7 @@ import { getUserDataServer } from "@/services/storage/user.server"
 import { CardType } from "@/types/enums"
 import { db } from "@/lib/firebase.admin"
 import { revalidatePath, revalidateTag, updateTag } from "next/cache"
+import { ActionResult } from "@/types/actionResult"
 
 function parseToTimestamp(value: unknown): Timestamp | null {
   const date = parseToDate(value)
@@ -15,9 +16,11 @@ function parseToTimestamp(value: unknown): Timestamp | null {
 export async function createCard(
   listId: string,
   data: CardRequest,
-): Promise<void> {
+): Promise<ActionResult<string>> {
   const userData = await getUserDataServer()
-  if (!userData?.userId) throw new Error("Not authenticated.")
+  if (!userData?.userId) {
+    return { success: false, error: "Not authenticated." }
+  }
 
   const {
     title,
@@ -71,4 +74,6 @@ export async function createCard(
   revalidatePath(`/lists/${listId}`)
   updateTag(`list-${listId}-cards`)
   revalidateTag(`list-${listId}-cards`, { expire: 0 })
+
+  return { success: true, data: newCardId }
 }

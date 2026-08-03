@@ -3,21 +3,28 @@ import { db } from "@/lib/firebase.admin"
 import { FieldValue } from "firebase-admin/firestore"
 import { getUserDataServer } from "@/services/storage/user.server"
 import { revalidatePath, revalidateTag, updateTag } from "next/cache"
+import { ActionResult } from "@/types/actionResult"
 
-export async function createInvite(listId: string) {
+export async function createInvite(
+  listId: string,
+): Promise<ActionResult<void>> {
   const userData = await getUserDataServer()
-  if (!userData?.userId) throw new Error("Not authenticated.")
+  if (!userData?.userId)
+    return { success: false, error: "User not authenticated." }
 
   const listRef = db.collection("lists").doc(listId)
   const listDoc = await listRef.get()
 
-  if (!listDoc.exists) throw new Error("List not found.")
+  if (!listDoc.exists) return { success: false, error: "List not found." }
 
   const listData = listDoc.data()
   const isCreator = listData?.createdBy.userId === userData.userId
 
   if (!isCreator)
-    throw new Error("Only administrators can generate invite codes.")
+    return {
+      success: false,
+      error: "Only administrators can generate invite codes.",
+    }
 
   const inviteCode = crypto.randomUUID()
 
@@ -32,5 +39,6 @@ export async function createInvite(listId: string) {
   revalidatePath(`/lists/${listId}/members`)
   updateTag(`list-${listId}-invites`)
   revalidateTag(`list-${listId}-invites`, { expire: 0 })
-  return inviteCode
+
+  return { success: true, data: undefined }
 }
