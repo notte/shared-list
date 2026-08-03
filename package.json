@@ -12,37 +12,32 @@
     "@daypicker/react": "^10.0.1",
     "@headlessui/react": "^2.2.10",
     "@heroicons/react": "^2.2.0",
-    "@hookform/resolvers": "^5.4.0",
+    "@hookform/resolvers": "^5.7.1",
     "@tailwindcss/typography": "^0.5.20",
-    "@tiptap/core": "^3.28.0",
-    "@tiptap/pm": "^3.28.0",
-    "@tiptap/react": "^3.28.0",
-    "@tiptap/starter-kit": "^3.28.0",
+    "@tiptap/core": "^3.29.2",
+    "@tiptap/pm": "^3.29.2",
+    "@tiptap/react": "^3.29.2",
+    "@tiptap/starter-kit": "^3.29.2",
     "date-fns": "^4.4.0",
-    "firebase": "^12.15.0",
-    "firebase-admin": "^14.1.0",
-    "next": "16.2.9",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "react-hook-form": "^7.81.0",
+    "firebase": "^12.17.0",
+    "firebase-admin": "^14.2.0",
+    "next": "16.2.12",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-hook-form": "^7.84.0",
     "uuid": "^14.0.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.9",
-    "prettier": "^3.8.4",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^26.1.2",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "eslint": "^10.8.0",
+    "eslint-config-next": "16.2.12",
+    "prettier": "^3.9.6",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3"
   },
-  "packageManager": "pnpm@9.15.0",
-  "pnpm": {
-    "overrides": {
-      "jwks-rsa>jose": "^5"
-    }
-  }
+  "packageManager": "pnpm@11.18.0+sha512.33d83c77da82f49fba836925c6f1b841181ec3132b670639bd012f7075f5c7cf634c5f870147c19aae7478fac01df09d8892e880454896edd23ee9b33757563c"
 }
