@@ -1,7 +1,16 @@
-packages: []
+packages: ["."]
 allowBuilds:
+  "@firebase/util": true
+  protobufjs: true
   sharp: true
   unrs-resolver: true
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+overrides:
+  sharp: ">=0.35.0"
+  postcss: ">=8.5.18"
+  fast-xml-parser: ">=5.10.1"
+  uuid: ">=11.1.1"
+  eslint: "^9.20.0"
+  "minimatch>brace-expansion": "^1.1.11"
