@@ -39,6 +39,7 @@
     "tailwindcss": "^4",
     "typescript": "^5"
   },
+  "packageManager": "pnpm@9.15.0",
   "pnpm": {
     "overrides": {
       "jwks-rsa>jose": "^5"
