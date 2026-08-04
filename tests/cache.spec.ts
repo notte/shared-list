@@ -122,7 +122,9 @@ test.describe("P2 cache invalidation regressions", () => {
         .filter({ hasText: editTitle })
       await expect(editCard).toBeVisible({ timeout: 15_000 })
       await editCard.getByRole("button", { name: "edit" }).click()
-      await expect(page.getByRole("heading", { name: "Edit Card" })).toBeVisible()
+      await expect(
+        page.getByRole("heading", { name: "Edit Card" }),
+      ).toBeVisible()
 
       const updatedTitle = uniqueName("Edited")
       await fillLabeledInput(page, "Title", updatedTitle)
@@ -131,7 +133,9 @@ test.describe("P2 cache invalidation regressions", () => {
       await expect(
         page.getByRole("heading", { name: updatedTitle }),
       ).toBeVisible({ timeout: 15_000 })
-      await expect(page.getByRole("heading", { name: editTitle })).toHaveCount(0)
+      await expect(page.getByRole("heading", { name: editTitle })).toHaveCount(
+        0,
+      )
 
       // Delete
       const delCard = page
@@ -141,10 +145,9 @@ test.describe("P2 cache invalidation regressions", () => {
       await expect(page.getByText("Remove Card？")).toBeVisible()
       await page.getByRole("button", { name: "Delete" }).click()
       await expectToast(page, "Card successfully deleted.")
-      await expect(page.getByRole("heading", { name: updatedTitle })).toHaveCount(
-        0,
-        { timeout: 15_000 },
-      )
+      await expect(
+        page.getByRole("heading", { name: updatedTitle }),
+      ).toHaveCount(0, { timeout: 15_000 })
     } finally {
       await deleteListTree(listId).catch(() => undefined)
     }

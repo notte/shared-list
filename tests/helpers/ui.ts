@@ -71,11 +71,14 @@ export async function selectByLabel(
 ) {
   const labelEl = labelLocator(scope, label)
   await labelEl.scrollIntoViewIfNeeded()
-  const field = labelEl.locator("xpath=ancestor::div[contains(@class,'w-full')][1]")
+  const field = labelEl.locator(
+    "xpath=ancestor::div[contains(@class,'w-full')][1]",
+  )
   await field.getByRole("button").first().click()
-  const page = "page" in scope && typeof scope.page === "function"
-    ? scope.page()
-    : (scope as Page)
+  const page =
+    "page" in scope && typeof scope.page === "function"
+      ? scope.page()
+      : (scope as Page)
   await page
     .locator(".select-item")
     .filter({ hasText: new RegExp(`^${escapeRegExp(optionLabel)}$`) })
@@ -90,11 +93,7 @@ export async function fillTiptap(scope: Scope, text: string) {
   await editor.fill(text)
 }
 
-export async function fillDateByLabel(
-  scope: Scope,
-  label: string,
-  date: Date,
-) {
+export async function fillDateByLabel(scope: Scope, label: string, date: Date) {
   const value = formatDateInput(date)
   const input = await inputForLabel(scope, label)
   await input.click({ force: true })
@@ -109,11 +108,11 @@ export async function fillDateByLabel(
 }
 
 export async function expectToast(page: Page, message: string | RegExp) {
-  await expect(
-    page.locator(".toast").filter({ hasText: message }),
-  ).toBeVisible({
-    timeout: 15_000,
-  })
+  await expect(page.locator(".toast").filter({ hasText: message })).toBeVisible(
+    {
+      timeout: 15_000,
+    },
+  )
 }
 
 export async function createList(
@@ -154,9 +153,7 @@ export async function openCreateCardDialog(page: Page) {
     timeout: 15_000,
   })
   await page.locator("nav").getByRole("button").last().click()
-  await expect(
-    page.getByRole("heading", { name: "Create Card" }),
-  ).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Create Card" })).toBeVisible()
   return page.getByRole("dialog")
 }
 
@@ -215,9 +212,7 @@ export async function createCardViaUi(
 
 export async function addInviteAndGetCode(page: Page, listId: string) {
   await openMembersPage(page, listId)
-  await expect(
-    page.getByRole("heading", { name: "Member List" }),
-  ).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Member List" })).toBeVisible()
 
   await page.getByRole("button", { name: "Add Member" }).click()
   await expectToast(page, "Invite created.")

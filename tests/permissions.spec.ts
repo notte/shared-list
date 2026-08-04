@@ -63,7 +63,9 @@ test.describe("P1 permission boundaries", () => {
       const ownerDraft = page
         .locator(".card-container")
         .filter({ hasText: draftTitle })
-      await expect(ownerDraft.getByRole("button", { name: "edit" })).toBeVisible()
+      await expect(
+        ownerDraft.getByRole("button", { name: "edit" }),
+      ).toBeVisible()
       await expect(
         ownerDraft.getByRole("button", { name: "delete" }),
       ).toBeVisible()
@@ -124,7 +126,9 @@ test.describe("P1 permission boundaries", () => {
       await expect(page.getByText("Revoke Invitation?")).toBeVisible()
       await page.getByRole("button", { name: "Revoke" }).click()
       await expectToast(page, "Invite Code successfully deleted.")
-      await expect(page.getByText(inviteCode)).toHaveCount(0, { timeout: 15_000 })
+      await expect(page.getByText(inviteCode)).toHaveCount(0, {
+        timeout: 15_000,
+      })
 
       const stranger = await newUserContext(browser)
       try {

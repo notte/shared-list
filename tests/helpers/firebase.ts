@@ -63,7 +63,11 @@ export type SeedCardInput = {
   }
 }
 
-export async function seedInvite(listId: string, title: string, creator: string) {
+export async function seedInvite(
+  listId: string,
+  title: string,
+  creator: string,
+) {
   const { db } = getAdmin()
   const inviteCode = randomUUID()
   await db.collection("invites").doc(inviteCode).set({
@@ -79,7 +83,8 @@ export async function seedInvite(listId: string, title: string, creator: string)
 export async function seedCard(listId: string, input: SeedCardInput) {
   const { db } = getAdmin()
   const ref = db.collection("lists").doc(listId).collection("cards").doc()
-  const eventTime = input.eventTime ?? new Date(Date.now() + 24 * 60 * 60 * 1000)
+  const eventTime =
+    input.eventTime ?? new Date(Date.now() + 24 * 60 * 60 * 1000)
   const data = {
     cardId: ref.id,
     title: input.title,
