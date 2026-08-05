@@ -121,7 +121,7 @@ export async function createList(
 ) {
   await page.goto("/")
   await expect(
-    page.getByRole("heading", { name: "Landing Page" }),
+    page.getByRole("heading", { name: "A corkboard for your group." }),
   ).toBeVisible()
   await waitForFirebaseAuth(page)
   await fillLabeledInput(page, "List Name", opts.title)
