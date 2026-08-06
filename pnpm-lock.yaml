@@ -11,6 +11,7 @@ overrides:
   uuid: ">=11.1.1"
   eslint: ^9.20.0
   minimatch>brace-expansion: ^1.1.11
+  jose: ^5.9.6
 
 importers:
   .:
@@ -4430,10 +4431,10 @@ packages:
       }
     hasBin: true
 
-  jose@6.2.7:
+  jose@5.10.0:
     resolution:
       {
-        integrity: sha512-hq1OB1bALKfydZNoViyg6hPVGV4i93ny9Op+n4zP5RSf7SCZEXa/TsG2O3IEr7+WlHRTPnpqDmHfMH6qXAD60w==,
+        integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==,
       }
 
   js-tokens@10.0.0:
@@ -9467,7 +9468,7 @@ snapshots:
 
   jiti@2.7.0: {}
 
-  jose@6.2.7: {}
+  jose@5.10.0: {}
 
   js-tokens@10.0.0: {}
 
@@ -9551,7 +9552,7 @@ snapshots:
     dependencies:
       "@types/jsonwebtoken": 9.0.10
       debug: 4.4.3(supports-color@7.2.0)
-      jose: 6.2.7
+      jose: 5.10.0
       limiter: 1.1.5
       lru-cache: 11.5.2
       lru-memoizer: 3.0.0
