@@ -14,3 +14,4 @@ overrides:
   uuid: ">=11.1.1"
   eslint: "^9.20.0"
   "minimatch>brace-expansion": "^1.1.11"
+  jose: ^5.9.6
