@@ -30,6 +30,7 @@ export default async function Page({ params }: PageProps) {
           vote={cardDetailData.vote}
           listId={listId}
           cardId={cardId}
+          publishTime={cardDetailData.publishTime}
         />
       )}
       {cardDetailData.cardType === CardType.Announce && (

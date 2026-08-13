@@ -16,6 +16,8 @@ export async function joinList(
 
   const inviteRef = db.collection("invites").doc(inviteCode)
 
+  let listId: string = ""
+
   const result = await db.runTransaction<ActionResult<string>>(
     async (transaction) => {
       const inviteSnap = await transaction.get(inviteRef)
@@ -26,7 +28,7 @@ export async function joinList(
       if (!inviteData)
         return { success: false, error: "Invalid invitation data." }
 
-      const listId = inviteData.listId
+      listId = inviteData.listId
       const listRef = db.collection("lists").doc(listId)
       const memberRef = listRef.collection("members").doc(currentUserId)
 
@@ -57,8 +59,10 @@ export async function joinList(
 
   updateTag(`list-members-${result.data}`)
   updateTag(`invite-${inviteCode}`)
+  updateTag(`list-${listId}-invites`)
   revalidateTag(`list-members-${result.data}`, { expire: 0 })
   revalidateTag(`invite-${inviteCode}`, { expire: 0 })
+  revalidateTag(`list-${listId}-invites`, { expire: 0 })
 
   return result
 }

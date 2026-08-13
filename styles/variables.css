@@ -203,10 +203,16 @@
     color: var(--btn-warning-text);
   }
 
-  .status-joined {
+  .status-member {
     background-color: var(--btn-success-bg);
     border-color: var(--btn-success-border);
     color: var(--btn-success-text);
+  }
+
+  .status-admin {
+    background-color: var(--btn-primary-bg);
+    border-color: var(--btn-primary-border);
+    color: var(--btn-primary-text);
   }
 
   /* Tiptap */

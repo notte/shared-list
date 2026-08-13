@@ -9,12 +9,14 @@ import { submitVote } from "@/features/cards/actions/submitVote"
 
 export type VoteCardViewProps = {
   vote: GetCardDetailResponse["vote"]
+  publishTime: string
   listId: string
   cardId: string
 }
 
 export default function VoteCardView(props: VoteCardViewProps) {
-  const { vote, listId, cardId } = props
+  const { vote, listId, cardId, publishTime } = props
+  const isPublished = new Date(publishTime) <= new Date()
   const { isMultipleChoice, maxChoices, options } = vote!
   const totalVotes = options.reduce((sum, o) => sum + o.voteCount, 0)
   const [selectedIds, setSelectedIds] = useState<string[]>([])
@@ -111,15 +113,17 @@ export default function VoteCardView(props: VoteCardViewProps) {
         Total votes: {totalVotes}
       </p>
       <hr />
-      <div className="flex justify-end">
-        <Button
-          disabled={isPending}
-          variant={selectedIds.length > 0 ? Variant.Primary : Variant.Default}
-          action={ButtonAction.Submit}
-          onClick={handleSubmit}
-          buttonText={isPending ? "Submitting..." : "Submit Vote"}
-        />
-      </div>
+      {isPublished && (
+        <div className="flex justify-end">
+          <Button
+            disabled={isPending}
+            variant={selectedIds.length > 0 ? Variant.Primary : Variant.Default}
+            action={ButtonAction.Submit}
+            onClick={handleSubmit}
+            buttonText={isPending ? "Submitting..." : "Submit Vote"}
+          />
+        </div>
+      )}
     </div>
   )
 }
