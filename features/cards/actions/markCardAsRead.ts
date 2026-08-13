@@ -31,6 +31,9 @@ export async function markCardAsRead(
   revalidatePath(`/lists/${listId}/cards/${cardId}`)
   updateTag(`card-${cardId}`)
   revalidateTag(`card-${cardId}`, { expire: 0 })
-
+  updateTag(`card-${cardId}`)
+  revalidateTag(`card-${cardId}`, { expire: 0 })
+  updateTag(`list-${listId}-cards`)
+  revalidateTag(`list-${listId}-cards`, { expire: 0 })
   return { success: true, data: undefined }
 }

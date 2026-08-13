@@ -1,7 +1,13 @@
 "use client"
 import Button from "@/components/ui/Button"
 import Dialog from "@/components/ui/Dialog"
-import { Variant, ButtonAction, DialogRole, InviteStatus } from "@/types/enums"
+import {
+  Variant,
+  ButtonAction,
+  DialogRole,
+  InviteStatus,
+  UserRole,
+} from "@/types/enums"
 import {
   GetInviteCodeDetailResponse,
   MemberResponseItem,
@@ -23,6 +29,7 @@ export default function MemberItem({
   joinedAt,
   listId,
   userId,
+  role,
 }: MemberItemProps) {
   const [isPending, startTransition] = useTransition()
 
@@ -30,7 +37,11 @@ export default function MemberItem({
   const [open, setOpen] = useState<boolean>(false)
   const [copied, setCopied] = useState<boolean>(false)
 
-  const status = inviteCode ? InviteStatus.Pending : InviteStatus.Joined
+  const status = inviteCode
+    ? InviteStatus.Pending
+    : role === UserRole.Admin
+      ? UserRole.Admin
+      : UserRole.Member
 
   const handleCopy = async () => {
     const joinUrl = `${window.location.origin}/join/${inviteCode}`
@@ -121,7 +132,7 @@ export default function MemberItem({
               />
             </div>
           )}
-          {joinedAt && (
+          {joinedAt && role !== UserRole.Admin && (
             <Button
               disabled={isPending}
               buttonText={isPending ? "Delete..." : "Delete"}
