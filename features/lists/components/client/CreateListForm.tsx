@@ -60,7 +60,7 @@ export default function CreateListForm() {
 
       try {
         const token = await currentUser.getIdToken()
-        await saveUserData(data.color, data.userName)
+        await saveUserData(currentUser.uid, data.color, data.userName)
         const result = await createList(
           token,
           data.title,

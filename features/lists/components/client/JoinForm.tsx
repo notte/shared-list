@@ -77,7 +77,7 @@ export default function JoinForm({
           tempData.color,
         )
         if (result.success) {
-          await saveUserData(tempData.color, tempData.userName)
+          await saveUserData(currentUser.uid, tempData.color, tempData.userName)
           toastStore.add(Variant.Success, "Joined successfully.")
           router.push(`/lists/${result.data}`)
         } else {
