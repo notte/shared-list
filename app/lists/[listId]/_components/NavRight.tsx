@@ -3,11 +3,11 @@ import Icon from "@/components/ui/Icon"
 import Button from "@/components/ui/Button"
 import Dialog from "@/components/ui/Dialog"
 import CardForm from "@/features/cards/components/client/CardForm"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { PlusCircleIcon, UserGroupIcon } from "@heroicons/react/24/solid"
 import { ButtonAction, Variant, Size, DialogRole } from "@/types/enums"
-import { useUserData } from "@/services/storage/user.client"
+import { saveUserData, useUserData } from "@/services/storage/user.client"
 import { GetListDetailResponse } from "@/features/lists/adapters/response"
 
 export default function NavRight({
@@ -25,6 +25,17 @@ export default function NavRight({
 
   const [openCreateCardDialog, setOpenCreateCardDialog] =
     useState<boolean>(false)
+
+  useEffect(() => {
+    if (!userData?.userId || !listData.members) return
+    const member = listData.members[userData?.userId]
+    console.log("member", member)
+    console.log("userData?.userId", userData?.userId)
+    console.log("listData.members keys", Object.keys(listData.members))
+    if (member) {
+      saveUserData(userData?.userId, member.color, member.userName)
+    }
+  }, [listData, userData?.userId])
 
   return (
     <>

@@ -1,6 +1,4 @@
 "use client"
-import { signInAnonymously } from "firebase/auth"
-import { auth } from "@/lib/firebase.client"
 import { useSyncExternalStore } from "react"
 import {
   USER_ID_KEY,
@@ -35,16 +33,15 @@ function deleteCookie(name: string) {
   document.cookie = `${name}=; path=/; max-age=0; SameSite=Lax`
 }
 
-export async function saveUserData(color: string, userName: string) {
-  const { user } = await signInAnonymously(auth)
-  const existingUserId = getCookie(USER_ID_KEY)
-
-  if (!existingUserId || existingUserId === user.uid) {
-    setCookie(USER_ID_KEY, user.uid, MAX_AGE_10_YEARS)
-    setCookie(USER_COLOR_KEY, color, MAX_AGE_10_YEARS)
-    setCookie(USER_NAME_KEY, userName, MAX_AGE_10_YEARS)
-    window.dispatchEvent(new Event("userDataChange"))
-  }
+export async function saveUserData(
+  userId: string,
+  color: string,
+  userName: string,
+) {
+  setCookie(USER_ID_KEY, userId, MAX_AGE_10_YEARS)
+  setCookie(USER_COLOR_KEY, color, MAX_AGE_10_YEARS)
+  setCookie(USER_NAME_KEY, userName, MAX_AGE_10_YEARS)
+  window.dispatchEvent(new Event("userDataChange"))
 }
 
 export function clearUserId() {
